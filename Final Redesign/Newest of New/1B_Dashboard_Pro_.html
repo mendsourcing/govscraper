@@ -1,0 +1,2543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard — GovScraper</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+  :root {
+    --bg: #F8FAFC;
+    --surface: #FFFFFF;
+    --surface-2: #F1F5F9;
+    --surface-3: #E8EFF7;
+    --border: #E2E8F0;
+    --border-strong: #CBD5E1;
+    --text: #0F172A;
+    --text-dim: #334155;
+    --text-muted: #64748B;
+    --text-faint: #94A3B8;
+    --accent: #2563EB;
+    --accent-hover: #1D4ED8;
+    --accent-bg: #EFF6FF;
+    --accent-border: #BFDBFE;
+    --green: #16A34A;
+    --green-bg: #F0FDF4;
+    --green-border: #BBF7D0;
+    --amber: #D97706;
+    --amber-bg: #FFFBEB;
+    --amber-border: #FDE68A;
+    --red: #DC2626;
+    --red-bg: #FEF2F2;
+    --red-border: #FECACA;
+    --cyan: #0891B2;
+    --cyan-bg: #ECFEFF;
+    --purple: #7C3AED;
+    --purple-bg: #F5F3FF;
+    /* Brand colors from logo */
+    --brand-blue: #00AEEF;
+    --brand-red: #BE1E2D;
+    --brand-navy: #1B2A4A;
+    /* FSC bar palette - energized */
+    --fsc-1: #2563EB;
+    --fsc-2: #0891B2;
+    --fsc-3: #16A34A;
+    --fsc-4: #7C3AED;
+    --fsc-5: #D97706;
+    --fsc-6: #DC2626;
+    --fsc-7: #0E7490;
+    --fsc-8: #059669;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Manrope',sans-serif; background:var(--bg); color:var(--text); font-size:13px; }
+  a { color:var(--accent); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  .mono { font-family:'Source Code Pro',monospace; }
+
+  /* TOPBAR */
+  .topbar {
+    height:56px; background:var(--surface);
+    border-bottom:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 24px; position:sticky; top:0; z-index:100;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .topbar-left { display:flex; align-items:center; gap:20px; }
+  .topbar-logo { height:30px; width:auto; }
+  .topbar-divider { width:1px; height:24px; background:var(--border); }
+  .breadcrumb { font-size:12px; color:var(--text-muted); font-weight:500; letter-spacing:0.2px; }
+  .topbar-right { display:flex; align-items:center; gap:10px; }
+  .topbar-icon-btn {
+    width:34px; height:34px; border-radius:8px;
+    border:1px solid var(--border); background:var(--surface);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; color:var(--text-muted); transition:all .15s;
+  }
+  .topbar-icon-btn:hover { background:var(--surface-2); color:var(--accent); border-color:var(--accent-border); }
+  .topbar-icon-btn svg { width:16px; height:16px; }
+  .avatar {
+    width:34px; height:34px; border-radius:8px;
+    background:linear-gradient(135deg, var(--brand-navy) 0%, var(--accent) 100%);
+    color:#fff; display:flex; align-items:center; justify-content:center;
+    font-size:12px; font-weight:700; cursor:pointer; letter-spacing:0.5px;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width:224px; position:fixed; top:56px; left:0; bottom:0;
+    background:var(--surface); border-right:1px solid var(--border);
+    padding:20px 0 16px; overflow-y:auto; z-index:90;
+    display:flex; flex-direction:column;
+  }
+  .sidebar-label {
+    font-size:9.5px; font-weight:800; text-transform:uppercase;
+    letter-spacing:0.8px; color:var(--text-faint);
+    padding:14px 20px 5px;
+  }
+  .sidebar-item {
+    display:flex; align-items:center; gap:10px; padding:8px 20px;
+    font-size:12.5px; font-weight:500; color:var(--text-dim);
+    text-decoration:none; border-left:3px solid transparent;
+    transition:all .15s; position:relative;
+  }
+  .s-item {
+    display:flex; align-items:center; gap:10px; padding:8px 16px;
+    font-size:12.5px; font-weight:500; color:var(--text-dim);
+    text-decoration:none; border-left:3px solid transparent;
+    transition:all .15s; position:relative; cursor:pointer;
+    background:none; border-top:none; border-right:none; border-bottom:none;
+    width:100%; text-align:left;
+  }
+  .s-item svg { width:16px; height:16px; flex-shrink:0; }
+  .sidebar-item svg { width:16px; height:16px; flex-shrink:0; }
+  .s-item:hover { background:var(--surface-2); color:var(--text); }
+  .s-item.active { color:var(--green); border-left-color:var(--green); background:var(--green-bg); font-weight:600; }
+  body.supplier-mode .s-item:hover { background:var(--green-bg); color:var(--green); }
+  .sidebar-item:hover { background:var(--accent-bg); color:var(--accent); text-decoration:none; border-left-color:var(--accent-border); }
+  .sidebar-item.active { color:var(--accent); font-weight:700; border-left-color:var(--accent); background:var(--accent-bg); }
+  .sidebar-item svg { width:16px; height:16px; flex-shrink:0; opacity:0.8; }
+  .sidebar-item.active svg { opacity:1; }
+  .sidebar-badge {
+    margin-left:auto; background:var(--accent); color:#fff;
+    font-size:9.5px; font-weight:800; padding:2px 7px;
+    border-radius:10px; letter-spacing:0.2px;
+  }
+  .sidebar-badge.amber { background:var(--amber); }
+  .sidebar-badge.red { background:var(--red); }
+  .sidebar-spacer { flex:1; min-height:32px; }
+
+  /* MAIN */
+  .main { margin-left:224px; padding:28px 32px 40px; min-height:calc(100vh - 56px); }
+
+  /* PAGE HEADER */
+  .page-header { margin-bottom:24px; display:flex; align-items:flex-end; justify-content:space-between; }
+  .page-header-left h1 { font-size:22px; font-weight:800; color:var(--text); letter-spacing:-0.3px; margin-bottom:3px; }
+  .page-header-left p { color:var(--text-muted); font-size:13px; font-weight:500; }
+  .page-header-right { display:flex; align-items:center; gap:8px; }
+  .date-badge {
+    font-size:11px; font-weight:600; color:var(--text-muted);
+    background:var(--surface-2); border:1px solid var(--border);
+    padding:6px 12px; border-radius:8px;
+  }
+
+  /* CARDS */
+  .card {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:12px; overflow:hidden;
+    box-shadow:0 1px 3px rgba(0,0,0,0.04);
+    transition:box-shadow .15s;
+  }
+  .card:hover { box-shadow:0 2px 8px rgba(0,0,0,0.07); }
+  .card-hdr {
+    padding:14px 18px; border-bottom:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between;
+    background:var(--surface);
+  }
+  .card-hdr h3 {
+    font-size:11.5px; font-weight:800; text-transform:uppercase;
+    letter-spacing:0.7px; color:var(--text-dim);
+  }
+  .card-body { padding:16px 18px; }
+
+  /* BUTTONS */
+  .btn {
+    font-family:'Manrope',sans-serif; font-size:11.5px; font-weight:700;
+    padding:7px 14px; border-radius:7px; border:1px solid var(--border);
+    cursor:pointer; display:inline-flex; align-items:center; gap:6px;
+    transition:all .15s; letter-spacing:0.1px;
+  }
+  .btn-primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .btn-primary:hover { background:var(--accent-hover); }
+  .btn-ghost { background:transparent; color:var(--text-dim); }
+  .btn-ghost:hover { background:var(--surface-2); }
+  .btn-accent { background:var(--accent-bg); color:var(--accent); border-color:var(--accent-border); }
+  .btn-accent:hover { background:#DBEAFE; }
+  .btn-sm { padding:5px 11px; font-size:11px; }
+
+  /* BANNER CARDS */
+  .banners { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:22px; }
+  .banner {
+    border-radius:12px; padding:18px 20px;
+    border:1px solid var(--border); background:var(--surface);
+    box-shadow:0 1px 3px rgba(0,0,0,0.04);
+    transition:box-shadow .15s;
+  }
+  .banner:hover { box-shadow:0 2px 8px rgba(0,0,0,0.07); }
+  .banner-icon {
+    width:36px; height:36px; border-radius:9px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:17px; margin-bottom:12px;
+  }
+  .banner-icon.blue { background:var(--accent-bg); }
+  .banner-icon.green { background:var(--green-bg); }
+  .banner-icon.gray { background:var(--surface-2); }
+  .banner h3 { font-size:13px; font-weight:700; margin-bottom:5px; color:var(--text); }
+  .banner p { font-size:12px; color:var(--text-muted); margin-bottom:14px; line-height:1.5; }
+
+  /* METRIC CARDS */
+  .metrics { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:22px; }
+  .metric-card {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:12px; padding:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.04);
+    position:relative; overflow:hidden;
+    transition:box-shadow .15s;
+  }
+  .metric-card:hover { box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+  .metric-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:3px;
+    border-radius:12px 12px 0 0;
+  }
+  .metric-card.blue::before { background:var(--accent); }
+  .metric-card.green::before { background:var(--green); }
+  .metric-card.red::before { background:var(--red); }
+  .metric-card.gold::before { background:var(--amber); }
+  .metric-label {
+    font-size:10px; font-weight:800; text-transform:uppercase;
+    letter-spacing:0.6px; color:var(--text-faint); margin-bottom:10px;
+    display:flex; align-items:center; gap:6px;
+  }
+  .metric-label svg { width:14px; height:14px; }
+  .metric-num {
+    font-size:36px; font-weight:800; font-family:'Source Code Pro',monospace;
+    line-height:1; letter-spacing:-1px; margin-bottom:6px;
+  }
+  .metric-sub { font-size:11px; color:var(--text-muted); font-weight:500; }
+  .metric-change { font-size:11px; margin-top:5px; font-weight:600; }
+  .metric-change.down { color:var(--red); }
+  .metric-change.up { color:var(--green); }
+  .metric-hdr-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .metric-award-row { display:flex; gap:24px; margin-top:4px; }
+  .metric-award-row .col .slabel {
+    font-size:9.5px; font-weight:700; text-transform:uppercase;
+    letter-spacing:0.5px; color:var(--text-faint); margin-bottom:3px;
+  }
+  .metric-award-row .col .sval {
+    font-family:'Source Code Pro',monospace; font-size:22px; font-weight:700;
+  }
+
+  /* TWO / THREE COLUMN GRIDS */
+  .two-col { display:grid; grid-template-columns:1.3fr 0.7fr; gap:14px; margin-bottom:22px; }
+  .three-col { display:grid; grid-template-columns:1.2fr 0.9fr 0.9fr; gap:14px; margin-bottom:22px; }
+
+  /* FSC BAR CHART */
+  .bar-chart { padding:4px 0; }
+  .bar-row { display:flex; align-items:center; margin-bottom:10px; }
+  .bar-row:last-child { margin-bottom:0; }
+  .bar-label {
+    width:42px; font-family:'Source Code Pro',monospace;
+    font-size:11.5px; font-weight:600; color:var(--text-dim);
+    text-align:right; margin-right:12px; flex-shrink:0;
+  }
+  .bar-meta {
+    width:120px; flex-shrink:0; margin-left:10px;
+    font-size:11px; color:var(--text-muted); font-weight:500;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .bar-track {
+    flex:1; height:24px; background:var(--surface-2);
+    border-radius:6px; position:relative; overflow:hidden;
+  }
+  .bar-fill {
+    height:100%; border-radius:6px;
+    display:flex; align-items:center; padding:0 10px;
+    font-size:11px; font-weight:700; color:#fff;
+    min-width:30px; transition:width .4s ease;
+  }
+  .bar-axis {
+    display:flex; justify-content:space-between;
+    padding-left:54px; margin-top:8px;
+    padding-right:132px;
+  }
+  .bar-axis span { font-size:10px; color:var(--text-faint); }
+  .bar-legend {
+    display:flex; align-items:center; justify-content:flex-end;
+    gap:16px; margin-bottom:12px;
+  }
+  .bar-legend-item { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--text-muted); }
+  .bar-legend-dot { width:8px; height:8px; border-radius:3px; flex-shrink:0; }
+
+  /* MEMBER WINS */
+  .member-wins-body { padding:18px; }
+  .member-wins-body .mw-label {
+    font-size:9.5px; font-weight:800; text-transform:uppercase;
+    letter-spacing:0.6px; color:var(--text-faint); margin-bottom:8px;
+  }
+  .member-wins-body .mw-row { display:flex; align-items:baseline; gap:12px; margin-bottom:6px; }
+  .member-wins-body .mw-num {
+    font-family:'Source Code Pro',monospace; font-size:38px;
+    font-weight:800; color:var(--text); line-height:1;
+  }
+  .member-wins-body .mw-amt {
+    font-family:'Source Code Pro',monospace; font-size:22px;
+    font-weight:700; color:var(--green);
+  }
+  .member-wins-body .mw-powered {
+    font-size:10.5px; color:var(--text-faint); font-weight:500;
+    display:flex; align-items:center; gap:5px; margin-top:4px;
+  }
+
+  /* POST BID */
+  .post-bid-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+  .pbs-item { text-align:center; padding:12px 8px; background:var(--surface-2); border-radius:8px; }
+  .pbs-item .pbs-label {
+    font-size:9.5px; font-weight:700; text-transform:uppercase;
+    letter-spacing:0.5px; color:var(--text-faint); margin-bottom:6px;
+  }
+  .pbs-item .pbs-val {
+    font-family:'Source Code Pro',monospace; font-size:20px; font-weight:800;
+  }
+
+  /* SAVED SEARCHES */
+  .saved-item {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 0; border-bottom:1px solid var(--border);
+  }
+  .saved-item:last-child { border:none; }
+  .saved-item .si-name { font-size:12.5px; font-weight:500; color:var(--text-dim); }
+  .saved-item .si-count {
+    font-size:10.5px; font-weight:700; color:var(--accent);
+    background:var(--accent-bg); border:1px solid var(--accent-border);
+    padding:2px 8px; border-radius:10px;
+  }
+
+  /* RATIO CARDS */
+  /* ── BID TO AWARD RATIO CARD ── */
+  .ratio-card-body { padding:16px 18px 18px; }
+  .ratio-card-header-row {
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;
+  }
+  .ratio-card-title {
+    font-size:9.5px; font-weight:800; text-transform:uppercase;
+    letter-spacing:0.6px; color:var(--text-faint);
+  }
+  .ratio-status-pill {
+    font-size:9px; font-weight:800; padding:2px 8px; border-radius:10px;
+    text-transform:uppercase; letter-spacing:0.4px;
+  }
+  .ratio-status-pill.below { background:var(--amber-bg); color:var(--amber); border:1px solid var(--amber-border); }
+  .ratio-status-pill.good  { background:var(--green-bg); color:var(--green); border:1px solid var(--green-border); }
+  .ratio-gauge-wrap { position:relative; margin-bottom:12px; }
+  .ratio-track {
+    height:8px; background:var(--surface-2); border-radius:6px;
+    position:relative; overflow:visible;
+  }
+  .ratio-fill {
+    height:100%; border-radius:6px; transition:width .6s ease;
+    position:relative;
+  }
+  .ratio-fill.below { background: linear-gradient(90deg, var(--amber), #F59E0B); }
+  .ratio-fill.good  { background: linear-gradient(90deg, var(--green), #22C55E); }
+  .ratio-industry-marker {
+    position:absolute; top:-4px; width:2px; height:16px;
+    background:var(--text-faint); border-radius:2px;
+    transform:translateX(-50%);
+  }
+  .ratio-industry-marker::after {
+    content: 'avg'; position:absolute; top:-16px; left:50%;
+    transform:translateX(-50%); font-size:8px; font-weight:700;
+    color:var(--text-faint); white-space:nowrap;
+  }
+  .ratio-numbers-row {
+    display:flex; align-items:flex-end; justify-content:space-between;
+    margin-bottom:10px;
+  }
+  .ratio-your { }
+  .ratio-your-val {
+    font-family:'Source Code Pro',monospace; font-size:32px;
+    font-weight:800; line-height:1; margin-bottom:2px;
+  }
+  .ratio-your-val.below { color:var(--amber); }
+  .ratio-your-val.good  { color:var(--green); }
+  .ratio-your-lbl { font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-faint); }
+  .ratio-industry { text-align:right; }
+  .ratio-industry-val {
+    font-family:'Source Code Pro',monospace; font-size:18px;
+    font-weight:700; color:var(--text-dim); line-height:1; margin-bottom:2px;
+  }
+  .ratio-industry-lbl { font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-faint); }
+  .ratio-insight {
+    font-size:11px; color:var(--text-muted); line-height:1.5;
+    background:var(--surface-2); border-radius:6px; padding:7px 10px;
+    border-left:3px solid var(--amber);
+  }
+  .ratio-insight.good { border-left-color:var(--green); }
+
+  /* BULLSEYE ICON */
+  .bullseye-icon { color:var(--accent); }
+
+  /* FILTERS LINK */
+  .filters-link {
+    font-size:11px; font-weight:700; color:var(--accent); cursor:pointer;
+    padding:3px 8px; border-radius:5px; border:1px solid var(--accent-border);
+    background:var(--accent-bg); transition:all .15s;
+  }
+  .filters-link:hover { background:#DBEAFE; }
+
+  /* DIVIDER SECTION */
+  .section-divider { height:1px; background:var(--border); margin:4px 0 22px; }
+
+  @media(max-width:900px) {
+    .sidebar { display:none; }
+    .main { margin-left:0; padding:16px; }
+    .banners, .metrics { grid-template-columns:1fr 1fr; }
+    .two-col, .three-col { grid-template-columns:1fr; }
+  }
+
+
+/* ─── ACCOUNT PANEL STYLES ─── */
+
+:root{--bg:#F8FAFC;--surface:#fff;--surface-2:#F1F5F9;--border:#E2E8F0;--border-strong:#CBD5E1;--text:#1E293B;--text-dim:#475569;--text-muted:#6B7280;--text-faint:#94A3B8;--accent:#2563EB;--accent-bg:#EFF6FF;--accent-border:#BFDBFE;--accent-hover:#1D4ED8;--green:#16A34A;--green-bg:#F0FDF4;--green-border:#BBF7D0;--amber:#D97706;--amber-bg:#FFF7ED;--amber-border:#FDE68A;--red:#DC2626;--red-bg:#FEF2F2;--red-border:#FECACA}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);font-size:13px}
+
+/* ─── TOPBAR ─── */
+.topbar{height:56px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.topbar-left{display:flex;align-items:center;gap:16px}.topbar-logo{height:30px}
+.bc{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-muted)}.bc a{color:var(--text-muted);font-weight:500;text-decoration:none}.bc a:hover{color:var(--accent)}.bc .sep{color:var(--border-strong)}.bc .cur{color:var(--text-dim);font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.tib{width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-muted);transition:all .15s}.tib:hover{background:var(--surface-2);border-color:var(--border-strong)}
+
+/* AVATAR BUTTON */
+.avatar-btn{width:36px;height:36px;border-radius:9px;border:2px solid #E2E8F0;background:linear-gradient(135deg,var(--accent),#1D4ED8);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;cursor:pointer;overflow:hidden;padding:0;transition:all .15s;position:relative}
+.avatar-btn:hover{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.avatar-btn.panel-open{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.avatar-btn img{width:100%;height:100%;object-fit:cover;display:none}.avatar-btn img.loaded{display:block}.avatar-btn .initials{line-height:1}
+
+/* ─── SIDEBAR ─── */
+.nav-sb{width:224px;position:fixed;top:56px;left:0;bottom:0;background:var(--surface);border-right:1px solid var(--border);padding:14px 0;overflow-y:auto;z-index:90}
+.sb-lbl{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--text-faint);padding:12px 20px 4px}
+.sb-a{display:flex;align-items:center;gap:10px;padding:8px 20px;font-size:12.5px;font-weight:500;color:var(--text-dim);text-decoration:none;border-left:3px solid transparent;transition:all .15s}.sb-a:hover{background:var(--accent-bg);color:var(--accent)}.sb-a.active{color:var(--accent);font-weight:700;border-left-color:var(--accent);background:var(--accent-bg)}.sb-a svg{width:16px;height:16px;flex-shrink:0;opacity:.8}
+.sb-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:10px}
+.sb-divider{height:1px;background:var(--border);margin:10px 20px}
+.sb-logout{display:flex;align-items:center;gap:10px;padding:8px 20px;font-size:12.5px;font-weight:500;color:var(--red);text-decoration:none;border-left:3px solid transparent;cursor:pointer;transition:all .15s;background:none;border-top:none;border-right:none;border-bottom:none;width:100%;font-family:'Manrope',sans-serif}.sb-logout:hover{background:var(--red-bg)}.sb-logout svg{width:16px;height:16px;flex-shrink:0}
+
+/* ─── MAIN ─── */
+.main{margin-left:224px;padding:28px;min-height:calc(100vh - 56px)}
+.demo-notice{background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:10px;padding:20px 24px;text-align:center;color:var(--accent);font-weight:600;font-size:13px;margin-bottom:20px}
+.demo-notice p{margin-top:6px;font-size:12px;font-weight:400;color:var(--text-muted)}
+
+/* ─── ACCOUNT PANEL OVERLAY ─── */
+.ap-overlay{position:fixed;inset:0;background:rgba(15,23,42,.35);z-index:1000;opacity:0;pointer-events:none;transition:opacity .25s}
+.ap-overlay.open{opacity:1;pointer-events:all}
+
+/* ─── ACCOUNT PANEL ─── */
+.ap{position:fixed;top:0;right:0;bottom:0;width:380px;background:var(--surface);border-left:1px solid var(--border);z-index:1100;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);box-shadow:-8px 0 40px rgba(0,0,0,.12)}
+.ap.open{transform:translateX(0)}
+
+/* PANEL HEADER */
+.ap-hdr{padding:18px 20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.ap-hdr-left{display:flex;align-items:center;gap:12px}
+.ap-avatar-wrap{position:relative;cursor:pointer}
+.ap-avatar{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#1D4ED8);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;overflow:hidden;border:2px solid var(--border)}
+.ap-avatar img{width:100%;height:100%;object-fit:cover;display:none}.ap-avatar img.loaded{display:block}
+.ap-avatar-edit{position:absolute;bottom:-4px;right:-4px;width:20px;height:20px;border-radius:50%;background:var(--accent);border:2px solid var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.ap-avatar-edit svg{color:#fff}
+.ap-name{font-size:14px;font-weight:800;color:var(--text)}
+.ap-email{font-size:11.5px;color:var(--text-muted);margin-top:1px}
+.ap-close{width:30px;height:30px;border:none;background:var(--surface-2);border-radius:7px;cursor:pointer;color:var(--text-muted);display:flex;align-items:center;justify-content:center;flex-shrink:0}.ap-close:hover{background:var(--border);color:var(--text)}
+
+/* PANEL BODY */
+.ap-body{flex:1;overflow-y:auto;padding:8px 0}
+
+/* ACCORDION */
+.acc-item{border-bottom:1px solid var(--border)}
+.acc-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:none;border:none;font-family:'Manrope',sans-serif;cursor:pointer;gap:12px;transition:background .15s}.acc-trigger:hover{background:var(--surface-2)}
+.acc-trigger-left{display:flex;align-items:center;gap:10px}
+.acc-ico{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.acc-ico.blue{background:var(--accent-bg)}.acc-ico.green{background:var(--green-bg)}.acc-ico.amber{background:var(--amber-bg)}.acc-ico.purple{background:#F5F3FF}.acc-ico.red{background:var(--red-bg)}
+.acc-label{font-size:13px;font-weight:700;color:var(--text);text-align:left}
+.acc-sub{font-size:11px;color:var(--text-faint);margin-top:1px;text-align:left}
+.acc-chevron{color:var(--text-faint);transition:transform .2s;flex-shrink:0}
+.acc-trigger.open .acc-chevron{transform:rotate(180deg)}
+.acc-body{display:none;padding:0 20px 18px}.acc-body.open{display:block}
+
+/* FORM FIELDS */
+.field{margin-bottom:14px}.field:last-of-type{margin-bottom:0}
+.field-label{font-size:11px;font-weight:700;color:var(--text-dim);display:block;margin-bottom:5px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fi{width:100%;font-family:'Manrope',sans-serif;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;transition:all .15s}.fi:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.08)}.fi::placeholder{color:var(--text-faint)}
+.fi-wrap{position:relative}.fi-wrap .fi{padding-right:38px}
+.fi-eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-faint);display:flex;align-items:center}.fi-eye:hover{color:var(--text-dim)}
+
+/* PHOTO UPLOAD */
+.photo-upload{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.photo-preview{width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#1D4ED8);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;overflow:hidden;border:2px solid var(--border);flex-shrink:0}
+.photo-preview img{width:100%;height:100%;object-fit:cover;display:none}.photo-preview img.loaded{display:block}
+.photo-actions{display:flex;flex-direction:column;gap:6px}
+.btn-upload{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:7px 14px;border-radius:7px;border:1.5px solid var(--accent-border);background:var(--accent-bg);color:var(--accent);cursor:pointer;transition:all .15s}.btn-upload:hover{background:var(--accent);color:#fff}
+.btn-remove-photo{font-family:'Manrope',sans-serif;font-size:11.5px;font-weight:600;padding:5px 14px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer}.btn-remove-photo:hover{background:var(--red-bg);color:var(--red);border-color:var(--red-border)}
+.photo-hint{font-size:10.5px;color:var(--text-faint);line-height:1.5;margin-top:2px}
+input[type=file]{display:none}
+
+/* SAVE BUTTON */
+.btn-save{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:9px 20px;border-radius:8px;border:none;background:var(--accent);color:#fff;cursor:pointer;transition:background .15s;margin-top:16px;width:100%}.btn-save:hover{background:var(--accent-hover)}
+.btn-save.success{background:var(--green)}
+
+/* PASSWORD RESET SECTION */
+.pw-reset-box{background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:16px;margin-bottom:4px}
+.pw-reset-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+.pw-reset-sub{font-size:12px;color:var(--text-muted);line-height:1.6;margin-bottom:14px}
+.btn-send-reset{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:9px 18px;border-radius:8px;border:1.5px solid var(--accent-border);background:var(--accent-bg);color:var(--accent);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:7px;width:100%;justify-content:center}.btn-send-reset:hover{background:var(--accent);color:#fff}
+.pw-sent-state{display:none;text-align:center;padding:12px}
+.pw-sent-state.show{display:block}
+.pw-sent-ico{width:40px;height:40px;border-radius:50%;background:var(--green-bg);border:2px solid var(--green-border);display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.pw-sent-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+.pw-sent-sub{font-size:11.5px;color:var(--text-muted);line-height:1.6}
+
+/* SUBSCRIPTION SUMMARY */
+.sub-summary{background:linear-gradient(135deg,#1E3A5F,#2563EB);border-radius:9px;padding:14px 16px;margin-bottom:14px}
+.sub-plan{font-size:15px;font-weight:800;color:#fff;margin-bottom:2px}
+.sub-price{font-size:12px;color:rgba(255,255,255,.7);margin-bottom:10px}
+.sub-renews{font-size:11px;color:rgba(255,255,255,.55)}
+.sub-renews strong{color:rgba(255,255,255,.85)}
+.sub-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.sub-stat{background:var(--surface-2);border:1px solid var(--border);border-radius:7px;padding:10px 12px}
+.sub-stat-n{font-family:'Source Code Pro',monospace;font-size:17px;font-weight:700;color:var(--text)}
+.sub-stat-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--text-faint);margin-top:1px}
+.btn-manage-sub{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:9px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;width:100%;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px}.btn-manage-sub:hover{background:var(--surface-2);border-color:var(--border-strong)}
+
+/* FSC SHORTCUT */
+.fsc-shortcut{background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:14px 16px;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.fsc-sc-left .fsc-sc-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
+.fsc-sc-left .fsc-sc-sub{font-size:11.5px;color:var(--text-muted);line-height:1.5}
+.fsc-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;margin-bottom:4px}
+.fsc-chip{font-family:'Source Code Pro',monospace;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:var(--accent-bg);border:1px solid var(--accent-border);color:var(--accent)}
+.btn-edit-fsc{font-family:'Manrope',sans-serif;font-size:11.5px;font-weight:700;padding:7px 14px;border-radius:7px;border:1.5px solid var(--accent-border);background:var(--accent-bg);color:var(--accent);cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s}.btn-edit-fsc:hover{background:var(--accent);color:#fff}
+
+/* LOGOUT */
+.logout-zone{padding:4px 0}
+.btn-logout{font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:12px 20px;border:none;background:transparent;color:var(--red);cursor:pointer;width:100%;text-align:left;display:flex;align-items:center;gap:10px;transition:all .15s}.btn-logout:hover{background:var(--red-bg)}
+
+/* PANEL FOOTER */
+.ap-footer{padding:14px 20px;border-top:1px solid var(--border);flex-shrink:0}
+.ap-footer-txt{font-size:10.5px;color:var(--text-faint);text-align:center;line-height:1.5}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:#1E293B;color:#fff;font-size:12.5px;font-weight:600;padding:12px 18px;border-radius:10px;display:flex;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(0,0,0,.2);opacity:0;transition:opacity .2s;pointer-events:none;z-index:1200}
+.toast.show{opacity:1}
+
+
+/* Avatar button override for topbar */
+.avatar-btn {
+  width:34px; height:34px; border-radius:8px;
+  border:2px solid var(--border);
+  background:linear-gradient(135deg, var(--brand-navy, #1B2A4A) 0%, var(--accent) 100%);
+  color:#fff; display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:700; cursor:pointer; letter-spacing:0.5px;
+  transition:all .15s; position:relative; padding:0;
+  font-family:'Manrope',sans-serif;
+}
+.avatar-btn:hover { border-color:var(--accent); box-shadow:0 0 0 3px rgba(37,99,235,.15); }
+.avatar-btn.panel-open { border-color:var(--accent); box-shadow:0 0 0 3px rgba(37,99,235,.15); }
+
+
+
+
+/* ═══════════════════════════════════════
+   TOPBAR — white, clean
+   ═══════════════════════════════════════ */
+.topbar {
+  background: #FFFFFF !important;
+  border-bottom: 2px solid var(--border) !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+}
+.topbar-divider { background: var(--border) !important; }
+.breadcrumb, .breadcrumb a { color: var(--text-muted) !important; }
+.breadcrumb a:hover { color: var(--accent) !important; }
+.topbar-icon-btn {
+  border-color: var(--border) !important;
+  background: var(--surface) !important;
+  color: var(--text-muted) !important;
+}
+.topbar-icon-btn:hover {
+  background: var(--surface-2) !important;
+  color: var(--accent) !important;
+  border-color: var(--accent-border) !important;
+}
+
+/* Supplier mode: green accent on topbar bottom border only */
+body.supplier-mode .topbar {
+  background: #FFFFFF !important;
+  border-bottom: 2px solid #16A34A !important;
+  box-shadow: 0 1px 4px rgba(22,163,74,0.12) !important;
+}
+
+/* ═══════════════════════════════════════
+   MODE SWITCHER — bold, high contrast pill
+   ═══════════════════════════════════════ */
+.mode-switcher {
+  display: flex;
+  align-items: center;
+  background: var(--surface-2);
+  border: 1.5px solid var(--border-strong);
+  border-radius: 9px;
+  padding: 3px;
+  gap: 3px;
+}
+.mode-btn {
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+  transition: all .2s;
+  letter-spacing: 0.1px;
+  line-height: 1;
+}
+/* Inactive — subtle ghost */
+.mode-btn.inactive {
+  background: transparent;
+  color: var(--text-muted);
+}
+.mode-btn.inactive:hover {
+  background: var(--surface-3);
+  color: var(--text-dim);
+}
+/* Active Member — solid navy */
+.mode-btn.active-member {
+  background: #1B2A4A;
+  color: #ffffff;
+  box-shadow: 0 1px 4px rgba(27,42,74,0.3), 0 0 0 0px #1B2A4A;
+}
+/* Active Supplier — solid green */
+.mode-btn.active-supplier {
+  background: #16A34A;
+  color: #ffffff;
+  box-shadow: 0 1px 4px rgba(22,163,74,0.35), 0 0 0 0px #16A34A;
+}
+.mode-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+}
+/* Dot colors on inactive buttons */
+.mode-btn.inactive .mode-dot.blue { background: #2563EB; }
+.mode-btn.inactive .mode-dot.green { background: #16A34A; }
+/* Dot on active buttons — white */
+.mode-btn.active-member .mode-dot,
+.mode-btn.active-supplier .mode-dot { background: rgba(255,255,255,0.6); }
+
+
+/* ═══ PANEL VISIBILITY ═══ */
+#panel-member  { display: block; }
+#panel-supplier { display: none; }
+body.supplier-mode #panel-member  { display: none; }
+body.supplier-mode #panel-supplier { display: block; }
+
+/* Sidebar visibility */
+.sidebar-member  { display: flex !important; flex-direction: column; }
+.sidebar-supplier { display: none !important; }
+body.supplier-mode .sidebar-member  { display: none !important; }
+body.supplier-mode .sidebar-supplier {
+    width:224px; position:fixed; top:56px; left:0; bottom:0;
+    background:var(--surface); border-right:1px solid var(--border);
+    padding:20px 0 16px; overflow-y:auto; z-index:90;
+    display:flex !important; flex-direction:column;
+  }
+
+
+
+
+/* ── CAGE REGISTER FORM ── */
+.reg-page { max-width: 780px; margin: 0 auto; padding: 32px 24px 80px; }
+.reg-page margin:0;padding:0;box-sizing:border-box}body {font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);font-size:13px}
+.reg-page .topbar {height:56px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.reg-page .topbar-logo {height:30px}
+.reg-page .tb-r {display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-muted)}
+.reg-page .page {max-width:780px;margin:0 auto;padding:40px 24px 80px}
+.reg-page .steps {display:flex;align-items:center;margin-bottom:36px}
+.reg-page .step {display:flex;align-items:center;gap:8px;flex:1}
+.reg-page .step:last-child {flex:none}
+.reg-page .sdot {width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
+.reg-page .sdot.done {background:var(--green);color:#fff}
+.reg-page .sdot.active {background:var(--accent);color:#fff;box-shadow:0 0 0 4px var(--accent-bg)}
+.reg-page .sdot.pend {background:var(--surface-2);color:var(--text-faint);border:2px solid var(--border)}
+.reg-page .slbl {font-size:11px;font-weight:700;color:var(--text-muted)}
+.reg-page .slbl.active {color:var(--accent)}
+.reg-page .slbl.done {color:var(--green)}
+.reg-page .sline {flex:1;height:2px;background:var(--border);margin:0 8px}
+.reg-page .sline.done {background:var(--green)}
+.reg-page .cage-bar {background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 20px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.reg-page .cb-l {display:flex;align-items:center;gap:14px}
+.reg-page .cb-ico {width:40px;height:40px;background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.reg-page .cb-code {font-family:'Source Code Pro',monospace;font-size:17px;font-weight:700;color:var(--accent)}
+.reg-page .sec-title {font-size:16px;font-weight:800;color:var(--text);margin-bottom:4px}
+.reg-page .sec-sub {font-size:12.5px;color:var(--text-muted);margin-bottom:20px;line-height:1.6}
+.reg-page .fc {background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.reg-page .fc-hdr {padding:11px 20px;background:var(--surface-2);border-bottom:1px solid var(--border);font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--text-dim)}
+.reg-page .fc-body {padding:20px}
+.reg-page .fg-g {display:grid;gap:14px}
+.reg-page .g2 {grid-template-columns:1fr 1fr}
+.reg-page .g3 {grid-template-columns:1fr 1fr 1fr}
+.reg-page .fg {display:flex;flex-direction:column;gap:5px}
+.reg-page .fg label {font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--text-faint)}
+.reg-page .req {color:var(--red);margin-left:2px}
+.reg-page .fg input, .reg-page .fg select, .reg-page .fg textarea {font-family:'Manrope',sans-serif;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;background:var(--surface);color:var(--text);outline:none;transition:border-color .15s;width:100%}
+.reg-page .fg input:focus, .reg-page .fg select:focus, .reg-page .fg textarea:focus {border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.08)}
+.reg-page .fg input::placeholder, .reg-page .fg textarea::placeholder {color:var(--text-faint)}
+.reg-page .fg textarea {resize:vertical;min-height:80px}
+.reg-page .fg .hint {font-size:11px;color:var(--text-faint);line-height:1.5}
+.reg-page .ro {background:var(--surface-2);color:var(--text-muted);cursor:default}
+.reg-page .cert-g {display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.reg-page .sa-g {display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}
+.reg-page .ck-tile {display:flex;align-items:center;gap:8px;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;cursor:pointer;font-size:12.5px;font-weight:600;color:var(--text-dim);transition:all .15s}
+.reg-page .ck-tile:hover {border-color:var(--accent-border);background:var(--accent-bg)}
+.reg-page .ck-tile.on {border-color:var(--accent-border);background:var(--accent-bg);color:var(--accent)}
+.reg-page .ck-tile input {width:15px;height:15px;accent-color:var(--accent);flex-shrink:0}
+.reg-page .role-g {display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}
+.reg-page .role-t {padding:14px 10px;border:1.5px solid var(--border);border-radius:7px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;cursor:pointer;background:var(--surface);color:var(--text-dim);transition:all .15s;text-align:center}
+.reg-page .role-t:hover {border-color:var(--accent-border);color:var(--accent);background:var(--accent-bg)}
+.reg-page .role-t.on {border-color:var(--accent);background:var(--accent-bg);color:var(--accent)}
+.reg-page .drop-z {border:2px dashed var(--border-strong);border-radius:8px;padding:28px 24px;text-align:center;cursor:pointer;transition:all .15s}
+.reg-page .drop-z:hover {border-color:var(--accent);background:var(--accent-bg)}
+.reg-page .terms-scroll {background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:14px 16px;font-size:12px;color:var(--text-muted);line-height:1.7;max-height:130px;overflow-y:auto;margin-bottom:12px}
+.reg-page .terms-ck {display:flex;align-items:flex-start;gap:10px;font-size:12.5px;color:var(--text-dim);cursor:pointer}
+.reg-page .terms-ck input {width:16px;height:16px;accent-color:var(--accent);flex-shrink:0;margin-top:1px}
+.reg-page .submit-area {display:flex;align-items:center;justify-content:space-between;margin-top:24px;padding-top:20px;border-top:1px solid var(--border)}
+.reg-page .back-btn {font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;padding:10px 20px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;display:flex;align-items:center;gap:6px}
+.reg-page .back-btn:hover {background:var(--surface-2)}
+.reg-page .sub-btn {font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:12px 32px;border-radius:8px;border:none;background:var(--accent);color:#fff;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .15s}
+.reg-page .sub-btn:hover {background:var(--accent-hover)}
+.reg-page .sub-note {font-size:11px;color:var(--text-faint);margin-top:6px;text-align:right}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+  .plan-badge { display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:800;padding:4px 12px;border-radius:20px;letter-spacing:.3px;flex-shrink:0; }
+  .plan-badge.lite  { background:#F1F5F9;color:#475569;border:1px solid #CBD5E1; }
+  .plan-badge.pro   { background:#EFF6FF;color:#2563EB;border:1px solid #BFDBFE; }
+  .plan-badge.gold  { background:#FFF7ED;color:#D97706;border:1px solid #FDE68A; }
+  .plan-badge.maxx  { background:#F5F3FF;color:#7C3AED;border:1px solid #DDD6FE; }
+  /* ── LOCKED / BLURRED SECTIONS ── */
+  .locked-wrap { position:relative; border-radius:12px; }
+  .locked-wrap .locked-content { pointer-events:none; user-select:none; }
+  .locked-wrap .locked-content .card-hdr,
+  .locked-wrap .locked-content .card-header { filter:none; opacity:1; }
+  .locked-wrap .locked-content .card-body,
+  .locked-wrap .locked-content .member-wins-body,
+  .locked-wrap .locked-content .ratio-body,
+  .locked-wrap .locked-content .bar-chart,
+  .locked-wrap .locked-content .post-bid-stats,
+  .locked-wrap .locked-content .bar-axis { filter:blur(3px); opacity:0.65; }
+  .locked-wrap > .metrics.locked-content { filter:blur(3px); opacity:0.65; }
+  .locked-wrap .locked-overlay {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    padding: 7px 14px 7px 10px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.12);
+    cursor: pointer;
+    transition: all .15s;
+    white-space: nowrap;
+  }
+  .locked-wrap .locked-overlay:hover { border-color:var(--accent); box-shadow:0 4px 20px rgba(37,99,235,.18); background:var(--accent-bg); }
+  .locked-overlay .lock-icon { display:flex;align-items:center;justify-content:center;color:var(--text-faint); flex-shrink:0; }
+  .locked-overlay .lock-label { font-size:11px;font-weight:700;color:var(--text-dim); white-space:nowrap; }
+  .locked-wrap .locked-overlay:hover .lock-icon { color:var(--accent); }
+  .locked-wrap .locked-overlay:hover .lock-label { color:var(--accent); }
+  .locked-overlay .lock-plan { font-size:9.5px;font-weight:800;padding:2px 8px;border-radius:10px;white-space:nowrap; }
+  .locked-overlay .lock-plan.pro  { background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-border); }
+  .locked-overlay .lock-plan.gold { background:#FFF7ED;color:#D97706;border:1px solid #FDE68A; }
+  .locked-overlay .lock-plan.maxx { background:#F5F3FF;color:#7C3AED;border:1px solid #DDD6FE; }
+  .upgrade-backdrop { display:none;position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:9000;align-items:center;justify-content:center; }
+  .upgrade-backdrop.open { display:flex; }
+  .upgrade-box { background:var(--surface);border-radius:16px;width:440px;max-width:calc(100vw - 32px);box-shadow:0 24px 64px rgba(0,0,0,.18);border:1px solid var(--border);overflow:hidden; }
+  .upgrade-box-hdr { padding:22px 24px 18px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between; }
+  .upgrade-box-hdr h3 { font-size:16px;font-weight:900;color:var(--text);margin-bottom:4px; }
+  .upgrade-box-hdr p  { font-size:12.5px;color:var(--text-muted);line-height:1.5; }
+  .upgrade-box-close { background:none;border:none;cursor:pointer;color:var(--text-faint);font-size:18px;padding:2px 6px;border-radius:5px;line-height:1;flex-shrink:0;margin-left:12px; }
+  .upgrade-box-close:hover { background:var(--surface-2);color:var(--text); }
+  .upgrade-features { padding:18px 24px; }
+  .upgrade-features ul { list-style:none;display:flex;flex-direction:column;gap:9px; }
+  .upgrade-features li { display:flex;align-items:center;gap:10px;font-size:12.5px;font-weight:500;color:var(--text-dim); }
+  .upgrade-features li svg { color:var(--green);flex-shrink:0; }
+  .upgrade-box-footer { padding:14px 24px 20px;display:flex;gap:10px; }
+  .upgrade-cta { flex:1;font-family:'Manrope',sans-serif;font-size:13px;font-weight:800;padding:11px 20px;border-radius:9px;border:none;cursor:pointer;color:#fff;transition:opacity .15s; }
+  .upgrade-cta:hover { opacity:.9; }
+  .upgrade-cta.pro  { background:#2563EB; }
+  .upgrade-cta.gold { background:#D97706; }
+  .upgrade-cta.maxx { background:#7C3AED; }
+  .upgrade-cancel { font-family:'Manrope',sans-serif;font-size:12.5px;font-weight:600;padding:11px 18px;border-radius:9px;border:1px solid var(--border);background:var(--surface);color:var(--text-dim);cursor:pointer; }
+  .upgrade-cancel:hover { background:var(--surface-2); }
+  .sidebar-item.sb-locked-click { opacity:.65;cursor:pointer; }
+  .sidebar-item.sb-locked-click:hover { background:var(--surface-2);color:var(--text-dim); }
+  .lock-pip { margin-left:auto;font-size:9px;font-weight:800;padding:2px 6px;border-radius:8px;white-space:nowrap; }
+  .lock-pip.pro  { background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-border); }
+  .lock-pip.gold { background:#FFF7ED;color:#D97706;border:1px solid #FDE68A; }
+  .lock-pip.maxx { background:#F5F3FF;color:#7C3AED;border:1px solid #DDD6FE; }
+  .s-item.sb-locked-click { opacity:.65;cursor:pointer; }
+  .s-item.sb-locked-click:hover { background:var(--surface-2); }
+
+  
+/* ════════════════ SPOTLIGHT TOUR ════════════════ */
+.spotlight-overlay{position:fixed;inset:0;z-index:9000;pointer-events:none;transition:opacity .3s}
+.spotlight-overlay.active{pointer-events:all}
+.spot-svg{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+.spotlight-overlay.active .spot-svg{pointer-events:all}
+.spot-ring{position:fixed;border-radius:10px;box-shadow:0 0 0 4px rgba(255,255,255,.9),0 0 0 8px rgba(255,255,255,.15);z-index:9001;pointer-events:none;transition:all .35s cubic-bezier(.4,0,.2,1)}
+.spot-tooltip{position:fixed;z-index:9002;width:300px;background:#fff;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.28),0 4px 16px rgba(0,0,0,.12);transition:all .35s cubic-bezier(.4,0,.2,1);overflow:hidden}
+.tt-bar{height:4px;width:100%}
+.tt-body{padding:18px 20px 0;position:relative}
+.tt-close{position:absolute;top:0;right:0;width:26px;height:26px;border-radius:6px;border:none;background:rgba(0,0,0,.06);color:#64748B;cursor:pointer;font-size:14px;line-height:26px;text-align:center;transition:all .15s}
+.tt-close:hover{background:rgba(0,0,0,.12);color:#0F172A}
+.tt-step{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px;opacity:.8}
+.tt-title{font-size:15px;font-weight:900;color:#0F172A;line-height:1.25;margin-bottom:6px}
+.tt-desc{font-size:12.5px;color:#64748B;line-height:1.6;margin-bottom:16px}
+.tt-footer{padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #E2E8F0;background:#F8FAFC}
+.tt-dots{display:flex;gap:5px;align-items:center}
+.tt-dot{width:6px;height:6px;border-radius:50%;background:#CBD5E1;transition:all .2s;cursor:pointer}
+.tt-dot.active{width:16px;border-radius:3px}
+.tt-nav{display:flex;gap:6px;align-items:center}
+.tt-back{font-family:'Manrope',sans-serif;font-size:11.5px;font-weight:600;padding:6px 14px;border-radius:7px;border:1.5px solid #E2E8F0;background:transparent;color:#475569;cursor:pointer}
+.tt-back:hover{background:#F1F5F9}
+.tt-next{font-family:'Manrope',sans-serif;font-size:11.5px;font-weight:800;padding:6px 18px;border-radius:7px;border:none;color:#fff;cursor:pointer;transition:all .15s}
+.tt-next:hover{filter:brightness(1.1)}
+.skip-confirm-tooltip{position:fixed;z-index:9003;width:280px;background:#fff;border-radius:12px;box-shadow:0 16px 48px rgba(0,0,0,.22);padding:18px 20px;display:none}
+.skip-confirm-tooltip.show{display:block}
+.sct-ico{width:32px;height:32px;border-radius:8px;background:#FFFBEB;border:1px solid #FDE68A;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.sct-title{font-size:12.5px;font-weight:800;color:#0F172A;margin-bottom:4px}
+.sct-sub{font-size:11.5px;color:#64748B;line-height:1.5;margin-bottom:12px}
+.sct-btns{display:flex;gap:7px}
+.sct-keep{font-family:'Manrope',sans-serif;font-size:11.5px;font-weight:700;padding:7px 14px;border-radius:7px;border:none;background:#D97706;color:#fff;cursor:pointer;flex:1}
+.sct-skip{font-family:'Manrope',sans-serif;font-size:11.5px;font-weight:600;padding:7px 14px;border-radius:7px;border:1.5px solid #E2E8F0;background:transparent;color:#64748B;cursor:pointer;flex:1}
+.tour-done{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#fff;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.16);padding:14px 20px;display:none;align-items:center;gap:12px;z-index:9002;min-width:340px;animation:tdSlideUp .3s ease}
+.tour-done.show{display:flex}
+@keyframes tdSlideUp{from{opacity:0;transform:translateX(-50%) translateY(16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.td-ico{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.td-title{font-size:13px;font-weight:800;color:#0F172A}
+.td-sub{font-size:11.5px;color:#64748B;margin-top:1px}
+.td-action{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:8px 16px;border-radius:8px;border:none;color:#fff;cursor:pointer;white-space:nowrap;margin-left:auto}
+.td-dismiss{font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;padding:8px;background:none;border:none;color:#94A3B8;cursor:pointer}
+.sb-tour-wrap{padding:0 12px 16px;margin-top:0;flex-shrink:0}
+.sb-tour-divider{height:1px;background:#E2E8F0;margin:12px 0 14px}
+.sb-tour-btn{width:100%;font-family:'Manrope',sans-serif;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;border:1.5px solid #E2E8F0;background:#F8FAFC;cursor:pointer;transition:all .15s;text-align:left;position:relative}
+.sb-tour-btn:hover{background:#fff;border-color:#CBD5E1;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.sb-tour-ico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-tour-ico svg{width:15px;height:15px}
+.sb-tour-label{font-size:12px;font-weight:800;color:#334155}
+.sb-tour-sub{font-size:10.5px;color:#94A3B8;margin-top:1px}
+
+</style>
+</head>
+<body>
+
+
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-left">
+    <a href="govscraper-dashboard.html">
+      <img src="https://govscraper.com/assets/BigLogo-7gv5uAxF.png" alt="GovScraper" class="topbar-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+    </a>
+    <div class="topbar-divider"></div>
+
+    <!-- ── MODE SWITCHER ── -->
+    <div class="mode-switcher">
+      <button class="mode-btn active-member" id="btn-member" onclick="setMode('member')">
+        <span class="mode-dot blue"></span>
+        Member Portal
+      </button>
+      <button class="mode-btn inactive" id="btn-supplier" onclick="setMode('supplier')">
+        <span class="mode-dot green"></span>
+        Supplier Portal
+      </button>
+    </div>
+
+    <div class="topbar-divider"></div>
+    <div class="breadcrumb" id="topbar-bc">Dashboard</div>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-icon-btn bullseye-icon" title="New Opportunities">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+      </svg>
+    </div>
+    <div class="topbar-icon-btn" title="Settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+      </svg>
+    </div>
+    <button class="avatar-btn" id="avatar-btn" title="My Account"
+      onclick="document.getElementById('account-panel').classList.add('open');document.getElementById('ap-overlay').classList.add('open');this.classList.add('panel-open');">
+      <span id="avatar-initials">JD</span>
+    </button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<nav class="sidebar sidebar-member">
+
+  <div class="sidebar-label">Main</div>
+  <a class="sidebar-item active" href="govscraper-dashboard.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    Dashboard
+  </a>
+  <a class="sidebar-item" id="sb-rfqs" href="govscraper-rfq-list.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+    My RFQs<span class="sidebar-badge">47</span>
+  </a>
+  <a class="sidebar-item" href="govscraper-rfq-list.html" style="padding-left:32px;font-size:12px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+    Private List of RFQs
+  </a>
+  <a class="sidebar-item" href="govscraper-public-rfq-list.html" style="padding-left:32px;font-size:12px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+    Public List of RFQs
+  </a>
+
+  <div class="sidebar-label">Intelligence</div>
+  <a class="sidebar-item" id="sb-nsn" href="govscraper-nsn-page.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    NSN Search
+  </a>
+  <a class="sidebar-item" id="sb-cage" href="govscraper-cage-page.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+    CAGE Search
+  </a>
+  <a class="sidebar-item" href="govscraper-fsc-lookup.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+    FSC Lookup
+  </a>
+  <a class="sidebar-item sb-locked-click" href="#" onclick="showUpgrade('gold');return false;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    NSN Watch List
+    <span class="lock-pip gold">GOLD</span>
+  </a>
+
+  <div class="sidebar-label">Results</div>
+  <a class="sidebar-item" id="sb-awards" href="govscraper-awarded-contracts.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+    Awarded Contracts
+  </a>
+  <a class="sidebar-item" href="govscraper-archived-rfqs.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+    Archived RFQs
+  </a>
+
+  <div class="sidebar-label">Alerts</div>
+  <a class="sidebar-item sb-locked-click" href="#" onclick="showUpgrade('gold');return false;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+    RFQ Alerts
+    <span class="lock-pip gold">GOLD</span>
+  </a>
+
+  <div class="sidebar-label">Community</div>
+  <a id="sb-community" class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+    Community
+  </a>
+
+  <div class="sidebar-label">Tools</div>
+  <a id="sb-packing" class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+    GovPacking
+  </a>
+
+  <div class="sidebar-spacer"></div>
+
+  <div style="height:1px;background:var(--border);margin:4px 14px 2px;"></div>
+
+  <button class="sidebar-item" onclick="document.getElementById('account-panel').classList.add('open');document.getElementById('ap-overlay').classList.add('open');document.getElementById('avatar-btn').classList.add('panel-open');" style="background:none;border:none;width:100%;cursor:pointer;font-family:'Manrope',sans-serif;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    Settings &amp; Account
+  </button>
+
+  <div class="sb-tour-wrap">
+    <div class="sb-tour-divider"></div>
+    <button class="sb-tour-btn" id="sbTourBtn" onclick="restartTour()" style="border-color:#2563EB40;background:#2563EB08">
+      <div class="sb-tour-ico" style="background:#2563EB15">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2"><polygon points="5,3 19,12 5,21 5,3"/></svg>
+      </div>
+      <div>
+        <div class="sb-tour-label" style="color:#2563EB">Replay PRO Tour</div>
+        <div class="sb-tour-sub">Replay the walkthrough</div>
+      </div>
+    </button>
+  </div>
+
+</nav>
+
+</nav>
+
+<!-- SUPPLIER SIDEBAR -->
+<nav class="sidebar-supplier">
+  <div class="sidebar-label">SUPPLIER ACCOUNT</div>
+  <div class="supplier-id-card" id="sic-claimed" style="display:none">
+    <div class="sic-verified"><svg width="12" height="12" viewBox="0 0 24 24" fill="#16A34A"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>GovScraper Verified</div>
+    <div class="sic-name">SPS Technologies, Inc.</div><div class="sic-cage">CAGE: 96906</div>
+  </div>
+  <div style="margin:0 12px 4px;background:#FEF3C7;border:1px solid #FDE68A;border-radius:8px;padding:10px 12px;" id="sic-unclaimed">
+    <div style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#D97706;margin-bottom:5px">No CAGE claimed</div>
+    <div style="font-size:11.5px;font-weight:600;color:var(--text-dim);line-height:1.4">Claim your CAGE page to unlock supplier tools</div>
+  </div>
+  <a class="s-item active" href="#" onclick="switchSupplierTab('cage-page');return false;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+    My CAGE Page
+  </a>
+  <a class="s-item sb-locked-click" href="#" onclick="showUpgrade('maxx');return false;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+    Inventory
+    <span class="lock-pip maxx">MAXX</span>
+  </a>
+  <a class="s-item sb-locked-click" href="#" onclick="showUpgrade('maxx');return false;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+    RFQ Alerts
+    <span class="lock-pip maxx">MAXX</span>
+  </a>
+  <a class="s-item" href="#" onclick="switchSupplierTab('upgrade');return false;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+    Upgrade to MAXX
+  </a>
+  <div class="sidebar-label" style="margin-top:8px">BROWSE</div>
+  <a class="s-item" href="govscraper-cage-page.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    CAGE Search
+  </a>
+  <a class="s-item" href="govscraper-nsn-page.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    NSN Search
+  </a>
+  <div class="s-spacer"></div>
+  <button class="s-item" onclick="setMode('member')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15,18 9,12 15,6"/></svg>
+    Back to Member Portal
+  </button>
+</nav>
+
+
+
+
+
+<div id="panel-member">
+<main class="main">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h1>Good morning, John 👋</h1>
+      <p>Here's your pipeline overview for today &mdash; Friday, February 13, 2026</p>
+    </div>
+    <div class="page-header-right">
+      <span class="plan-badge pro">PRO Plan</span>
+      <span class="date-badge">Last synced: 6:02 AM EST</span>
+    </div>
+  </div>
+  <div id="welcomeBanner" style="display:none"></div><div class="banners">
+    <div class="banner">
+      <div class="banner-icon blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+      <h3>New Opportunities</h3>
+      <p>12 new RFQs match your FSC criteria since yesterday</p>
+      <a href="govscraper-rfq-list.html" class="btn btn-primary">Review Now</a>
+    </div>
+    <div class="banner">
+      <div class="banner-icon green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg></div>
+      <h3>GovPacking</h3>
+      <p>Check MIL-SPEC packaging requirements for your active bids</p>
+      <a href="#" class="btn btn-accent">Visit GovPacking</a>
+    </div>
+    <div class="banner">
+      <div class="banner-icon gray"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+      <h3>Community Forum</h3>
+      <p>Connect with other DLA contractors and share insights</p>
+      <a href="#" class="btn btn-ghost">Join Discussion</a>
+    </div>
+  </div>
+  <div class="metrics" id="kpiRow">
+    <div class="metric-card blue" onclick="window.location.href='govscraper-rfq-list.html'" style="cursor:pointer">
+      <div class="metric-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>RFQs Ready to Source</div>
+      <div class="metric-num" style="color:var(--accent)">47</div>
+      <div class="metric-change down">↓&nbsp;<b>-57.1%</b> vs. prior 7 days</div>
+    </div>
+    <div class="metric-card green" onclick="window.location.href='govscraper-rfq-list.html'" style="cursor:pointer">
+      <div class="metric-label">Currently Sourcing</div>
+      <div class="metric-num" style="color:var(--green)">8</div>
+      <div class="metric-sub">Awaiting vendor quotes</div>
+    </div>
+    <div class="metric-card red" onclick="window.location.href='govscraper-rfq-list.html'" style="cursor:pointer">
+      <div class="metric-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Expiring within 7 Days</div>
+      <div class="metric-num" style="color:var(--red)">3</div>
+      <div class="metric-sub" style="color:var(--red);font-weight:600">Action required</div>
+    </div>
+    <div class="metric-card gold" onclick="window.location.href='govscraper-awarded-contracts.html'" style="cursor:pointer">
+      <div class="metric-hdr-row"><div class="metric-label" style="margin:0">Awards Won (30-Day)</div><span class="filters-link">Filters</span></div>
+      <div class="metric-award-row">
+        <div class="col"><div class="slabel">Total</div><div class="sval">2</div></div>
+        <div class="col"><div class="slabel">Amount</div><div class="sval" style="color:var(--green);font-family:'Source Code Pro',monospace;font-size:22px;font-weight:700">$82,958</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-hdr"><h3>FSC Performance (30 Day)</h3><span class="filters-link btn-sm">View All FSCs</span></div>
+      <div class="card-body">
+        <div class="bar-chart">
+          <div class="bar-row"><div class="bar-label">5306</div><div class="bar-track"><div class="bar-fill" style="width:92%;background:var(--fsc-1)">23</div></div><div class="bar-meta">Bolts &amp; Machine Screws</div></div>
+          <div class="bar-row"><div class="bar-label">5310</div><div class="bar-track"><div class="bar-fill" style="width:76%;background:var(--fsc-2)">19</div></div><div class="bar-meta">Nuts &amp; Washers</div></div>
+          <div class="bar-row"><div class="bar-label">4720</div><div class="bar-track"><div class="bar-fill" style="width:60%;background:var(--fsc-3)">15</div></div><div class="bar-meta">Hose &amp; Flexible Tubing</div></div>
+          <div class="bar-row"><div class="bar-label">2590</div><div class="bar-track"><div class="bar-fill" style="width:52%;background:var(--fsc-4)">13</div></div><div class="bar-meta">Vehicular Components</div></div>
+          <div class="bar-row"><div class="bar-label">5330</div><div class="bar-track"><div class="bar-fill" style="width:44%;background:var(--fsc-5)">11</div></div><div class="bar-meta">Packing &amp; Gaskets</div></div>
+          <div class="bar-row"><div class="bar-label">6130</div><div class="bar-track"><div class="bar-fill" style="width:36%;background:var(--fsc-6)">9</div></div><div class="bar-meta">Power Distribution Equip.</div></div>
+          <div class="bar-row"><div class="bar-label">4810</div><div class="bar-track"><div class="bar-fill" style="width:28%;background:var(--fsc-7)">7</div></div><div class="bar-meta">Valves, Nonpowered</div></div>
+          <div class="bar-row"><div class="bar-label">4820</div><div class="bar-track"><div class="bar-fill" style="width:8%;background:var(--fsc-8)">2</div></div><div class="bar-meta">Valves, Powered</div></div>
+        </div>
+        <div class="bar-axis"><span>0</span><span>5</span><span>10</span><span>15</span><span>20</span><span>25</span></div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div class="card">
+        <div class="card-hdr"><h3>Member Wins</h3></div>
+        <div class="member-wins-body">
+          <div class="mw-label">Total Award &amp; Amount</div>
+          <div class="mw-row"><span class="mw-num">98</span><span class="mw-amt">$4.85M</span></div>
+          <div class="mw-powered"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>Member Wins Powered by GovScraper</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><h3>Post Bid Statistics</h3><span class="filters-link">Filters</span></div>
+        <div class="card-body">
+          <div class="post-bid-stats">
+            <div class="pbs-item"><div class="pbs-label">Submitted</div><div class="pbs-val">23</div></div>
+            <div class="pbs-item"><div class="pbs-label">Trace Req.</div><div class="pbs-val" style="color:var(--cyan)">5</div></div>
+            <div class="pbs-item"><div class="pbs-label">Won</div><div class="pbs-val" style="color:var(--green)">5</div></div>
+            <div class="pbs-item"><div class="pbs-label">Win Rate</div><div class="pbs-val" style="color:var(--green)">21.7%</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="three-col">
+    <div class="card">
+      <div class="card-hdr"><h3>Saved Searches</h3><button class="btn btn-ghost btn-sm">+ Add / Edit</button></div>
+      <div class="card-body">
+        <div class="saved-item" onclick="window.location.href='govscraper-rfq-list.html'" style="cursor:pointer"><span class="si-name">FSC 5306 &mdash; Small Business Only</span><span class="si-count">12 new</span></div>
+        <div class="saved-item" onclick="window.location.href='govscraper-rfq-list.html'" style="cursor:pointer"><span class="si-name">Bolts &amp; Screws &mdash; Expiring This Week</span><span class="si-count">3 new</span></div>
+        <div class="saved-item" onclick="window.location.href='govscraper-rfq-list.html'" style="cursor:pointer"><span class="si-name">High Bid Worthiness (Score &gt; 60)</span><span class="si-count">7 new</span></div>
+        <div class="saved-item" onclick="window.location.href='govscraper-nsn-page.html'" style="cursor:pointer"><span class="si-name">My Watched NSNs</span><span class="si-count">2 new</span></div>
+      </div>
+    </div>
+<div class="locked-wrap">
+    <div class="card locked-content">
+      <div class="card-hdr"><h3>NSN Watch List</h3><a href="govscraper-nsn-watchlist.html" class="filters-link">View All</a></div>
+      <div class="card-body">
+        <div class="saved-item"><span class="si-name">5306-01-184-7652 — Bolt, Machine</span><span class="si-count">1 new RFQ</span></div>
+        <div class="saved-item"><span class="si-name">5310-00-045-3299 — Nut, Hexagon</span><span class="si-count">active</span></div>
+        <div class="saved-item"><span class="si-name">5315-00-011-6632 — Pin, Cotter</span><span class="si-count">active</span></div>
+        <div class="saved-item" style="border:none;padding-bottom:0"><span class="si-name" style="color:var(--text-faint)">+ 47 more NSNs tracked</span></div>
+      </div>
+    </div>
+<div class="locked-overlay" onclick="showUpgrade('gold')"><div class="lock-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><div class="lock-label">Unlock NSN Watch List</div><span class="lock-plan gold">GOLD</span></div>
+</div>
+    <div class="card">
+      <div class="card-hdr"><h3>Bid to Award Ratio</h3></div>
+      <div class="ratio-card-body">
+        <div class="ratio-numbers-row">
+          <div class="ratio-your">
+            <div class="ratio-your-val good" id="ratio-your-val">6.25%</div>
+            <div class="ratio-your-lbl">Your Ratio</div>
+          </div>
+          <div class="ratio-industry">
+            <div class="ratio-industry-val">5.25%</div>
+            <div class="ratio-industry-lbl">Industry Avg</div>
+          </div>
+        </div>
+        <div class="ratio-gauge-wrap">
+          <div class="ratio-track">
+            <div class="ratio-fill good" id="ratio-fill" style="width:62.5%"></div>
+          </div>
+        </div>
+        <div class="ratio-insight good" id="ratio-insight">
+          <span id="ratio-insight-text"></span>
+        </div>
+        <div style="font-size:10px;color:var(--text-faint);margin-top:8px;line-height:1.5;">
+          Percentage is based on your total bids submitted vs. awards won over the lifetime of your GovScraper use.
+        </div>
+      </div>
+    </div>
+    <script>
+    (function(){
+      var your = 6.25, avg = 5.25;
+      var diff = Math.abs(your - avg).toFixed(2);
+      var isAbove = your >= avg;
+      var insightEl = document.getElementById('ratio-insight-text');
+      var insightBox = document.getElementById('ratio-insight');
+      if (isAbove) {
+        insightEl.innerHTML = 'You're <strong>' + diff + ' pts above</strong> the industry average — your win rate is strong. Keep consistent bid pricing to maintain this edge.';
+        insightBox.classList.remove('below'); insightBox.classList.add('good');
+      } else {
+        insightEl.innerHTML = 'You're <strong>' + diff + ' pts below</strong> the industry average. Focus on bid accuracy and faster sourcing to close the gap.';
+        insightBox.classList.remove('good'); insightBox.classList.add('below');
+      }
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+
+<div id="upgrade-backdrop" class="upgrade-backdrop" onclick="if(event.target===this)closeUpgrade()">
+  <div class="upgrade-box">
+    <div class="upgrade-box-hdr">
+      <div><h3 id="up-title">Upgrade Required</h3><p id="up-desc">This feature is available on a higher plan.</p></div>
+      <button class="upgrade-box-close" onclick="closeUpgrade()">&#x2715;</button>
+    </div>
+    <div class="upgrade-features"><ul id="up-features"></ul></div>
+    <div class="upgrade-box-footer">
+      <button class="upgrade-cta" id="up-cta-btn" onclick="window.location.href='govscraper-pricing.html'">View Plans</button>
+      <button class="upgrade-cancel" onclick="closeUpgrade()">Not now</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUPPLIER PORTAL PANEL -->
+<div id="panel-supplier">
+  <div class="main" style="padding:28px 32px;min-height:calc(100vh - 56px)">
+    <div style="display:flex;gap:28px;align-items:flex-start;">
+
+      <!-- LEFT: scrollable form content -->
+      <div style="flex:1;min-width:0;">
+<div id="sp-unclaimed">
+  <div class="reg-page" style="padding:0;">
+
+    <!-- PAGE HEADER -->
+    <div style="margin-bottom:28px;">
+      <h1 style="font-size:20px;font-weight:800;color:var(--text);margin-bottom:6px;">Claim Your CAGE Page</h1>
+      <p style="font-size:13px;color:var(--text-muted);line-height:1.6;">Your CAGE code is already in GovScraper's database. Complete the form below to claim it — our admin team will review and activate your page within 1–2 business days.</p>
+    </div>
+
+    <!-- YOUR INFORMATION -->
+    <div class="fc">
+      <div class="fc-hdr">Your Information</div>
+      <div class="fc-body">
+        <div class="fg-g g2">
+          <div class="fg"><label>First Name <span class="req">*</span></label><input placeholder="Jane"></div>
+          <div class="fg"><label>Last Name <span class="req">*</span></label><input placeholder="Smith"></div>
+          <div class="fg"><label>Job Title <span class="req">*</span></label><input placeholder="e.g. VP of Sales, Procurement Manager"></div>
+          <div class="fg"><label>Business Email <span class="req">*</span></label><input type="email" id="reg-email" placeholder="jane@yourcompany.com"><span class="hint">Must match your company domain to expedite review.</span></div>
+          <div class="fg"><label>Direct Phone <span class="req">*</span></label><input type="tel" placeholder="(215) 555-0100"></div>
+          <div class="fg"><label>Mobile Phone</label><input type="tel" placeholder="(215) 555-0101"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPANY & CONTACT DETAILS with live CAGE search -->
+    <div class="fc">
+      <div class="fc-hdr">Company &amp; Contact Details <span style="font-weight:500;text-transform:none;font-size:10px;letter-spacing:0;color:var(--text-faint);margin-left:6px">— displayed on your public CAGE page</span></div>
+      <div class="fc-body">
+        <div class="fg-g">
+          <div class="fg-g g2">
+
+            <!-- CAGE CODE with live search -->
+            <div class="fg" style="position:relative;">
+              <label>CAGE Code <span class="req">*</span></label>
+              <div style="position:relative;">
+                <input
+                  id="reg-cage-input"
+                  placeholder="e.g. 96906"
+                  maxlength="5"
+                  autocomplete="off"
+                  oninput="cageLookup(this.value)"
+                  style="font-family:'Source Code Pro',monospace;text-transform:uppercase;letter-spacing:1px;"
+                >
+                <div id="cage-spinner" style="display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-faint)" stroke-width="2" style="animation:spin .7s linear infinite"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                </div>
+              </div>
+              <!-- Dropdown results -->
+              <div id="cage-dropdown" style="display:none;position:absolute;left:0;right:0;top:100%;z-index:200;background:var(--surface);border:1.5px solid var(--accent-border);border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.1);overflow:hidden;margin-top:3px;"></div>
+              <span class="hint" id="cage-hint">Enter your 5-character CAGE code to look up your company.</span>
+            </div>
+
+            <!-- Company Name — prefilled by CAGE lookup -->
+            <div class="fg">
+              <label>Company Name <span class="req">*</span></label>
+              <input id="reg-company-name" placeholder="Auto-filled when CAGE is selected" readonly style="background:var(--surface-2);color:var(--text-muted);cursor:default;" class="ro">
+              <span class="hint" id="company-hint">Pulled from CAGE record — contact support to correct errors.</span>
+            </div>
+
+            <div class="fg"><label>Company Website</label><input type="url" placeholder="https://www.yourcompany.com"></div>
+            <div class="fg"><label>Public Contact Email</label><input type="email" placeholder="sales@yourcompany.com"></div>
+            <div class="fg"><label>Public Phone Number</label><input type="tel" placeholder="(215) 555-0100"></div>
+            <div class="fg"><label>Year Established</label><input placeholder="e.g. 1998"></div>
+          </div>
+          <div class="fg"><label>Company Description</label><textarea placeholder="Brief description of your capabilities and specializations — shown on your public CAGE page…"></textarea></div>
+          <div class="fg"><label>Point of Contact for RFQ Inquiries</label><input placeholder="Full name of primary contact for contractor inquiries"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUPPLIER ROLE -->
+    <div class="fc">
+      <div class="fc-hdr">Supplier Role</div>
+      <div class="fc-body">
+        <div class="fg"><label>How does your company primarily participate in DLA procurement? <span class="req">*</span></label></div>
+        <div class="role-g">
+          <button class="role-t" onclick="rTog(this)"><div style="font-size:22px;margin-bottom:6px">🏭</div>Manufacturer<div style="font-size:10px;font-weight:500;opacity:.8;margin-top:4px">We make the parts</div></button>
+          <button class="role-t" onclick="rTog(this)"><div style="font-size:22px;margin-bottom:6px">📦</div>Distributor<div style="font-size:10px;font-weight:500;opacity:.8;margin-top:4px">We source and supply parts</div></button>
+          <button class="role-t" onclick="rTog(this)"><div style="font-size:22px;margin-bottom:6px">🔄</div>Both<div style="font-size:10px;font-weight:500;opacity:.8;margin-top:4px">We manufacture and distribute</div></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CERTIFICATIONS -->
+    <div class="fc">
+      <div class="fc-hdr">Certifications &amp; Standards</div>
+      <div class="fc-body">
+        <div class="fg"><label>Select all certifications your company holds</label></div>
+        <div class="cert-g">
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)"> ISO 9001:2015</label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)"> AS9100 Rev D</label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)"> ITAR Registered</label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)"> NADCAP</label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)"> ISO 14001</label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)"> CMMC Level 2+</label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)"> MIL-SPEC Packaging</label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)"> Other (specify below)</label>
+        </div>
+        <div class="fg" style="margin-top:12px"><label>Other Certifications</label><input placeholder="e.g. ANAB Accredited, OSHA 18001…"></div>
+      </div>
+    </div>
+
+    <!-- SET-ASIDE STATUS -->
+    <div class="fc">
+      <div class="fc-hdr">Small Business &amp; Set-Aside Status</div>
+      <div class="fc-body">
+        <div class="fg"><label>Select all that apply</label></div>
+        <div class="sa-g">
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)"> Small Business</label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)"> 8(a) Certified</label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)"> HUBZone</label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)"> WOSB</label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)"> SDVOSB</label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)"> None of the above</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- MANUFACTURING CAPABILITIES -->
+    <div class="fc">
+      <div class="fc-hdr">Manufacturing &amp; Production Capabilities</div>
+      <div class="fc-body">
+        <div class="fg"><label>Select all capabilities your facility offers</label></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px;" id="cap-grid">
+
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)">
+            <div><div style="font-size:13px;margin-bottom:2px;">🖨️ Additive Manufacturing</div><div style="font-size:10px;font-weight:500;opacity:.7;">3D printing, SLS, SLA, FDM</div></div>
+          </label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)">
+            <div><div style="font-size:13px;margin-bottom:2px;">⚙️ CNC Machining</div><div style="font-size:10px;font-weight:500;opacity:.7;">Milling, turning, EDM</div></div>
+          </label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)">
+            <div><div style="font-size:13px;margin-bottom:2px;">🔩 Fasteners &amp; Hardware</div><div style="font-size:10px;font-weight:500;opacity:.7;">Bolts, screws, nuts, pins</div></div>
+          </label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)">
+            <div><div style="font-size:13px;margin-bottom:2px;">🔧 Metal Fabrication</div><div style="font-size:10px;font-weight:500;opacity:.7;">Welding, stamping, forming</div></div>
+          </label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)">
+            <div><div style="font-size:13px;margin-bottom:2px;">🛡️ Castings &amp; Forgings</div><div style="font-size:10px;font-weight:500;opacity:.7;">Sand cast, die cast, investment</div></div>
+          </label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)">
+            <div><div style="font-size:13px;margin-bottom:2px;">🧪 Surface Treatment</div><div style="font-size:10px;font-weight:500;opacity:.7;">Plating, anodizing, coating</div></div>
+          </label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)">
+            <div><div style="font-size:13px;margin-bottom:2px;">🔌 Electronics &amp; Electrical</div><div style="font-size:10px;font-weight:500;opacity:.7;">PCBs, connectors, wiring</div></div>
+          </label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)">
+            <div><div style="font-size:13px;margin-bottom:2px;">🧲 Bearings &amp; Seals</div><div style="font-size:10px;font-weight:500;opacity:.7;">Ball, roller, thrust bearings</div></div>
+          </label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)">
+            <div><div style="font-size:13px;margin-bottom:2px;">💧 Hydraulics &amp; Pneumatics</div><div style="font-size:10px;font-weight:500;opacity:.7;">Valves, cylinders, fittings</div></div>
+          </label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)">
+            <div><div style="font-size:13px;margin-bottom:2px;">🔦 Optics &amp; Photonics</div><div style="font-size:10px;font-weight:500;opacity:.7;">Lenses, filters, laser components</div></div>
+          </label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)">
+            <div><div style="font-size:13px;margin-bottom:2px;">🧵 Textiles &amp; Soft Goods</div><div style="font-size:10px;font-weight:500;opacity:.7;">Webbing, straps, protective gear</div></div>
+          </label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)">
+            <div><div style="font-size:13px;margin-bottom:2px;">📦 Packaging &amp; Kitting</div><div style="font-size:10px;font-weight:500;opacity:.7;">MIL-SPEC, custom pack, kitting</div></div>
+          </label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)">
+            <div><div style="font-size:13px;margin-bottom:2px;">🛞 Rubber &amp; Polymers</div><div style="font-size:10px;font-weight:500;opacity:.7;">O-rings, gaskets, molded parts</div></div>
+          </label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)">
+            <div><div style="font-size:13px;margin-bottom:2px;">🪵 Composites</div><div style="font-size:10px;font-weight:500;opacity:.7;">Carbon fiber, fiberglass, laminates</div></div>
+          </label>
+          <label class="ck-tile"><input type="checkbox" onchange="tileOn(this)">
+            <div><div style="font-size:13px;margin-bottom:2px;">🔬 Testing &amp; Inspection</div><div style="font-size:10px;font-weight:500;opacity:.7;">NDT, CMM, metrology services</div></div>
+          </label>
+
+        </div>
+        <div class="fg" style="margin-top:14px;">
+          <label>Other Capabilities</label>
+          <input placeholder="e.g. Gear cutting, heat treating, special processes…">
+        </div>
+      </div>
+    </div>
+
+    <!-- SPECIALIZATION DETAILS -->
+    <div class="fc">
+      <div class="fc-hdr">Specialization Details <span style="font-weight:500;text-transform:none;font-size:10px;letter-spacing:0;color:var(--text-faint);margin-left:4px">— help contractors understand exactly what you supply</span></div>
+      <div class="fc-body">
+        <div class="fg-g" style="gap:18px;">
+
+          <div class="fg">
+            <label>Materials You Work With</label>
+            <input placeholder="e.g. 304 stainless steel, 6061 aluminum, titanium, nylon, PEEK…">
+            <span class="hint">List primary materials — this helps match you to the right NSNs.</span>
+          </div>
+
+          <div class="fg-g g2">
+            <div class="fg">
+              <label>Size / Dimension Range</label>
+              <input placeholder='e.g. Bolts 1/4" to 1-1/2" diameter, up to 6" length'>
+              <span class="hint">Describe the physical range of parts you typically supply.</span>
+            </div>
+            <div class="fg">
+              <label>Production Volume Range</label>
+              <select>
+                <option value="" disabled selected>Select typical order size</option>
+                <option>1 – 10 units (prototype / small lot)</option>
+                <option>10 – 100 units (low volume)</option>
+                <option>100 – 1,000 units (mid volume)</option>
+                <option>1,000 – 10,000 units (high volume)</option>
+                <option>10,000+ units (mass production)</option>
+                <option>Varies widely by part</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="fg">
+            <label>What Can You Supply? <span class="req">*</span></label>
+            <textarea id="spec-detail" rows="4" placeholder="Describe specifically what your company supplies for DLA contracts. Be as specific as possible — this information is used to match you with relevant RFQs.&#10;&#10;Example: We supply all standard hex bolts from 3/8&quot; to 1-1/2&quot; diameter in grades 2, 5, and 8, in both zinc-plated and stainless finishes. We also stock a full range of metric fasteners and can accommodate MIL-SPEC packaging requirements." style="min-height:120px;"></textarea>
+            <span class="hint">The more detail you provide, the more accurately we can match you to open RFQs.</span>
+          </div>
+
+          <div class="fg">
+            <label>FSC Categories You Actively Supply</label>
+            <input placeholder="e.g. 5305 Screws, 5306 Bolts, 5310 Nuts &amp; Washers, 5330 Packing &amp; Gaskets…">
+            <span class="hint">Enter FSC codes or descriptions separated by commas.</span>
+          </div>
+
+          <div class="fg">
+            <label>Notable NSNs or Part Numbers You Stock</label>
+            <textarea placeholder="List any NSNs or manufacturer part numbers you regularly stock or have supplied before. One per line or comma-separated.&#10;&#10;Example:&#10;5306-00-151-7836&#10;5305-00-071-2510&#10;SPS-M12-S304" style="min-height:90px;"></textarea>
+            <span class="hint">Optional — helps us verify and pre-match your inventory to active RFQs immediately upon approval.</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- SUPPORTING DOCS -->
+    <div class="fc">
+      <div class="fc-hdr">Supporting Documentation <span style="font-weight:500;text-transform:none;font-size:10px;letter-spacing:0;color:var(--text-faint);margin-left:4px">— Optional but speeds up review</span></div>
+      <div class="fc-body">
+        <div class="drop-z">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--text-faint)" stroke-width="1.5" style="margin-bottom:10px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <div style="font-size:13px;font-weight:700;color:var(--text-dim);margin-bottom:4px">Drop files or click to browse</div>
+          <div style="font-size:11.5px;color:var(--text-faint)">Business license, SAM.gov registration, or signed authorization letter. PDF, JPG, PNG — up to 10MB each.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TERMS -->
+    <div class="fc">
+      <div class="fc-hdr">Terms &amp; Agreement</div>
+      <div class="fc-body">
+        <div class="terms-scroll">
+          <strong>GovScraper Supplier Page Terms of Service</strong><br><br>
+          By claiming this CAGE page, you represent and warrant that you are an authorized representative of the company associated with your CAGE code and have the legal authority to act on behalf of that company.<br><br>
+          You agree that all information submitted is accurate and truthful. Misrepresentation may result in immediate removal of your claimed page and potential notification to relevant authorities.<br><br>
+          GovScraper reserves the right to verify your identity and company association through any available means, including cross-referencing government databases, contacting the company directly, or requesting additional documentation.<br><br>
+          You acknowledge that GovScraper may display your company's information — including contact details and certifications you provide — to registered contractor members for the purpose of facilitating government contracting.<br><br>
+          Your page will remain pending until reviewed and approved by GovScraper administrators. Approval is not guaranteed and may be denied at GovScraper's sole discretion.
+        </div>
+        <label class="terms-ck">
+          <input type="checkbox" id="tc">
+          <span id="tc-label">I confirm that I am an authorized representative of my company and agree to the GovScraper Supplier Terms of Service.</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="submit-area">
+      <div></div>
+      <div>
+        <button class="sub-btn" onclick="doSubmit()">
+          Submit Claim Request
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
+        </button>
+        <div class="sub-note">Your information is encrypted and securely transmitted.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+    
+<div id="sp-claimed" style="display:none">
+<!-- HERO — CLAIMED STATE -->
+  <div class="hero">
+    <div class="hero-top">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2316A34A'%3E%3Cpolygon points='12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26'/%3E%3C/svg%3E" alt="GovScraper Verified" style="width:40px;height:40px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.25))">
+          <span style="font-size:12px;font-weight:700;color:#86EFAC;letter-spacing:.2px">GovScraper Verified Supplier</span>
+        </div>
+        <div class="cage-code">96906</div>
+        <div class="cage-co">SPS Technologies, Inc.</div>
+        <div class="cage-desc">Leading manufacturer of aerospace and defense fasteners. ISO 9001 certified. Specializing in NAS and MIL-SPEC bolts, screws, and studs for DLA procurement.</div>
+        <div class="cage-tags">
+          <span class="c-tag">● ACTIVE</span>
+          <span class="c-tag">LARGE BUSINESS</span>
+          <span class="c-tag">MANUFACTURER</span>
+          <span class="c-tag">ISO 9001</span>
+          <span class="c-tag">ITAR</span>
+          <span class="c-tag">EST. 1956</span>
+        </div>
+      </div>
+      <div class="hero-actions">
+        <button class="edit-btn" onclick="window.location.href='#edit'">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;margin-right:4px"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Edit Page
+        </button>
+        <button class="upgrade-btn" onclick="window.location.href='govscraper-cage-upgrade.html'">⭐ Upgrade to Member</button>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hs-i"><span class="hs-n">360</span><span class="hs-l">NSN References</span></div>
+      <div class="hs-i"><span class="hs-n">342</span><span class="hs-l">As Manufacturer</span></div>
+      <div class="hs-i"><span class="hs-n">18</span><span class="hs-l">As Distributor</span></div>
+      <div class="hs-i"><span class="hs-n">7</span><span class="hs-l">FSC Categories</span></div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- RFQ ALERT NOTIFICATION -->
+    <div class="notif-card">
+      <div class="notif-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg></div>
+      <div class="notif-text">
+        <strong>2 New RFQs match your inventory</strong>
+        <span>SPE7M8-26-Q-0142 and SPE7M8-26-Q-0098 reference NSNs you supply — upgrade to Supplier Pro to get these alerts in real time before contractors find someone else.</span>
+      </div>
+      <button class="notif-action" onclick="window.location.href='govscraper-cage-upgrade.html'">Upgrade to See RFQs →</button>
+    </div>
+
+    <!-- SOFT UPGRADE CTA -->
+    <div style="background:var(--surface);border:1px solid var(--accent-border);border-radius:10px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+      <div style="display:flex;align-items:center;gap:14px">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2316A34A'%3E%3Cpolygon points='12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26'/%3E%3C/svg%3E" alt="GovScraper Verified" style="width:28px;height:28px;flex-shrink:0">
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px">Get notified when contractors need your parts</div>
+          <div style="font-size:12px;color:var(--text-muted)">Upgrade to Supplier Pro to receive real-time RFQ alerts, priority search placement, and bid analytics. Your GovScraper Verified badge is already working — now let contractors find you first.</div>
+        </div>
+      </div>
+      <button onclick="window.location.href='govscraper-cage-upgrade.html'" style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:9px 18px;border-radius:8px;border:1.5px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s" onmouseover="this.style.background='var(--accent-bg)'" onmouseout="this.style.background='transparent'">View Plans →</button>
+    </div>
+
+    <!-- CONTACT INFO — EDITABLE -->
+    <div class="card">
+      <div class="ch"><h3>Contact Information</h3><div class="ch-r"><span class="tag tag-green">✓ Claimed</span><button class="edit-field-btn">Edit</button></div></div>
+      <div class="cb">
+        <div class="kvg c2">
+          <div class="kv"><label>Website</label><div class="editable-val"><span>www.spstechnologies.com</span><svg class="edit-ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div></div>
+          <div class="kv"><label>Point of Contact</label><div class="editable-val"><span>Jane Smith, VP Sales</span><svg class="edit-ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div></div>
+          <div class="kv"><label>Email</label><div class="editable-val"><span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="394a58555c4a794a494a4d5c5a51575655565e505c4a175a5654">[email&#160;protected]</a></span><svg class="edit-ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div></div>
+          <div class="kv"><label>Phone</label><div class="editable-val"><span>(215) 555-0100</span><svg class="edit-ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CERTIFICATIONS — EDITABLE -->
+    <div class="card">
+      <div class="ch"><h3>Certifications</h3><div class="ch-r"><span class="tag tag-green">✓ Claimed</span><button class="edit-field-btn">Edit</button></div></div>
+      <div class="cb">
+        <div class="cert-display">
+          <div class="cert-item active"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg> ISO 9001:2015</div>
+          <div class="cert-item active"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg> ITAR Registered</div>
+          <div class="cert-item active"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg> MIL-SPEC Packaging</div>
+          <div class="cert-item inactive">— AS9100 Rev D</div>
+          <div class="cert-item inactive">— NADCAP</div>
+          <div class="cert-item inactive">— CMMC Level 2+</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUPPLIER INVENTORY — UNLOCKED -->
+    <div class="card">
+      <div class="ch"><h3>Supplier Inventory</h3><div class="ch-r"><span class="tag tag-green">✓ Active — 4 Items</span><button class="edit-field-btn">Manage</button></div></div>
+      <div class="cb">
+        <div class="inv-upload">
+          <div class="drop-z">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--text-faint)" stroke-width="1.5" style="margin-bottom:8px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <div style="font-size:12.5px;font-weight:700;color:var(--text-dim);margin-bottom:4px">Upload CSV Inventory</div>
+            <div style="font-size:11px;color:var(--text-faint)">NSN, Part Number, Condition, Lead Time</div>
+          </div>
+          <div class="inv-form">
+            <div class="inv-form-title">+ Add Single Item</div>
+            <div class="fg-g2">
+              <div class="fg"><label>NSN</label><input placeholder="5306-00-203-3858"></div>
+              <div class="fg"><label>Part Number</label><input placeholder="NAS6203-14"></div>
+              <div class="fg"><label>Condition</label><select><option>New</option><option>Refurbished</option><option>Surplus</option></select></div>
+              <div class="fg"><label>Lead Time</label><select><option>In Stock</option><option>7 Days</option><option>14 Days</option><option>30 Days</option><option>60+ Days</option></select></div>
+              <div class="fg"><label>Cert Type</label><select><option>OEM Cert</option><option>ISO 9001</option><option>No Cert</option></select></div>
+              <div class="fg"><label>MIL-SPEC Pkg?</label><select><option>Yes</option><option>No</option></select></div>
+            </div>
+            <button class="add-btn" style="margin-top:9px">+ Add to Inventory</button>
+          </div>
+        </div>
+        <table class="dt">
+          <thead><tr><th>NSN</th><th>Part Number</th><th>Condition</th><th>Cert</th><th>Lead Time</th><th>Packaging</th><th>Updated</th><th></th></tr></thead>
+          <tbody>
+            <tr><td class="mo"><a href="#">5306-00-203-3858</a></td><td class="mo">NAS6203-14</td><td><span class="tag tag-green">New</span></td><td>OEM Cert</td><td>In Stock</td><td><span class="tag tag-green">Yes</span></td><td>10-Feb-2026</td><td><button style="font-family:'Manrope',sans-serif;font-size:10px;padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer">✕</button></td></tr>
+            <tr><td class="mo"><a href="#">5305-00-269-5518</a></td><td class="mo">SPS-2505-14</td><td><span class="tag tag-green">New</span></td><td>OEM Cert</td><td>7 Days</td><td><span class="tag tag-green">Yes</span></td><td>08-Feb-2026</td><td><button style="font-family:'Manrope',sans-serif;font-size:10px;padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer">✕</button></td></tr>
+            <tr><td class="mo"><a href="#">5306-00-418-7224</a></td><td class="mo">NAS6203-20</td><td><span class="tag tag-green">New</span></td><td>OEM Cert</td><td>14 Days</td><td><span class="tag tag-green">Yes</span></td><td>05-Feb-2026</td><td><button style="font-family:'Manrope',sans-serif;font-size:10px;padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer">✕</button></td></tr>
+            <tr><td class="mo"><a href="#">5310-00-225-8698</a></td><td class="mo">SPS-W516-5AE</td><td><span class="tag tag-amber">Surplus</span></td><td>No Cert</td><td>In Stock</td><td><span class="tag tag-red">No</span></td><td>01-Feb-2026</td><td><button style="font-family:'Manrope',sans-serif;font-size:10px;padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer">✕</button></td></tr>
+          </tbody>
+        </table>
+        <div class="inv-footer">4 inventory items &bull; <a href="#">Export as CSV</a></div>
+      </div>
+    </div>
+
+    <!-- FSC -->
+    <div class="card">
+      <div class="ch"><h3>FSC Categories Supplied</h3><span class="src-t">7 categories</span></div>
+      <div class="cb">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 40px">
+          <div>
+            <div class="fsc-row"><span class="fsc-code">5306</span><span class="fsc-nm">Bolts</span><div class="fsc-bw"><div class="fsc-b" style="width:100%"></div></div><span class="fsc-cn">187</span></div>
+            <div class="fsc-row"><span class="fsc-code">5305</span><span class="fsc-nm">Screws</span><div class="fsc-bw"><div class="fsc-b" style="width:53%"></div></div><span class="fsc-cn">100</span></div>
+            <div class="fsc-row"><span class="fsc-code">5307</span><span class="fsc-nm">Studs</span><div class="fsc-bw"><div class="fsc-b" style="width:21%"></div></div><span class="fsc-cn">40</span></div>
+          </div>
+          <div>
+            <div class="fsc-row"><span class="fsc-code">5310</span><span class="fsc-nm">Nuts &amp; Washers</span><div class="fsc-bw"><div class="fsc-b" style="width:11%"></div></div><span class="fsc-cn">20</span></div>
+            <div class="fsc-row"><span class="fsc-code">5315</span><span class="fsc-nm">Nails, Keys, Pins</span><div class="fsc-bw"><div class="fsc-b" style="width:4.3%"></div></div><span class="fsc-cn">8</span></div>
+            <div class="fsc-row"><span class="fsc-code">5320</span><span class="fsc-nm">Rivets</span><div class="fsc-bw"><div class="fsc-b" style="width:2.1%"></div></div><span class="fsc-cn">4</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NSN REFERENCES -->
+    <div class="card">
+      <div class="ch"><h3>NSN References (Active)</h3><span class="src-t">360 total — showing 5</span></div>
+      <div class="cb" style="padding:0">
+        <table class="dt">
+          <thead><tr><th>NSN</th><th>Item Name</th><th>Part Number</th><th>Role</th><th>In My Inventory</th></tr></thead>
+          <tbody>
+            <tr><td class="mo"><a href="#">5306-00-203-3858</a></td><td>BOLT, MACHINE</td><td class="mo">NAS6203-14</td><td><span class="tag tag-blue">MFG</span></td><td><span class="tag tag-green">✓ Yes</span></td></tr>
+            <tr><td class="mo"><a href="#">5306-00-203-3859</a></td><td>BOLT, MACHINE</td><td class="mo">NAS6203-10</td><td><span class="tag tag-blue">MFG</span></td><td><span class="tag tag-gray">No</span></td></tr>
+            <tr><td class="mo"><a href="#">5306-00-418-7224</a></td><td>BOLT, MACHINE</td><td class="mo">NAS6203-20</td><td><span class="tag tag-blue">MFG</span></td><td><span class="tag tag-green">✓ Yes</span></td></tr>
+            <tr><td class="mo"><a href="#">5305-00-269-5518</a></td><td>SCREW, CAP SOCKET HEAD</td><td class="mo">SPS-2505-14</td><td><span class="tag tag-blue">MFG</span></td><td><span class="tag tag-green">✓ Yes</span></td></tr>
+            <tr><td class="mo"><a href="#">5310-00-225-8698</a></td><td>WASHER, FLAT</td><td class="mo">SPS-W516-5AE</td><td><span class="tag tag-gray">DIST</span></td><td><span class="tag tag-amber">Surplus</span></td></tr>
+          </tbody>
+        </tabl
+</div>
+  
+      </div>
+
+      <!-- RIGHT: sticky summary card -->
+      <div style="width:260px;flex-shrink:0;position:sticky;top:80px;">
+
+        <!-- Claim Your Page card -->
+        <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);">
+          <div style="background:linear-gradient(135deg,#14532D 0%,#16A34A 100%);padding:18px 20px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span style="font-size:13px;font-weight:800;color:#fff;">Claim Your CAGE Page</span>
+            </div>
+            <p style="font-size:11.5px;color:rgba(255,255,255,.85);line-height:1.5;">Free to claim. Takes 2 minutes. Verified within 1–2 business days.</p>
+          </div>
+          <div style="padding:16px 20px;">
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;align-items:flex-start;gap:10px;">
+                <div style="width:20px;height:20px;border-radius:50%;background:var(--green-bg);border:1.5px solid var(--green-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg>
+                </div>
+                <span style="font-size:12px;color:var(--text-dim);line-height:1.5;">Own &amp; edit your public CAGE profile</span>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:10px;">
+                <div style="width:20px;height:20px;border-radius:50%;background:var(--green-bg);border:1.5px solid var(--green-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg>
+                </div>
+                <span style="font-size:12px;color:var(--text-dim);line-height:1.5;">Get notified when contractors need your parts</span>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:10px;">
+                <div style="width:20px;height:20px;border-radius:50%;background:var(--green-bg);border:1.5px solid var(--green-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg>
+                </div>
+                <span style="font-size:12px;color:var(--text-dim);line-height:1.5;">Upload inventory so contractors find you</span>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:10px;">
+                <div style="width:20px;height:20px;border-radius:50%;background:var(--green-bg);border:1.5px solid var(--green-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg>
+                </div>
+                <span style="font-size:12px;color:var(--text-dim);line-height:1.5;">Earn the GovScraper Verified badge</span>
+              </div>
+            </div>
+          </div>
+          <div style="padding:0 20px 18px;">
+            <div style="font-size:10.5px;font-weight:700;text-align:center;color:var(--text-faint);padding:8px 0;border-top:1px solid var(--border);">✓ Free &nbsp;·&nbsp; ✓ No credit card &nbsp;·&nbsp; ✓ 2-min setup</div>
+          </div>
+        </div>
+
+        <!-- Selected CAGE preview (hidden until CAGE chosen) -->
+        <div id="cage-preview-card" style="display:none;margin-top:16px;background:var(--surface);border:1.5px solid var(--green-border);border-radius:12px;padding:16px 20px;box-shadow:0 1px 4px rgba(22,163,74,.08);">
+          <div style="font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--green);margin-bottom:8px;">CAGE Selected</div>
+          <div style="font-family:'Source Code Pro',monospace;font-size:16px;font-weight:700;color:var(--accent)" id="preview-code">—</div>
+          <div style="font-size:13px;font-weight:700;color:var(--text);margin-top:3px" id="preview-name">—</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px" id="preview-addr">—</div>
+          <div style="margin-top:10px;display:flex;align-items:center;gap:6px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+            <span style="font-size:11px;font-weight:600;color:var(--green)">Ready to claim</span>
+          </div>
+        </div>
+
+        <!-- Need help -->
+        <div style="margin-top:16px;padding:14px 16px;background:var(--surface-2);border-radius:10px;border:1px solid var(--border);">
+          <div style="font-size:11px;font-weight:700;color:var(--text-dim);margin-bottom:4px;">Need help?</div>
+          <div style="font-size:11px;color:var(--text-muted);line-height:1.5;">Not sure what a CAGE code is? <a href="#" style="color:var(--accent);font-weight:600;">Read the guide →</a></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ─── OVERLAY ─── -->
+<div class="ap-overlay" id="ap-overlay" onclick="closePanel()"></div>
+
+<!-- ─── ACCOUNT PANEL ─── -->
+<div class="ap" id="account-panel">
+
+  <!-- HEADER -->
+  <div class="ap-hdr">
+    <div class="ap-hdr-left">
+      <div class="ap-avatar-wrap" onclick="triggerPhotoUpload()" title="Change photo">
+        <div class="ap-avatar" id="ap-avatar">
+          <img id="ap-avatar-img" alt="">
+          <span id="ap-avatar-initials">JD</span>
+        </div>
+        <div class="ap-avatar-edit">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </div>
+      </div>
+      <div>
+        <div class="ap-name" id="ap-name">John Demo</div>
+        <div class="ap-email" id="ap-email-display"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="650f0a0d0b4b0100080a25060a0b11170406110c0b02060a4b060a08">[email&#160;protected]</a></div>
+      </div>
+    </div>
+    <button class="ap-close" onclick="closePanel()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+
+  <!-- BODY -->
+  <div class="ap-body">
+
+    <!-- ── ACCORDION 1: PROFILE ── -->
+    <div class="acc-item">
+      <button class="acc-trigger open" onclick="toggleAcc(this)">
+        <div class="acc-trigger-left">
+          <div class="acc-ico blue"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div>
+            <div class="acc-label">Profile</div>
+            <div class="acc-sub">Name, email, company, photo</div>
+          </div>
+        </div>
+        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+      </button>
+      <div class="acc-body open">
+
+        <!-- PHOTO -->
+        <div class="photo-upload">
+          <div class="photo-preview" id="photo-preview">
+            <img id="photo-preview-img" alt="">
+            <span id="photo-preview-initials">JD</span>
+          </div>
+          <div>
+            <div class="photo-actions">
+              <button class="btn-upload" onclick="triggerPhotoUpload()">Upload Photo</button>
+              <button class="btn-remove-photo" onclick="removePhoto()">Remove</button>
+            </div>
+            <div class="photo-hint">JPG or PNG, max 5MB. Square crop recommended.</div>
+          </div>
+        </div>
+        <input type="file" id="photo-input" accept="image/*" onchange="handlePhoto(this)">
+
+        <!-- NAME ROW -->
+        <div class="field">
+          <div class="field-row">
+            <div>
+              <label class="field-label">First Name</label>
+              <input class="fi" id="p-first" value="John" placeholder="First name">
+            </div>
+            <div>
+              <label class="field-label">Last Name</label>
+              <input class="fi" id="p-last" value="Demo" placeholder="Last name">
+            </div>
+          </div>
+        </div>
+
+        <!-- EMAIL -->
+        <div class="field">
+          <label class="field-label">Email Address</label>
+          <input class="fi" id="p-email" type="email" value="john.demo@contractingco.com" placeholder="your@email.com">
+          <div style="font-size:11px;color:var(--text-faint);margin-top:5px;line-height:1.5">Changing your email will require verification. A confirmation link will be sent to your new address.</div>
+        </div>
+
+        <!-- COMPANY -->
+        <div class="field">
+          <label class="field-label">Company Name</label>
+          <input class="fi" id="p-company" value="Demo Contracting Co." placeholder="Your company">
+        </div>
+
+        <!-- PHONE -->
+        <div class="field">
+          <label class="field-label">Phone Number</label>
+          <input class="fi" id="p-phone" type="tel" value="(555) 012-3456" placeholder="(555) 000-0000">
+        </div>
+
+        <button class="btn-save" id="save-profile-btn" onclick="saveProfile()">Save Profile</button>
+      </div>
+    </div>
+
+    <!-- ── ACCORDION 2: CHANGE PASSWORD ── -->
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">
+        <div class="acc-trigger-left">
+          <div class="acc-ico green"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+          <div>
+            <div class="acc-label">Change Password</div>
+            <div class="acc-sub">Send a secure reset link</div>
+          </div>
+        </div>
+        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+      </button>
+      <div class="acc-body">
+        <div class="pw-reset-box" id="pw-reset-form">
+          <div class="pw-reset-title">Reset your password</div>
+          <div class="pw-reset-sub">We'll send a secure password reset link to <strong id="pw-email-display"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="305a5f585e1e54555d5f70535f5e4442515344595e57535f1e535f5d">[email&#160;protected]</a></strong>. The link expires in 30 minutes.</div>
+          <button class="btn-send-reset" onclick="sendPasswordReset()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Send Reset Link
+          </button>
+        </div>
+        <div class="pw-sent-state" id="pw-sent-state">
+          <div class="pw-sent-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></div>
+          <div class="pw-sent-title">Reset link sent!</div>
+          <div class="pw-sent-sub">Check <strong id="pw-sent-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="503a3f383e7e34353d3f10333f3e2422313324393e37333f7e333f3d">[email&#160;protected]</a></strong> for the reset link. It expires in 30 minutes.</div>
+          <button style="font-family:'Manrope',sans-serif;font-size:11.5px;font-weight:600;padding:7px 14px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;margin-top:12px" onclick="resetPasswordState()">Send again</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ACCORDION 3: SUBSCRIPTION ── -->
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">
+        <div class="acc-trigger-left">
+          <div class="acc-ico amber"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+          <div>
+            <div class="acc-label">Subscription</div>
+            <div class="acc-sub">Pro plan · renews Mar 14</div>
+          </div>
+        </div>
+        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+      </button>
+      <div class="acc-body">
+        <div class="sub-summary">
+          <div class="sub-plan">GovScraper Pro</div>
+          <div class="sub-price">$149 / month</div>
+          <div class="sub-renews">Next renewal: <strong>March 14, 2026</strong></div>
+        </div>
+        <div class="sub-stats">
+          <div class="sub-stat"><div class="sub-stat-n" style="color:var(--accent)">8</div><div class="sub-stat-l">FSCs Active</div></div>
+          <div class="sub-stat"><div class="sub-stat-n" style="color:var(--green)">47</div><div class="sub-stat-l">Active RFQs</div></div>
+        </div>
+        <button class="btn-manage-sub" onclick="closePanel();window.location.href='govscraper-subscription.html'">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Manage Subscription & Billing →
+        </button>
+      </div>
+    </div>
+
+    <!-- ── ACCORDION 4: FSC / CAGE LIST ── -->
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">
+        <div class="acc-trigger-left">
+          <div class="acc-ico purple"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h7"/></svg></div>
+          <div>
+            <div class="acc-label">FSC / CAGE List</div>
+            <div class="acc-sub">8 FSCs · 3 CAGEs tracked</div>
+          </div>
+        </div>
+        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+      </button>
+      <div class="acc-body">
+        <!-- FSCs -->
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--text-faint);margin-bottom:7px">Active FSCs</div>
+        <div class="fsc-chips" style="margin-bottom:14px">
+          <span class="fsc-chip">5305</span>
+          <span class="fsc-chip">5306</span>
+          <span class="fsc-chip">5310</span>
+          <span class="fsc-chip">5320</span>
+          <span class="fsc-chip">5935</span>
+          <span class="fsc-chip">5961</span>
+          <span class="fsc-chip">5315</span>
+          <span class="fsc-chip">5325</span>
+        </div>
+        <!-- CAGEs with names -->
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--text-faint);margin-bottom:7px">Manufacturer CAGEs</div>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px">
+          <div style="display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:7px;padding:8px 11px">
+            <span style="font-family:'Source Code Pro',monospace;font-size:11px;font-weight:700;color:#7C3AED;width:44px;flex-shrink:0">96906</span>
+            <span style="font-size:12px;font-weight:600;color:var(--text-dim)">SPS Technologies, Inc.</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:7px;padding:8px 11px">
+            <span style="font-family:'Source Code Pro',monospace;font-size:11px;font-weight:700;color:#7C3AED;width:44px;flex-shrink:0">99193</span>
+            <span style="font-size:12px;font-weight:600;color:var(--text-dim)">Parker Hannifin</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:7px;padding:8px 11px">
+            <span style="font-family:'Source Code Pro',monospace;font-size:11px;font-weight:700;color:#7C3AED;width:44px;flex-shrink:0">06090</span>
+            <span style="font-size:12px;font-weight:600;color:var(--text-dim)">Moog Inc.</span>
+          </div>
+        </div>
+        <button class="btn-manage-sub" onclick="closePanel();window.location.href='govscraper-fsc-cage.html'">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Edit FSC / CAGE List →
+        </button>
+      </div>
+    </div>
+
+    <!-- ── ACCORDION 5: EMAIL INTEGRATION ── -->
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">
+        <div class="acc-trigger-left">
+          <div class="acc-ico blue" style="background:#F0FDF4;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div>
+            <div class="acc-label">Email Integration</div>
+            <div class="acc-sub" id="email-acc-sub">No mailbox connected</div>
+          </div>
+        </div>
+        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+      </button>
+      <div class="acc-body">
+        <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:14px 16px;margin-bottom:12px">
+          <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">Connect your mailbox</div>
+          <div style="font-size:12px;color:var(--text-muted);line-height:1.6">Send emails to vendors directly from GovScraper using your own Gmail or Outlook account.</div>
+        </div>
+        <button class="btn-manage-sub" onclick="closePanel();window.location.href='govscraper-email-integration.html'">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Manage Email Integration →
+        </button>
+      </div>
+    </div>
+
+    <!-- ── LOGOUT ── -->
+    <div class="acc-item">
+      <button class="btn-logout" onclick="handleLogout()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Log Out
+      </button>
+    </div>
+
+  </div><!-- end ap-body -->
+
+  <div class="ap-footer">
+    <div class="ap-footer-txt">GovScraper · Member since Feb 14, 2025 · <a href="#" style="color:var(--text-faint)">Privacy Policy</a></div>
+  </div>
+
+</div><!-- end account panel -->
+
+<div class="toast" id="toast"><span id="toast-msg"></span></div>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function(){
+
+// ─── STATE ───────────────────────────────────────────────────────────────
+let panelOpen = false;
+
+// ─── PANEL OPEN / CLOSE ──────────────────────────────────────────────────
+function togglePanel(){ panelOpen ? closePanel() : openPanel(); }
+function openPanel(){
+  panelOpen = true;
+  document.getElementById('account-panel').classList.add('open');
+  document.getElementById('ap-overlay').classList.add('open');
+  document.getElementById('avatar-btn').classList.add('panel-open');
+}
+function closePanel(){
+  panelOpen = false;
+  document.getElementById('account-panel').classList.remove('open');
+  document.getElementById('ap-overlay').classList.remove('open');
+  document.getElementById('avatar-btn').classList.remove('panel-open');
+}
+
+// Wire avatar button via addEventListener (not onclick attr)
+document.getElementById('avatar-btn').addEventListener('click', togglePanel);
+document.getElementById('ap-overlay').addEventListener('click', closePanel);
+document.querySelectorAll('.ap-close').forEach(b => b.addEventListener('click', closePanel));
+document.addEventListener('keydown', e => { if(e.key==='Escape') closePanel(); });
+
+// ─── ACCORDION ───────────────────────────────────────────────────────────
+window.toggleAcc = function(trigger){
+  const body = trigger.nextElementSibling;
+  const isOpen = trigger.classList.contains('open');
+  trigger.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+};
+
+// ─── PHOTO UPLOAD ────────────────────────────────────────────────────────
+window.triggerPhotoUpload = function(){
+  document.getElementById('photo-input').click();
+};
+window.handlePhoto = function(input){
+  if(!input.files || !input.files[0]) return;
+  const file = input.files[0];
+  if(file.size > 5*1024*1024){ showToast('Photo must be under 5MB.'); return; }
+  const reader = new FileReader();
+  reader.onload = e => setPhoto(e.target.result);
+  reader.readAsDataURL(file);
+};
+function setPhoto(src){
+  // topbar button — use background image
+  const btn = document.getElementById('avatar-btn');
+  btn.style.backgroundImage = `url(${src})`;
+  btn.style.backgroundSize = 'cover';
+  document.getElementById('avatar-initials').style.display = 'none';
+  // panel header avatar
+  const apIco = document.getElementById('ap-avatar');
+  apIco.style.backgroundImage = `url(${src})`;
+  apIco.style.backgroundSize = 'cover';
+  document.getElementById('ap-avatar-initials').style.display = 'none';
+  // photo preview
+  const pp = document.getElementById('photo-preview');
+  pp.style.backgroundImage = `url(${src})`;
+  pp.style.backgroundSize = 'cover';
+  document.getElementById('photo-preview-initials').style.display = 'none';
+}
+window.removePhoto = function(){
+  [document.getElementById('avatar-btn'), document.getElementById('ap-avatar'), document.getElementById('photo-preview')]
+    .forEach(el => { el.style.backgroundImage=''; el.style.backgroundSize=''; });
+  ['avatar-initials','ap-avatar-initials','photo-preview-initials']
+    .forEach(id => document.getElementById(id).style.display = '');
+};
+
+// ─── SAVE PROFILE ────────────────────────────────────────────────────────
+window.saveProfile = function(){
+  const first   = document.getElementById('p-first').value.trim();
+  const last    = document.getElementById('p-last').value.trim();
+  const email   = document.getElementById('p-email').value.trim();
+  if(!first || !last){ showToast('Please enter your first and last name.'); return; }
+  if(!email || !email.includes('@')){ showToast('Please enter a valid email.'); return; }
+  const initials = (first[0]||'').toUpperCase() + (last[0]||'').toUpperCase();
+  ['avatar-initials','ap-avatar-initials','photo-preview-initials'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = initials;
+  });
+  document.getElementById('ap-name').textContent = first + ' ' + last;
+  document.getElementById('ap-email-display').textContent = email;
+  document.getElementById('pw-email-display').textContent = email;
+  document.getElementById('pw-sent-email').textContent = email;
+  const btn = document.getElementById('save-profile-btn');
+  btn.textContent = 'Saved ✓'; btn.className = 'btn-save success';
+  setTimeout(()=>{ btn.textContent='Save Profile'; btn.className='btn-save'; }, 2500);
+  showToast('Profile updated successfully.');
+};
+
+// ─── PASSWORD RESET ───────────────────────────────────────────────────────
+window.sendPasswordReset = function(){
+  document.getElementById('pw-reset-form').style.display = 'none';
+  document.getElementById('pw-sent-state').classList.add('show');
+};
+window.resetPasswordState = function(){
+  document.getElementById('pw-reset-form').style.display = 'block';
+  document.getElementById('pw-sent-state').classList.remove('show');
+};
+
+// ─── LOGOUT ──────────────────────────────────────────────────────────────
+window.handleLogout = function(){
+  if(confirm('Log out of GovScraper?')) showToast('Logging out…');
+};
+
+// ─── NAVIGATION FROM PANEL ───────────────────────────────────────────────
+window.panelNav = function(url){
+  closePanel();
+  window.location.href = url;
+};
+
+// ─── TOAST ───────────────────────────────────────────────────────────────
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ADE80" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg><span>${msg}</span>`;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3000);
+}
+window.showToast = showToast;
+
+}); // end DOMContentLoaded
+
+
+
+// ══════════════════════════════════════
+// MODE SWITCHER
+// ══════════════════════════════════════
+// Simulate: change to 'claimed' to see claimed state
+const CAGE_STATE = 'unclaimed'; // 'unclaimed' | 'claimed'
+
+function setMode(mode) {
+  const body = document.body;
+  const btnMember = document.getElementById('btn-member');
+  const btnSupplier = document.getElementById('btn-supplier');
+  const bc = document.getElementById('topbar-bc');
+
+  if (mode === 'supplier') {
+    body.classList.add('supplier-mode');
+    btnMember.className = 'mode-btn inactive';
+    btnSupplier.className = 'mode-btn active-supplier';
+    bc.textContent = 'Supplier Portal';
+
+    // Show correct supplier content
+    const claimed = document.getElementById('sp-claimed');
+    const unclaimed = document.getElementById('sp-unclaimed');
+    const sicClaimed = document.getElementById('sic-claimed');
+    const sicUnclaimed = document.getElementById('sic-unclaimed');
+
+    if (CAGE_STATE === 'claimed') {
+      if (claimed) claimed.style.display = 'block';
+      if (unclaimed) unclaimed.style.display = 'none';
+      if (sicClaimed) sicClaimed.style.display = 'block';
+      if (sicUnclaimed) sicUnclaimed.style.display = 'none';
+    } else {
+      if (claimed) claimed.style.display = 'none';
+      if (unclaimed) unclaimed.style.display = 'block';
+      if (sicClaimed) sicClaimed.style.display = 'none';
+      if (sicUnclaimed) sicUnclaimed.style.display = 'block';
+    }
+
+  } else {
+    body.classList.remove('supplier-mode');
+    btnMember.className = 'mode-btn active-member';
+    btnSupplier.className = 'mode-btn inactive';
+    bc.textContent = 'Dashboard';
+  }
+}
+
+function switchSupplierTab(tab) {
+  // Update active state in supplier sidebar
+  document.querySelectorAll('.sidebar-supplier .s-item').forEach(el => el.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+}
+
+function claimCage() {
+  alert('CAGE Claim flow — coming soon!');
+}
+
+
+// ── CAGE Register form helpers ──
+function rTog(btn){btn.closest('.role-g').querySelectorAll('.role-t').forEach(b=>b.classList.remove('on'));btn.classList.add('on')}
+function tileOn(cb){cb.closest('.ck-tile').classList.toggle('on',cb.checked)}
+function doSubmit(){
+  const cage = document.getElementById('reg-cage-input');
+  const name = document.getElementById('reg-company-name');
+  if(!cage || !cage.value.trim() || cage.value.trim().length < 5){alert('Please enter and select a valid CAGE code.');return}
+  if(!name || !name.value.trim()){alert('Please select a CAGE code to auto-fill the company name.');return}
+  if(!document.getElementById('tc').checked){alert('Please agree to the Terms of Service to continue.');return}
+  window.location.href='govscraper-cage-pending.html'
+}
+
+// ── CAGE live search (simulated — replace fetch() with real API call) ──
+const CAGE_DATA = [
+  {code:'96906', name:'SPS Technologies, Inc.',       addr:'Jenkintown, PA 19046'},
+  {code:'0MKE7', name:'Boeing Defense & Space',        addr:'St. Louis, MO 63166'},
+  {code:'77814', name:'Raytheon Technologies Corp',    addr:'Waltham, MA 02451'},
+  {code:'53711', name:'Lockheed Martin Corporation',   addr:'Bethesda, MD 20817'},
+  {code:'21484', name:'General Dynamics Corp',         addr:'Reston, VA 20191'},
+  {code:'K0H79', name:'Parker Hannifin Corporation',   addr:'Cleveland, OH 44124'},
+  {code:'27541', name:'Honeywell International',       addr:'Charlotte, NC 28201'},
+  {code:'39428', name:'L3Harris Technologies',         addr:'Melbourne, FL 32901'},
+  {code:'88268', name:'BAE Systems Inc',               addr:'Falls Church, VA 22042'},
+  {code:'19743', name:'Northrop Grumman Systems',      addr:'Falls Church, VA 22042'},
+];
+
+let cageTimer = null;
+let selectedCage = null;
+
+function cageLookup(val) {
+  val = val.toUpperCase().trim();
+  const dropdown = document.getElementById('cage-dropdown');
+  const spinner  = document.getElementById('cage-spinner');
+  const hint     = document.getElementById('cage-hint');
+  const nameField= document.getElementById('reg-company-name');
+
+  // Clear previous selection if user edits
+  selectedCage = null;
+  nameField.value = '';
+  nameField.style.color = 'var(--text-muted)';
+  nameField.style.background = 'var(--surface-2)';
+  document.getElementById('tc-label').textContent = 'I confirm that I am an authorized representative of my company and agree to the GovScraper Supplier Terms of Service.';
+
+  if (val.length === 0) {
+    dropdown.style.display = 'none';
+    spinner.style.display = 'none';
+    hint.textContent = 'Enter your 5-character CAGE code to look up your company.';
+    hint.style.color = '';
+    return;
+  }
+
+  clearTimeout(cageTimer);
+  spinner.style.display = 'block';
+  dropdown.style.display = 'none';
+
+  cageTimer = setTimeout(() => {
+    spinner.style.display = 'none';
+    const matches = CAGE_DATA.filter(d => d.code.startsWith(val) || d.name.toUpperCase().includes(val));
+
+    if (val.length >= 2 && matches.length > 0) {
+      dropdown.innerHTML = matches.slice(0, 6).map(d => `
+        <div onclick="selectCage('${d.code}','${d.name.replace(/'/g,"\'")}','${d.addr.replace(/'/g,"\'")}');"
+          style="padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;transition:background .1s;"
+          onmouseover="this.style.background='var(--accent-bg)'" onmouseout="this.style.background=''">
+          <span style="font-family:'Source Code Pro',monospace;font-size:12px;font-weight:700;color:var(--accent);min-width:54px">${d.code}</span>
+          <span style="flex:1;font-size:12.5px;font-weight:600;color:var(--text)">${d.name}</span>
+          <span style="font-size:11px;color:var(--text-faint)">${d.addr}</span>
+        </div>`).join('');
+      dropdown.style.display = 'block';
+      hint.textContent = matches.length + ' match' + (matches.length > 1 ? 'es' : '') + ' found — click to select.';
+      hint.style.color = 'var(--accent)';
+    } else if (val.length >= 2) {
+      dropdown.innerHTML = '<div style="padding:12px 14px;font-size:12.5px;color:var(--text-muted);">No CAGE found matching <strong>' + val + '</strong> — try a different code.</div>';
+      dropdown.style.display = 'block';
+      hint.textContent = 'No matches found.';
+      hint.style.color = 'var(--amber)';
+    } else {
+      hint.textContent = 'Keep typing…';
+      hint.style.color = '';
+    }
+  }, 280);
+}
+
+function selectCage(code, name, addr) {
+  selectedCage = {code, name, addr};
+  document.getElementById('reg-cage-input').value = code;
+  const nameField = document.getElementById('reg-company-name');
+  nameField.value = name;
+  nameField.style.color = 'var(--text)';
+  nameField.style.background = 'var(--green-bg)';
+  document.getElementById('cage-dropdown').style.display = 'none';
+  document.getElementById('cage-spinner').style.display = 'none';
+  document.getElementById('cage-hint').textContent = '✓ ' + name + ' — ' + addr;
+  document.getElementById('cage-hint').style.color = 'var(--green)';
+  document.getElementById('company-hint').textContent = 'Pulled from CAGE record — contact support to correct errors.';
+  document.getElementById('tc-label').textContent = 'I confirm that I am an authorized representative of ' + name + ' (CAGE ' + code + ') and agree to the GovScraper Supplier Terms of Service.';
+  // Update right-panel preview card
+  const card = document.getElementById('cage-preview-card');
+  if (card) {
+    document.getElementById('preview-code').textContent = code;
+    document.getElementById('preview-name').textContent = name;
+    document.getElementById('preview-addr').textContent = addr;
+    card.style.display = 'block';
+  }
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#reg-cage-input') && !e.target.closest('#cage-dropdown')) {
+    const dd = document.getElementById('cage-dropdown');
+    if (dd) dd.style.display = 'none';
+  }
+});
+</script>
+
+<!-- ══ SPOTLIGHT LAYER ══ -->
+<div class="spotlight-overlay" id="spotlightOverlay">
+  <svg class="spot-svg" xmlns="http://www.w3.org/2000/svg">
+    <defs><mask id="spotMask"><rect width="100%" height="100%" fill="white"/><rect id="spotHole" x="0" y="0" width="0" height="0" rx="10" fill="black"/></mask></defs>
+    <rect width="100%" height="100%" fill="rgba(10,15,30,0.72)" mask="url(#spotMask)"/>
+  </svg>
+</div>
+<div class="spot-ring" id="spotRing" style="display:none"></div>
+<div class="spot-tooltip" id="spotTooltip" style="display:none">
+  <div class="tt-bar" id="ttBar"></div>
+  <div class="tt-body">
+    <button class="tt-close" id="ttClose" onclick="showSkipConfirm()">&#x2715;</button>
+    <div class="tt-step" id="ttStep"></div>
+    <div class="tt-title" id="ttTitle"></div>
+    <div class="tt-desc" id="ttDesc"></div>
+  </div>
+  <div class="tt-footer">
+    <div class="tt-dots" id="ttDots"></div>
+    <div class="tt-nav">
+      <button class="tt-back" id="ttBack" onclick="prevStep()" style="display:none">&#8592; Back</button>
+      <button class="tt-next" id="ttNext" onclick="nextStep()">Next &#8594;</button>
+    </div>
+  </div>
+</div>
+<div class="skip-confirm-tooltip" id="skipConfirm">
+  <div class="sct-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" width="16" height="16"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+  <div class="sct-title">Skip the tour?</div>
+  <div class="sct-sub">You can restart it anytime from the sidebar button.</div>
+  <div class="sct-btns">
+    <button class="sct-keep" onclick="hideSkipConfirm()">Keep Going</button>
+    <button class="sct-skip" onclick="endTour(true)">Skip Tour</button>
+  </div>
+</div>
+<div class="tour-done" id="tourDone">
+  <div class="td-ico" id="tdIco"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><polyline points="20,6 9,17 4,12"/></svg></div>
+  <div><div class="td-title" id="tdTitle">Tour Complete!</div><div class="td-sub" id="tdSub"></div></div>
+  <button class="td-action" id="tdAction">Go &#8594;</button>
+  <button class="td-dismiss" onclick="document.getElementById('tourDone').classList.remove('show')">&#x2715;</button>
+</div>
+
+</body>
+<script>
+
+const TOUR_STEPS = [
+  { target:'kpiRow', pos:'bottom',
+    title:'Welcome to GovScraper Pro! \u{1F44B}',
+    desc:'You have the full platform \u2014 bidding pipeline, research tools, and community. Check these four numbers every morning: RFQs Ready to Source are new opportunities matched to your FSCs. Expiring within 7 Days tells you what can\u2019t wait.' },
+  { target:'sb-rfqs', pos:'right',
+    title:'My RFQs \u2014 Your Bidding Pipeline',
+    desc:'Every RFQ matched to your FSCs lands here at \u201cNew Opportunity.\u201d Work each one through the workflow \u2014 Will Source \u2192 Currently Sourcing \u2192 Ready to Bid \u2192 Bid Complete. You control the pace.' },
+  { target:'sb-nsn', pos:'right',
+    title:'NSN Search \u2014 Research Before You Bid',
+    desc:'Before committing to any RFQ, look up the NSN here. 12-month demand, historical award prices, known suppliers, and a Bid Worthiness Score \u2014 so every decision is informed, not guesswork.' },
+  { target:'sb-cage', pos:'right',
+    title:'CAGE Search \u2014 Find Your Suppliers',
+    desc:'Identify and vet the vendors you\u2019ll source from. Search by company name, CAGE code, NSN, location, or certifications. This is how you build a reliable sourcing network.' },
+  { target:'sb-awards', pos:'right',
+    title:'Awarded Contracts \u2014 Your Learning Loop',
+    desc:'When you win or lose a bid, log it here. Track pricing accuracy, document lessons learned, and build a retrospective record that makes every future bid sharper.' },
+  { target:'sb-community', pos:'right',
+    title:'Community \u2014 Ask, Learn, Win More',
+    desc:'Every Pro member gets full Community access. Ask sourcing questions, share wins, watch platform walkthroughs, and learn from contractors who have already figured out what works.' },
+  { target:'sb-packing', pos:'right',
+    title:'GovPacking \u2014 Never Get Blindsided on Packaging',
+    desc:'MIL-SPEC packaging can make or break a bid margin. GovPacking decodes requirements and connects you with compliant suppliers \u2014 Pro members get 20% off all orders.' },
+  { target:'btn-supplier', pos:'bottom',
+    title:'Your CAGE Supplier Page \u2014 Free to Claim',
+    desc:'Your account includes a free CAGE page. Register your company to become searchable to contractors, add certifications, and upload your NSN inventory. Hit the Supplier Portal toggle anytime to get started.' },
+];
+const TOUR_COLOR = '#16A34A';
+const TOUR_DONE_SUB = 'Check what\u2019s waiting in your RFQ pipeline.';
+const TOUR_DONE_CTA = 'Open My RFQs \u2192';
+const TOUR_DONE_ACTION = function(){ document.getElementById('tourDone').classList.remove('show'); }; };
+
+
+// ════ SPOTLIGHT TOUR ENGINE ════
+let _tourStep = 0, _tourActive = false;
+
+function startTour() {
+  _tourActive = true; _tourStep = 0;
+  document.getElementById('spotlightOverlay').classList.add('active');
+  document.getElementById('tourDone').classList.remove('show');
+  _renderStep(0);
+}
+function restartTour() { startTour(); }
+
+function _renderStep(idx) {
+  const steps = TOUR_STEPS;
+  hideSkipConfirm();
+  while (idx < steps.length && !steps[idx].centered && !document.getElementById(steps[idx].target)) { idx++; }
+  if (idx >= steps.length) { endTour(false); _showTourDone(); return; }
+  _tourStep = idx;
+  const step = steps[idx];
+  const color = TOUR_COLOR;
+  document.getElementById('ttStep').textContent = 'Step ' + (idx+1) + ' of ' + steps.length;
+  document.getElementById('ttStep').style.color = color;
+  document.getElementById('ttTitle').textContent = step.title;
+  document.getElementById('ttDesc').textContent = step.desc;
+  document.getElementById('ttBar').style.background = color;
+  document.getElementById('ttNext').style.background = color;
+  document.getElementById('ttNext').textContent = idx === steps.length-1 ? 'Finish Tour ✓' : 'Next →';
+  document.getElementById('ttBack').style.display = idx === 0 ? 'none' : 'inline-flex';
+  const dotsEl = document.getElementById('ttDots');
+  dotsEl.innerHTML = '';
+  steps.forEach(function(_,i) {
+    const d = document.createElement('div');
+    d.className = 'tt-dot' + (i===idx ? ' active' : '');
+    if (i===idx) d.style.background = color;
+    d.onclick = function() { _renderStep(i); };
+    dotsEl.appendChild(d);
+  });
+  if (step.centered) {
+    _clearSpotlight();
+    const tt = document.getElementById('spotTooltip');
+    tt.style.width = '360px';
+    tt.style.left = '50%'; tt.style.top = '50%';
+    tt.style.transform = 'translate(-50%,-50%)';
+    tt.style.display = 'block';
+    return;
+  }
+  document.getElementById('spotTooltip').style.width = '300px';
+  document.getElementById('spotTooltip').style.transform = '';
+  const targetEl = document.getElementById(step.target);
+  if (step.preAction) { step.preAction(); }
+  const delay = step.preAction ? 400 : 100;
+  setTimeout(function() {
+    targetEl.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    setTimeout(function() {
+      const rect = targetEl.getBoundingClientRect();
+      const pad = 10;
+      const hole = document.getElementById('spotHole');
+      hole.setAttribute('x', rect.left - pad); hole.setAttribute('y', rect.top - pad);
+      hole.setAttribute('width', rect.width + pad*2); hole.setAttribute('height', rect.height + pad*2);
+      hole.setAttribute('rx', 10);
+      document.getElementById('spotlightOverlay').style.opacity = '1';
+      const ring = document.getElementById('spotRing');
+      ring.style.cssText = 'left:' + (rect.left-pad) + 'px;top:' + (rect.top-pad) + 'px;width:' + (rect.width+pad*2) + 'px;height:' + (rect.height+pad*2) + 'px;display:block;';
+      _posTooltip(rect, step.pos || 'right', pad);
+    }, 80);
+  }, delay);
+}
+
+function _posTooltip(rect, pos, pad) {
+  const tt = document.getElementById('spotTooltip');
+  const ttW = parseInt(tt.style.width)||300, ttH = tt.offsetHeight||200;
+  const vw = window.innerWidth, vh = window.innerHeight, gap = 16;
+  let left, top;
+  if (pos==='right') { left=rect.right+pad+gap; top=rect.top+rect.height/2-ttH/2; if(left+ttW>vw-12) left=rect.left-pad-ttW-gap; }
+  else if (pos==='bottom') { left=rect.left+rect.width/2-ttW/2; top=rect.bottom+pad+gap; if(top+ttH>vh-12) top=rect.top-pad-ttH-gap; }
+  else if (pos==='top') { left=rect.left+rect.width/2-ttW/2; top=rect.top-pad-ttH-gap; if(top<12) top=rect.bottom+pad+gap; }
+  else if (pos==='left') { left=rect.left-pad-ttW-gap; top=rect.top+rect.height/2-ttH/2; if(left<12) left=rect.right+pad+gap; }
+  left=Math.max(12,Math.min(left,vw-ttW-12)); top=Math.max(12,Math.min(top,vh-ttH-12));
+  tt.style.left=left+'px'; tt.style.top=top+'px'; tt.style.display='block';
+}
+
+function _clearSpotlight() {
+  const hole=document.getElementById('spotHole');
+  hole.setAttribute('width','0'); hole.setAttribute('height','0');
+  document.getElementById('spotRing').style.display='none';
+}
+
+function nextStep() {
+  if (_tourStep < TOUR_STEPS.length-1) { _tourStep++; _renderStep(_tourStep); }
+  else { endTour(false); _showTourDone(); }
+}
+function prevStep() { if (_tourStep > 0) { _tourStep--; _renderStep(_tourStep); } }
+
+function endTour(skipped) {
+  _tourActive = false;
+  document.getElementById('spotlightOverlay').style.opacity='0';
+  document.getElementById('spotlightOverlay').classList.remove('active');
+  document.getElementById('spotRing').style.display='none';
+  document.getElementById('spotTooltip').style.display='none';
+  hideSkipConfirm(); _clearSpotlight();
+}
+function showSkipConfirm() {
+  const tt=document.getElementById('spotTooltip'), sc=document.getElementById('skipConfirm');
+  const rect=tt.getBoundingClientRect();
+  sc.style.left=rect.left+'px'; sc.style.top=(rect.bottom+10)+'px';
+  sc.classList.add('show');
+}
+function hideSkipConfirm() { document.getElementById('skipConfirm').classList.remove('show'); }
+
+function _showTourDone() {
+  const color=TOUR_COLOR;
+  const ico=document.getElementById('tdIco');
+  ico.style.background=color+'22'; ico.querySelector('svg').style.stroke=color;
+  document.getElementById('tdTitle').textContent='Tour Complete!';
+  document.getElementById('tdSub').textContent=TOUR_DONE_SUB;
+  const btn=document.getElementById('tdAction');
+  btn.textContent=TOUR_DONE_CTA; btn.style.background=color;
+  btn.onclick=TOUR_DONE_ACTION;
+  document.getElementById('tourDone').classList.add('show');
+  setTimeout(function() {
+    const wb=document.getElementById('welcomeBanner');
+    if(wb){wb.style.transition='opacity .4s,max-height .4s,margin .4s,padding .4s';wb.style.opacity='0';wb.style.maxHeight='0';wb.style.marginBottom='0';wb.style.overflow='hidden';wb.style.padding='0';}
+  }, 1800);
+}
+window.addEventListener('load', function() { setTimeout(startTour, 500); });
+
+</script>
+</html>
+
+<script>
+const UPGRADE_DATA = {
+  pro: {
+    title: 'Upgrade to PRO',
+    desc: 'Unlock your full contracting toolkit — RFQ pipeline, bid analytics, and more.',
+    ctaClass: 'pro', cta: 'Upgrade to PRO — $100/mo',
+    features: [
+      'Private RFQ List with full pipeline workflow',
+      'Public & Private List of RFQs',
+      'FSC Performance charts & KPI metrics',
+      'Post-Bid Statistics & win rate tracking',
+      'Bid Pricing Tool with margin calculator',
+      'Awarded Contracts & learning loop',
+      'Archived RFQs management',
+      'Saved Searches (up to 10)',
+      '20% discount on GovPacking',
+    ]
+  },
+  gold: {
+    title: 'Upgrade to GOLD',
+    desc: 'Add NSN Watch List and RFQ Alerts to your PRO workflow.',
+    ctaClass: 'gold', cta: 'Upgrade to GOLD — $149/mo',
+    features: [
+      'NSN Watch List — track up to 500 NSNs',
+      'RFQ Alerts feed — get notified when watched NSNs go live',
+      'Everything included in PRO',
+    ]
+  },
+  maxx: {
+    title: 'Upgrade to MAXX',
+    desc: 'Unlock the full Supplier Portal — inventory matching, RFQ alerts, and more.',
+    ctaClass: 'maxx', cta: 'Upgrade to MAXX — $225/mo',
+    features: [
+      'Supplier Inventory upload & NSN matching',
+      'Supplier RFQ Alerts — get notified when contractors need your parts',
+      'Full CAGE page management & GovScraper Verified badge',
+      'Everything included in GOLD',
+    ]
+  }
+};
+function showUpgrade(tier) {
+  const d = UPGRADE_DATA[tier];
+  document.getElementById('up-title').textContent = d.title;
+  document.getElementById('up-desc').textContent = d.desc;
+  const btn = document.getElementById('up-cta-btn');
+  btn.textContent = d.cta; btn.className = 'upgrade-cta ' + d.ctaClass;
+  document.getElementById('up-features').innerHTML = d.features.map(f =>
+    `<li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>${f}</li>`
+  ).join('');
+  document.getElementById('upgrade-backdrop').classList.add('open');
+}
+function closeUpgrade() { document.getElementById('upgrade-backdrop').classList.remove('open'); }
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeUpgrade(); });
+</script>

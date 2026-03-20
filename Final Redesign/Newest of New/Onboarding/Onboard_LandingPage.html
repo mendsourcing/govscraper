@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GovScraper — Simplify RFQs and the Bidding Process</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Source+Code+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFFFFF;
+  --surface:#F8FAFC;
+  --border:#E2E8F0;
+  --text:#0F172A;
+  --text-dim:#334155;
+  --text-muted:#64748B;
+  --text-faint:#94A3B8;
+  --accent:#1B6CA8;
+  --accent-hover:#155a8a;
+  --accent-bg:#EFF6FF;
+  --green:#16A34A;
+  --green-bg:#F0FDF4;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+a{color:var(--accent);text-decoration:none}
+
+/* ── LAYOUT ── */
+.page{display:grid;grid-template-columns:45% 55%;min-height:100vh}
+
+/* ── LEFT: PHOTO PANEL ── */
+.photo-panel{position:relative;overflow:hidden;min-height:100vh}
+.photo-panel img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+.photo-overlay{position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,.08) 0%,transparent 100%)}
+
+/* ── RIGHT: CONTENT PANEL ── */
+.content-panel{
+  display:flex;flex-direction:column;
+  padding:0 72px;
+  justify-content:center;
+  min-height:100vh;
+  position:relative;
+  background:#fff;
+}
+
+/* ── TOPBAR (right side only) ── */
+.topbar{
+  position:absolute;top:0;left:0;right:0;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:24px 72px;
+}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+.logo img{height:32px}
+.logo-fallback{font-size:20px;font-weight:900;color:var(--text);letter-spacing:-.5px}
+.logo-fallback span{color:var(--accent)}
+.topbar-links{display:flex;align-items:center;gap:24px;font-size:13px}
+.topbar-links a{color:var(--text-muted);font-weight:600;transition:color .15s}
+.topbar-links a:hover{color:var(--text)}
+.btn-signin{
+  font-family:'Manrope',sans-serif;
+  font-size:13px;font-weight:700;
+  padding:8px 20px;
+  border-radius:7px;
+  border:1.5px solid var(--border);
+  background:transparent;color:var(--text-dim);
+  cursor:pointer;transition:all .15s;
+  text-decoration:none;display:inline-flex;align-items:center;
+}
+.btn-signin:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-bg)}
+
+/* ── MAIN COPY ── */
+.copy{max-width:520px;animation:fadeUp .5s ease both}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:11.5px;font-weight:800;
+  text-transform:uppercase;letter-spacing:.8px;
+  color:var(--accent);margin-bottom:20px;
+}
+.eyebrow svg{width:14px;height:14px;flex-shrink:0}
+h1{
+  font-size:clamp(36px,4vw,52px);
+  font-weight:900;
+  color:var(--text);
+  line-height:1.1;
+  letter-spacing:-.02em;
+  margin-bottom:20px;
+}
+.lead{
+  font-size:13.5px;font-weight:700;
+  color:var(--text-dim);
+  line-height:1.5;
+  margin-bottom:14px;
+  letter-spacing:-.01em;
+}
+.body-copy{
+  font-size:13px;color:var(--text-muted);
+  line-height:1.75;margin-bottom:32px;
+  max-width:460px;
+}
+
+/* ── META ROW ── */
+.meta-row{
+  display:flex;align-items:center;gap:20px;
+  margin-bottom:28px;
+  flex-wrap:wrap;
+}
+.meta-item{
+  display:flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:700;color:var(--text-muted);
+}
+.meta-item svg{width:14px;height:14px;color:var(--accent);flex-shrink:0}
+.meta-divider{width:1px;height:16px;background:var(--border)}
+
+/* ── CTA ── */
+.cta-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.btn-start{
+  font-family:'Manrope',sans-serif;
+  font-size:14px;font-weight:800;
+  padding:14px 36px;
+  border-radius:9px;
+  border:none;
+  background:var(--accent);
+  color:#fff;cursor:pointer;
+  transition:all .2s;
+  text-decoration:none;
+  display:inline-flex;align-items:center;gap:8px;
+  box-shadow:0 4px 16px rgba(27,108,168,.25);
+  letter-spacing:-.01em;
+}
+.btn-start:hover{
+  background:var(--accent-hover);
+  transform:translateY(-1px);
+  box-shadow:0 6px 24px rgba(27,108,168,.32);
+  color:#fff;
+}
+.btn-start svg{width:16px;height:16px;transition:transform .2s}
+.btn-start:hover svg{transform:translateX(3px)}
+.signin-link{
+  font-size:13px;font-weight:600;color:var(--text-muted);
+  display:flex;align-items:center;gap:5px;
+}
+.signin-link a{color:var(--accent);font-weight:700}
+.signin-link a:hover{text-decoration:underline}
+
+/* ── TRUST STRIP ── */
+.trust-strip{
+  display:flex;align-items:center;gap:20px;
+  margin-top:40px;
+  padding-top:32px;
+  border-top:1px solid var(--border);
+  flex-wrap:wrap;
+}
+.trust-item{
+  display:flex;align-items:center;gap:7px;
+  font-size:11.5px;font-weight:700;color:var(--text-faint);
+}
+.trust-item svg{width:13px;height:13px;color:var(--green);flex-shrink:0}
+
+/* ── STATS (bottom of photo panel) ── */
+.stats-bar{
+  position:absolute;bottom:0;left:0;right:0;
+  background:rgba(15,23,42,.82);
+  backdrop-filter:blur(10px);
+  padding:18px 28px;
+  display:flex;gap:0;
+}
+.stat-item{
+  flex:1;text-align:center;
+  padding:0 16px;
+  border-right:1px solid rgba(255,255,255,.1);
+}
+.stat-item:last-child{border-right:none}
+.stat-n{
+  font-family:'Source Code Pro',monospace;
+  font-size:20px;font-weight:700;color:#fff;
+  margin-bottom:2px;line-height:1;
+}
+.stat-n.blue{color:#60A5FA}
+.stat-n.green{color:#4ADE80}
+.stat-l{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.45);line-height:1.3}
+
+/* ── ANIMATION ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.copy .eyebrow{animation-delay:.05s}
+.copy h1{animation-delay:.1s;animation:fadeUp .5s .1s ease both}
+.copy .lead{animation:fadeUp .5s .15s ease both}
+.copy .body-copy{animation:fadeUp .5s .2s ease both}
+.copy .meta-row{animation:fadeUp .5s .25s ease both}
+.copy .cta-row{animation:fadeUp .5s .3s ease both}
+.copy .trust-strip{animation:fadeUp .5s .35s ease both}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .page{grid-template-columns:1fr}
+  .photo-panel{min-height:320px;max-height:400px}
+  .content-panel{padding:32px 28px 48px;justify-content:flex-start}
+  .topbar{padding:20px 28px;position:relative}
+  h1{font-size:32px}
+  .stats-bar{padding:14px 16px}
+  .stat-n{font-size:16px}
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- LEFT: Photo panel -->
+  <div class="photo-panel">
+    <!-- Placeholder image — replace with actual photo -->
+    <img
+      src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=900&q=80&fit=crop&crop=faces"
+      alt="DLA contractor at workbench with laptop"
+      onerror="this.style.background='linear-gradient(135deg,#1e3a5f,#2563EB)';this.removeAttribute('src')"
+    >
+    <div class="photo-overlay"></div>
+
+    <!-- Stats bar at bottom of photo -->
+    <div class="stats-bar">
+      <div class="stat-item">
+        <div class="stat-n blue">2,847</div>
+        <div class="stat-l">RFQs pulled<br>this week</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-n">105</div>
+        <div class="stat-l">Member awards<br>won</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-n green">$4.9M</div>
+        <div class="stat-l">Total award<br>value</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Content panel -->
+  <div class="content-panel">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <a href="#" class="logo">
+        <img
+          src="https://govscraper.com/assets/BigLogo-7gv5uAxF.png"
+          alt="GovScraper"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+        >
+        <span class="logo-fallback" style="display:none">Gov<span>Scraper</span></span>
+      </a>
+      <div class="topbar-links">
+        <a href="#">Pricing</a>
+        <a href="#">How it works</a>
+        <a href="govscraper-signin.html" class="btn-signin">Sign In</a>
+      </div>
+    </div>
+
+    <!-- Main copy -->
+    <div class="copy">
+
+      <div class="eyebrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+        Free trial — no credit card required
+      </div>
+
+      <h1>Simplify RFQs and<br>the bidding process</h1>
+
+      <p class="lead">We bring DIBBS/DLA solicitations straight to your dashboard. Every. Single. Day.</p>
+
+      <p class="body-copy">GovScraper delivers all matching opportunities directly to your personalized contracting dashboard — no downloads, no scattered files. Instantly access and manage RFQs, track solicitation progress, and input key sourcing details like manufacturer, quantity, price, and lead time — all in one place. Stop wasting hours on manual tracking — GovScraper keeps everything organized so you can focus on winning bids.</p>
+
+      <div class="meta-row">
+        <div class="meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,11 12,14 22,4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          6 Easy Steps
+        </div>
+        <div class="meta-divider"></div>
+        <div class="meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+          5 minutes
+        </div>
+        <div class="meta-divider"></div>
+        <div class="meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          No credit card needed
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a href="Onboard_Step1_Email.html" class="btn-start">
+          Start Now
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
+        </a>
+        <div class="signin-link">
+          Already a member? <a href="govscraper-signin.html">Sign In</a>
+        </div>
+      </div>
+
+      <div class="trust-strip">
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+          DIBBS data updated nightly
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+          All 49 FSC categories
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+          Cancel anytime
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

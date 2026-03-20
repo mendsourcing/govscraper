@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RFQ Alerts — GovScraper</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F8FAFC;--surface:#fff;--surface-2:#F1F5F9;
+  --border:#E2E8F0;--border-strong:#CBD5E1;
+  --text:#1E293B;--text-dim:#475569;--text-muted:#6B7280;--text-faint:#94A3B8;
+  --accent:#2563EB;--accent-bg:#EFF6FF;--accent-border:#BFDBFE;--accent-hover:#1D4ED8;
+  --green:#16A34A;--green-bg:#F0FDF4;--green-border:#BBF7D0;
+  --amber:#D97706;--amber-bg:#FFFBEB;--amber-border:#FDE68A;
+  --red:#DC2626;--red-bg:#FEF2F2;--red-border:#FECACA;
+  --purple:#7C3AED;--purple-bg:#F5F3FF;--purple-border:#DDD6FE;
+  --cyan:#0891B2;--cyan-bg:#ECFEFF;--cyan-border:#A5F3FC;
+}
+[data-theme="dark"]{
+  --bg:#0F172A;--surface:#1E293B;--surface-2:#0B1220;
+  --border:#334155;--border-strong:#475569;
+  --text:#E2E8F0;--text-dim:#94A3B8;--text-muted:#A1A1AA;--text-faint:#64748B;
+  --accent:#60A5FA;--accent-bg:#0B2A4A;--accent-border:#1E40AF;--accent-hover:#3B82F6;
+  --green:#4ADE80;--green-bg:#0B2A1A;--green-border:#166534;
+  --amber:#FBBF24;--amber-bg:#2D1B00;--amber-border:#92400E;
+  --red:#F87171;--red-bg:#2D0A0A;--red-border:#991B1B;
+  --purple:#A78BFA;--purple-bg:#1E1040;--purple-border:#5B21B6;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);font-size:13px}
+a{color:var(--accent);text-decoration:none}
+
+/* ── TOPBAR ── */
+.topbar{height:52px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:200;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.topbar-left{display:flex;align-items:center;gap:14px}
+.topbar-logo{height:28px}
+.topbar-divider{width:1px;height:22px;background:var(--border)}
+.mode-btn{font-family:'Manrope',sans-serif;font-size:11.5px;font-weight:700;padding:5px 12px;border-radius:6px;border:none;cursor:pointer;transition:all .15s}
+.active-member{background:var(--accent);color:#fff}
+.inactive{background:transparent;color:var(--text-faint)}
+.inactive:hover{background:var(--surface-2);color:var(--text-dim)}
+.breadcrumb{font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:4px}
+.breadcrumb a{color:var(--text-muted);font-weight:500}.breadcrumb a:hover{color:var(--accent)}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.topbar-icon-btn{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:transparent;border:none;color:var(--text-muted);transition:all .15s}
+.topbar-icon-btn:hover{background:var(--surface-2);color:var(--text)}
+.avatar-btn{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent-hover));color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;cursor:pointer;border:none;font-family:'Manrope',sans-serif}
+
+/* ── SIDEBAR ── */
+.sidebar{width:224px;position:fixed;top:52px;left:0;bottom:0;background:var(--surface);border-right:1px solid var(--border);padding:14px 0;overflow-y:auto;z-index:90;display:flex;flex-direction:column}
+.sidebar-label{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--text-faint);padding:12px 20px 4px}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:8px 20px;font-size:12.5px;font-weight:500;color:var(--text-dim);text-decoration:none;border-left:3px solid transparent;transition:all .15s;cursor:pointer;background:none;border-top:none;border-right:none;border-bottom:none;width:100%;text-align:left;font-family:'Manrope',sans-serif}
+.sidebar-item:hover{background:var(--accent-bg);color:var(--accent)}
+.sidebar-item.active{color:var(--accent);font-weight:700;border-left-color:var(--accent);background:var(--accent-bg)}
+.sidebar-item svg{width:16px;height:16px;flex-shrink:0;opacity:.8}
+.sidebar-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:10px}
+.sidebar-spacer{flex:1;min-height:20px}
+.sb-tour-btn{width:100%;font-family:'Manrope',sans-serif;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;border:1.5px solid #E2E8F0;background:#F8FAFC;cursor:pointer;transition:all .15s;text-align:left}
+.sb-tour-btn:hover{background:#fff;border-color:#CBD5E1;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.sb-tour-ico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-tour-ico svg{width:15px;height:15px}
+.sb-tour-label{font-size:12px;font-weight:800;color:#334155}
+.sb-tour-sub{font-size:10.5px;color:#94A3B8;margin-top:1px}
+
+/* ── MAIN ── */
+.main{margin-left:224px;padding:28px 32px 60px;min-height:calc(100vh - 52px)}
+
+/* ── PAGE HEADER ── */
+.page-hdr{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:20px}
+.page-hdr-left h1{font-size:22px;font-weight:800;color:var(--text);margin-bottom:4px}
+.page-hdr-left p{font-size:12.5px;color:var(--text-muted);line-height:1.6;max-width:560px}
+.page-hdr-right{display:flex;gap:8px;flex-shrink:0;align-items:center}
+
+/* ── STATS ── */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.stat-n{font-family:'Source Code Pro',monospace;font-size:26px;font-weight:700;line-height:1;margin-bottom:3px}
+.stat-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-faint)}
+
+/* ── TOOLBAR ── */
+.toolbar{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.al-tab{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:7px 16px;border-radius:7px;border:1.5px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;transition:all .15s}
+.al-tab:hover{border-color:var(--accent);color:var(--accent)}
+.al-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.al-search{flex:1;min-width:200px;max-width:320px;font-family:'Manrope',sans-serif;font-size:12.5px;padding:7px 12px;border:1.5px solid var(--border);border-radius:7px;background:var(--surface);color:var(--text);outline:none;transition:border-color .15s}
+.al-search:focus{border-color:var(--accent)}
+.al-search::placeholder{color:var(--text-faint)}
+.al-count{font-size:11.5px;color:var(--text-faint);font-weight:600;margin-left:auto}
+
+/* ── ALERT CARDS ── */
+.alerts-list{display:flex;flex-direction:column;gap:8px}
+.alert-card{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:16px 18px;cursor:pointer;transition:all .15s;display:flex;gap:16px;align-items:flex-start}
+.alert-card:hover{border-color:var(--accent-border);box-shadow:0 2px 8px rgba(37,99,235,.08)}
+.alert-card.is-new{border-left:3px solid var(--accent)}
+.alert-card.is-urgent{border-left:3px solid var(--red)}
+.alert-card.is-sourced{border-left:3px solid var(--green)}
+.alert-card.is-bidding{border-left:3px solid var(--purple)}
+.alert-card.is-archived{opacity:.65}
+
+.ac-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ac-icon.new{background:var(--accent-bg);border:1px solid var(--accent-border)}
+.ac-icon.urgent{background:var(--red-bg);border:1px solid var(--red-border)}
+.ac-icon.sourced{background:var(--green-bg);border:1px solid var(--green-border)}
+.ac-icon.bidding{background:var(--purple-bg);border:1px solid var(--purple-border)}
+.ac-icon.archived{background:var(--surface-2);border:1px solid var(--border)}
+
+.ac-body{flex:1;min-width:0}
+.ac-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:6px}
+.ac-rfq{font-family:'Source Code Pro',monospace;font-size:12.5px;font-weight:700;color:var(--accent)}
+.ac-status{font-size:10px;font-weight:800;padding:2px 8px;border-radius:5px;white-space:nowrap}
+.ac-status.new{background:var(--accent-bg);color:var(--accent)}
+.ac-status.urgent{background:var(--red-bg);color:var(--red)}
+.ac-status.sourced{background:var(--green-bg);color:var(--green)}
+.ac-status.bidding{background:var(--purple-bg);color:var(--purple)}
+.ac-status.archived{background:var(--surface-2);color:var(--text-faint)}
+.ac-age{font-size:10.5px;color:var(--text-faint);margin-left:auto;white-space:nowrap}
+
+.ac-title{font-size:13.5px;font-weight:700;color:var(--text);margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ac-meta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.ac-meta-item{font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:4px}
+.ac-meta-item svg{width:11px;height:11px;flex-shrink:0}
+.ac-triggered{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.ac-trigger-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--text-faint)}
+.ac-nsn-pill{font-family:'Source Code Pro',monospace;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-border)}
+.ac-watchlist-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:#F0FDF4;color:var(--green);border:1px solid var(--green-border)}
+
+.ac-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0}
+.ac-expiry{font-size:11px;font-weight:700;padding:3px 10px;border-radius:5px;white-space:nowrap}
+.ac-expiry.urgent{background:var(--red-bg);color:var(--red)}
+.ac-expiry.soon{background:var(--amber-bg);color:var(--amber)}
+.ac-expiry.ok{background:var(--green-bg);color:var(--green)}
+.ac-expiry.expired{background:var(--surface-2);color:var(--text-faint)}
+.ac-value{font-family:'Source Code Pro',monospace;font-size:13px;font-weight:700;color:var(--green)}
+.ac-actions{display:flex;gap:6px}
+.btn-ws{font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;padding:5px 12px;border-radius:6px;border:none;background:var(--accent);color:#fff;cursor:pointer;white-space:nowrap;transition:background .15s}
+.btn-ws:hover{background:var(--accent-hover)}
+.btn-ws.done{background:var(--green);cursor:default}
+.btn-arch{font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;padding:5px 10px;border-radius:6px;border:1.5px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer}
+.btn-arch:hover{background:var(--surface-2)}
+
+/* ── EMPTY STATE ── */
+.empty-state{text-align:center;padding:60px 20px}
+.empty-ico{width:56px;height:56px;border-radius:14px;background:var(--surface-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.empty-title{font-size:15px;font-weight:800;color:var(--text);margin-bottom:6px}
+.empty-sub{font-size:12.5px;color:var(--text-muted);line-height:1.6;max-width:360px;margin:0 auto}
+
+/* ── PREVIEW PANEL ── */
+.preview-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:400;display:none}
+.preview-overlay.open{display:block}
+.preview-panel{position:fixed;top:0;right:0;bottom:0;width:480px;max-width:calc(100vw - 40px);background:var(--surface);border-left:1px solid var(--border);z-index:500;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .22s cubic-bezier(.4,0,.2,1);box-shadow:-8px 0 32px rgba(0,0,0,.12)}
+.preview-panel.open{transform:translateX(0)}
+.pp-hdr{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:18px 20px;border-bottom:1px solid var(--border)}
+.pp-rfq{font-family:'Source Code Pro',monospace;font-size:12px;font-weight:700;color:var(--accent);margin-bottom:3px}
+.pp-title{font-size:16px;font-weight:800;color:var(--text)}
+.pp-close{background:none;border:none;cursor:pointer;color:var(--text-faint);font-size:20px;line-height:1;padding:2px 4px;border-radius:4px}
+.pp-close:hover{color:var(--text);background:var(--surface-2)}
+.pp-body{flex:1;overflow-y:auto;padding:18px 20px}
+.pp-section-label{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--text-faint);display:block;margin-bottom:8px;margin-top:16px}
+.pp-kv{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:4px}
+.pp-kv-item{background:var(--surface-2);border:1px solid var(--border);border-radius:7px;padding:10px 12px}
+.pp-kv-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--text-faint);margin-bottom:3px}
+.pp-kv-val{font-size:13px;font-weight:600;color:var(--text)}
+.pp-kv-val.mono{font-family:'Source Code Pro',monospace}
+.pp-kv-val.green{color:var(--green)}
+.pp-kv-val.red{color:var(--red)}
+.pp-summary{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:12.5px;color:var(--text-muted);line-height:1.7}
+.pp-nsn-row{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:8px;margin-bottom:6px}
+.pp-watchlist-notice{display:flex;align-items:center;gap:10px;background:var(--green-bg);border:1px solid var(--green-border);border-radius:8px;padding:10px 14px;margin-top:8px;font-size:12px;color:var(--green);font-weight:600}
+.pp-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap}
+.pp-btn-ws{flex:1;font-family:'Manrope',sans-serif;font-size:12.5px;font-weight:700;padding:10px;border-radius:8px;border:none;background:var(--accent);color:#fff;cursor:pointer;transition:background .15s;white-space:nowrap}
+.pp-btn-ws:hover{background:var(--accent-hover)}
+.pp-btn-ws.done{background:var(--green);cursor:default}
+.pp-btn-bid{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:10px 16px;border-radius:8px;border:1.5px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer;transition:all .15s;white-space:nowrap}
+.pp-btn-bid:hover{background:var(--accent-bg)}
+.pp-btn-arch{font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;padding:10px 14px;border-radius:8px;border:1.5px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer}
+.pp-btn-arch:hover{background:var(--surface-2)}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#1E293B;color:#fff;font-size:12.5px;font-weight:600;padding:10px 20px;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.2);opacity:0;transition:all .25s;pointer-events:none;z-index:999;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media(max-width:900px){.main{margin-left:0;padding:16px}.sidebar{display:none}}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-left">
+    <a href="dashboard.html">
+      <img src="https://govscraper.com/assets/BigLogo-7gv5uAxF.png" alt="GovScraper" class="topbar-logo" onerror="this.outerHTML='<span style=&quot;font-family:Manrope,sans-serif;font-size:18px;font-weight:800;color:var(--text);&quot;>GovScraper</span>'">
+    </a>
+    <div class="topbar-divider"></div>
+    <div class="mode-switcher">
+      <button class="mode-btn active-member"><span class="mode-dot blue"></span> Member</button>
+      <button class="mode-btn inactive" onclick="window.location.href='dashboard.html'"><span class="mode-dot green"></span> Supplier</button>
+    </div>
+    <div class="topbar-divider"></div>
+    <div class="breadcrumb">
+      <a href="dashboard.html">Dashboard</a>
+      <span style="color:#CBD5E1;margin:0 4px">&#8250;</span>
+      <span style="color:var(--text-dim);font-weight:600">RFQ Alerts</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <button class="topbar-icon-btn" title="Notifications">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+    </button>
+    <button class="avatar-btn" title="My Account">JD</button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<nav class="sidebar sidebar-member">
+  <div class="sidebar-label">MAIN</div>
+  <a class="sidebar-item" href="dashboard.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    Dashboard
+  </a>
+  <a class="sidebar-item" href="rfq-listing.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+    My RFQs <span class="sidebar-badge">47</span>
+  </a>
+  <div class="sidebar-label">INTELLIGENCE</div>
+  <a class="sidebar-item" href="nsn-search.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    NSN Search
+  </a>
+  <a class="sidebar-item" href="cage-search.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+    CAGE Search
+  </a>
+  <a class="sidebar-item" href="fsc-lookup.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+    FSC Lookup
+  </a>
+  <div class="sidebar-label">RESULTS</div>
+  <a class="sidebar-item" href="awarded-contracts.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+    Awarded Contracts
+  </a>
+  <a class="sidebar-item" href="nsn-watchlist.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    NSN Watch List
+  </a>
+  <a class="sidebar-item" href="archived.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+    Archived
+  </a>
+  <a class="sidebar-item active" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+    RFQ Alerts
+  </a>
+  <div class="sidebar-label">ACCOUNT</div>
+  <a class="sidebar-item" href="account.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    Account
+  </a>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- Page header -->
+  <div class="page-hdr">
+    <div class="page-hdr-left">
+      <h1>RFQ Alerts</h1>
+      <p>GovScraper monitors every new DLA solicitation and notifies you when an RFQ matches an NSN on your Watch List. Never miss a bid opportunity on the parts you track.</p>
+    </div>
+    <div class="page-hdr-right">
+      <a href="nsn-watchlist.html" style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:8px 16px;border-radius:8px;border:1.5px solid var(--border);background:transparent;color:var(--text-muted);display:flex;align-items:center;gap:6px;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Manage Watch List
+      </a>
+      <button onclick="markAllRead()" style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:8px 16px;border-radius:8px;border:none;background:var(--accent);color:#fff;cursor:pointer;display:flex;align-items:center;gap:6px;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg>
+        Mark all read
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-n" style="color:var(--accent)" id="stat-new">3</div>
+      <div class="stat-l">New Alerts</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-n" style="color:var(--amber)" id="stat-active">6</div>
+      <div class="stat-l">Active RFQs</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-n" style="color:var(--green)" id="stat-sourced">4</div>
+      <div class="stat-l">Will Source</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-n" style="color:var(--text-faint)" id="stat-archived">7</div>
+      <div class="stat-l">Archived</div>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <button class="al-tab active" id="tab-active" onclick="switchView('active')">Active</button>
+    <button class="al-tab" id="tab-sourced" onclick="switchView('sourced')">Will Source</button>
+    <button class="al-tab" id="tab-archived" onclick="switchView('archived')">Archived</button>
+    <input class="al-search" id="al-search" placeholder="Search NSN, part number, solicitation…" oninput="filterAlerts(this.value)">
+    <span class="al-count" id="al-count">6 alerts</span>
+  </div>
+
+  <!-- Alerts list -->
+  <div class="alerts-list" id="alerts-list"></div>
+
+</div><!-- /main -->
+
+<!-- PREVIEW PANEL -->
+<div class="preview-overlay" id="preview-overlay" onclick="closePanel()"></div>
+<div class="preview-panel" id="preview-panel">
+  <div class="pp-hdr">
+    <div>
+      <div class="pp-rfq" id="pp-rfq"></div>
+      <div class="pp-title" id="pp-title"></div>
+    </div>
+    <button class="pp-close" onclick="closePanel()">×</button>
+  </div>
+  <div class="pp-body" id="pp-body"></div>
+  <div class="pp-footer">
+    <button class="pp-btn-ws" id="pp-btn-ws" onclick="panelMarkWillSource()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline;margin-right:5px"><polyline points="20,6 9,17 4,12"/></svg>
+      Add to My RFQs — Will Source
+    </button>
+    <button class="pp-btn-bid" onclick="panelViewRFQ()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;margin-right:5px"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      View on DIBBS
+    </button>
+    <button class="pp-btn-arch" id="pp-btn-arch" onclick="panelArchive()">Archive</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const ALERTS = [
+  {
+    id: 1,
+    rfqNum: 'SPE7M8-26-Q-0142',
+    title: 'Bolt, Machine — NAS Series',
+    agency: 'DLA Land and Maritime',
+    setAside: 'Small Business',
+    expiry: '2026-03-18',
+    expiryLabel: 'Expires Mar 18 — 3 days',
+    expiryClass: 'urgent',
+    estValue: '$4,200',
+    qty: '500 EA',
+    delivDays: '45 days ARO',
+    summary: 'DLA solicitation for NAS6203-14 machine bolts, stainless steel, per MIL-SPEC drawing. Contractor must provide first article test documentation. MIL-SPEC packaging required.',
+    watchedNsns: [
+      { nsn: '5306-00-203-3858', name: 'BOLT, MACHINE', watchedSince: 'Jan 12, 2026' }
+    ],
+    status: 'new',
+    age: '2 hours ago'
+  },
+  {
+    id: 2,
+    rfqNum: 'SPE7M8-26-Q-0098',
+    title: 'Screw, Cap, Socket Head',
+    agency: 'DLA Aviation',
+    setAside: 'Unrestricted',
+    expiry: '2026-03-20',
+    expiryLabel: 'Expires Mar 20 — 5 days',
+    expiryClass: 'soon',
+    estValue: '$1,850',
+    qty: '200 EA',
+    delivDays: '30 days ARO',
+    summary: 'Requirement for socket head cap screws per SPS drawing SPS-2505-14. Traceability and cert documentation required. Packaging per MIL-STD-2073. Small business set-aside.',
+    watchedNsns: [
+      { nsn: '5305-00-269-5518', name: 'SCREW, CAP SOCKET HEAD', watchedSince: 'Feb 3, 2026' }
+    ],
+    status: 'new',
+    age: '5 hours ago'
+  },
+  {
+    id: 3,
+    rfqNum: 'SPE4A6-26-Q-0331',
+    title: 'Washer, Flat — MIL-SPEC',
+    agency: 'DLA Land and Maritime',
+    setAside: 'Unrestricted',
+    expiry: '2026-04-05',
+    expiryLabel: 'Expires Apr 5 — 21 days',
+    expiryClass: 'ok',
+    estValue: '$880',
+    qty: '1,000 EA',
+    delivDays: '30 days ARO',
+    summary: 'Open market procurement for flat washers per AN960-416. OEM documentation preferred. Delivery to DLA Distribution Susquehanna, PA.',
+    watchedNsns: [
+      { nsn: '5310-00-225-8698', name: 'WASHER, FLAT', watchedSince: 'Mar 1, 2026' }
+    ],
+    status: 'new',
+    age: '1 day ago'
+  },
+  {
+    id: 4,
+    rfqNum: 'SPE7M8-26-Q-0061',
+    title: 'Bolt, Machine — NAS6203-20',
+    agency: 'DLA Land and Maritime',
+    setAside: 'Unrestricted',
+    expiry: '2026-04-02',
+    expiryLabel: 'Expires Apr 2 — 18 days',
+    expiryClass: 'ok',
+    estValue: '$6,100',
+    qty: '800 EA',
+    delivDays: '60 days ARO',
+    summary: 'Open market procurement for NAS6203-20 series machine bolts. OEM certification required. CoC and material certifications at delivery.',
+    watchedNsns: [
+      { nsn: '5306-00-203-3858', name: 'BOLT, MACHINE', watchedSince: 'Jan 12, 2026' }
+    ],
+    status: 'sourced',
+    age: '3 days ago'
+  },
+  {
+    id: 5,
+    rfqNum: 'SPE4A6-26-Q-0218',
+    title: 'Nut, Self-Locking — Hex',
+    agency: 'DLA Aviation',
+    setAside: 'Small Business',
+    expiry: '2026-03-30',
+    expiryLabel: 'Expires Mar 30 — 15 days',
+    expiryClass: 'ok',
+    estValue: '$2,340',
+    qty: '600 EA',
+    delivDays: '45 days ARO',
+    summary: 'Self-locking hex nuts per MS17826. Must meet NASM17826 torque-off and prevailing torque requirements. Cert documentation required.',
+    watchedNsns: [
+      { nsn: '5310-00-187-3193', name: 'NUT, SELF-LOCKING', watchedSince: 'Feb 18, 2026' }
+    ],
+    status: 'sourced',
+    age: '4 days ago'
+  },
+  {
+    id: 6,
+    rfqNum: 'SPE7M8-26-Q-0019',
+    title: 'Screw, Cap Socket Head — Bulk',
+    agency: 'DLA Land and Maritime',
+    setAside: 'Unrestricted',
+    expiry: '2026-02-10',
+    expiryLabel: 'Expired Feb 10',
+    expiryClass: 'expired',
+    estValue: '$3,300',
+    qty: '600 EA',
+    delivDays: '30 days ARO',
+    summary: 'Expired bulk requirement for socket head cap screws. Contractor may still pursue delivery orders under associated IDIQ contract.',
+    watchedNsns: [
+      { nsn: '5305-00-269-5518', name: 'SCREW, CAP SOCKET HEAD', watchedSince: 'Feb 3, 2026' }
+    ],
+    status: 'archived',
+    age: '25 days ago'
+  },
+];
+
+let currentView = 'active';
+let activeAlertId = null;
+let searchVal = '';
+
+function getViewAlerts() {
+  return ALERTS.filter(a => {
+    const matchView =
+      currentView === 'active'   ? (a.status === 'new' || a.status === 'active') :
+      currentView === 'sourced'  ? a.status === 'sourced' :
+      currentView === 'archived' ? a.status === 'archived' : true;
+    const matchSearch = !searchVal ||
+      a.rfqNum.toLowerCase().includes(searchVal) ||
+      a.title.toLowerCase().includes(searchVal) ||
+      a.watchedNsns.some(n => n.nsn.includes(searchVal) || n.name.toLowerCase().includes(searchVal));
+    return matchView && matchSearch;
+  });
+}
+
+function iconSvg(cls) {
+  const icons = {
+    new:      `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>`,
+    urgent:   `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>`,
+    sourced:  `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg>`,
+    archived: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-faint)" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>`
+  };
+  return icons[cls] || icons.new;
+}
+
+function renderAlerts() {
+  const list = document.getElementById('alerts-list');
+  const alerts = getViewAlerts();
+  document.getElementById('al-count').textContent = alerts.length + ' alert' + (alerts.length !== 1 ? 's' : '');
+
+  if (!alerts.length) {
+    list.innerHTML = `<div class="empty-state">
+      <div class="empty-ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-faint)" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg></div>
+      <div class="empty-title">No alerts here</div>
+      <div class="empty-sub">When DLA posts an RFQ matching an NSN on your Watch List, it will appear here.</div>
+    </div>`;
+    return;
+  }
+
+  list.innerHTML = alerts.map(a => {
+    const ic = a.expiryClass === 'urgent' ? 'urgent' : a.status === 'sourced' ? 'sourced' : a.status === 'archived' ? 'archived' : 'new';
+    const statusLabel = a.status === 'new' ? 'New' : a.status === 'sourced' ? '✓ Will Source' : 'Archived';
+    const wsBtnText = a.status === 'sourced' ? '✓ In My RFQs' : '+ Add to My RFQs';
+    const wsBtnClass = a.status === 'sourced' ? 'btn-ws done' : 'btn-ws';
+
+    return `<div class="alert-card is-${ic}" onclick="openPanel(${a.id})">
+      <div class="ac-icon ${ic}">${iconSvg(ic)}</div>
+      <div class="ac-body">
+        <div class="ac-top">
+          <span class="ac-rfq">${a.rfqNum}</span>
+          <span class="ac-status ${a.status === 'sourced' ? 'sourced' : ic === 'urgent' ? 'urgent' : a.status === 'archived' ? 'archived' : 'new'}">${statusLabel}</span>
+          <span class="ac-age">${a.age}</span>
+        </div>
+        <div class="ac-title">${a.title}</div>
+        <div class="ac-meta">
+          <span class="ac-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+            ${a.agency}
+          </span>
+          <span class="ac-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            ${a.setAside}
+          </span>
+          <span class="ac-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/></svg>
+            ${a.qty}
+          </span>
+        </div>
+        <div class="ac-triggered">
+          <span class="ac-trigger-label">Watch List match:</span>
+          ${a.watchedNsns.map(n => `<span class="ac-nsn-pill">${n.nsn}</span><span class="ac-watchlist-tag">⭐ Watched</span>`).join('')}
+        </div>
+      </div>
+      <div class="ac-right" onclick="event.stopPropagation()">
+        <span class="ac-expiry ${a.expiryClass}">${a.expiryLabel}</span>
+        <span class="ac-value">${a.estValue}</span>
+        <div class="ac-actions">
+          <button class="${wsBtnClass}" onclick="markWillSource(${a.id},this)">${wsBtnText}</button>
+          ${a.status !== 'archived' ? `<button class="btn-arch" onclick="archiveAlert(${a.id})">Archive</button>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function switchView(v) {
+  currentView = v;
+  ['active','sourced','archived'].forEach(id => {
+    document.getElementById('tab-'+id).classList.toggle('active', id === v);
+  });
+  renderAlerts();
+}
+
+function filterAlerts(val) {
+  searchVal = val.toLowerCase().trim();
+  renderAlerts();
+}
+
+function markWillSource(id, btn) {
+  const a = ALERTS.find(x => x.id === id);
+  if (!a || a.status === 'sourced') return;
+  a.status = 'sourced';
+  showToast('✓ Added to your Private RFQ List as "Will Source"');
+  document.getElementById('stat-sourced').textContent = ALERTS.filter(x => x.status === 'sourced').length;
+  document.getElementById('stat-new').textContent = ALERTS.filter(x => x.status === 'new').length;
+  renderAlerts();
+  if (activeAlertId === id) updatePanelFooter(a);
+}
+
+function archiveAlert(id) {
+  const a = ALERTS.find(x => x.id === id);
+  if (!a) return;
+  a.status = 'archived';
+  showToast('Alert archived');
+  document.getElementById('stat-archived').textContent = ALERTS.filter(x => x.status === 'archived').length;
+  renderAlerts();
+  if (activeAlertId === id) closePanel();
+}
+
+function markAllRead() {
+  ALERTS.filter(a => a.status === 'new').forEach(a => { a.status = 'active'; });
+  document.getElementById('stat-new').textContent = 0;
+  renderAlerts();
+  showToast('All alerts marked as read');
+}
+
+// ── PANEL ─────────────────────────────────────────────────────────────────────
+function openPanel(id) {
+  const a = ALERTS.find(x => x.id === id);
+  if (!a) return;
+  activeAlertId = id;
+  document.getElementById('pp-rfq').textContent = a.rfqNum;
+  document.getElementById('pp-title').textContent = a.title;
+
+  document.getElementById('pp-body').innerHTML = `
+    <div class="pp-kv">
+      <div class="pp-kv-item"><div class="pp-kv-label">Agency</div><div class="pp-kv-val">${a.agency}</div></div>
+      <div class="pp-kv-item"><div class="pp-kv-label">Set-Aside</div><div class="pp-kv-val">${a.setAside}</div></div>
+      <div class="pp-kv-item"><div class="pp-kv-label">Est. Value</div><div class="pp-kv-val green">${a.estValue}</div></div>
+      <div class="pp-kv-item"><div class="pp-kv-label">Quantity</div><div class="pp-kv-val mono">${a.qty}</div></div>
+      <div class="pp-kv-item"><div class="pp-kv-label">Delivery</div><div class="pp-kv-val">${a.delivDays}</div></div>
+      <div class="pp-kv-item"><div class="pp-kv-label">Expires</div><div class="pp-kv-val ${a.expiryClass === 'urgent' || a.expiryClass === 'expired' ? 'red' : ''}">${a.expiryLabel}</div></div>
+    </div>
+
+    <span class="pp-section-label">Triggered by your Watch List</span>
+    ${a.watchedNsns.map(n => `
+      <div class="pp-nsn-row">
+        <span class="ac-nsn-pill">${n.nsn}</span>
+        <span style="font-size:12px;font-weight:600;color:var(--text)">${n.name}</span>
+        <span style="font-size:11px;color:var(--text-faint);margin-left:auto">Watched since ${n.watchedSince}</span>
+      </div>
+      <div class="pp-watchlist-notice">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        This NSN is on your Watch List — this solicitation was matched automatically.
+      </div>
+    `).join('')}
+
+    <span class="pp-section-label">Solicitation Summary</span>
+    <div class="pp-summary">${a.summary}</div>
+  `;
+
+  updatePanelFooter(a);
+
+  document.getElementById('preview-overlay').classList.add('open');
+  document.getElementById('preview-panel').classList.add('open');
+}
+
+function updatePanelFooter(a) {
+  const wsBtn = document.getElementById('pp-btn-ws');
+  if (a.status === 'sourced') {
+    wsBtn.textContent = '✓ Added to My RFQs';
+    wsBtn.classList.add('done');
+  } else {
+    wsBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline;margin-right:5px"><polyline points="20,6 9,17 4,12"/></svg>Add to My RFQs — Will Source';
+    wsBtn.classList.remove('done');
+  }
+  const archBtn = document.getElementById('pp-btn-arch');
+  archBtn.style.display = a.status === 'archived' ? 'none' : '';
+}
+
+function closePanel() {
+  document.getElementById('preview-overlay').classList.remove('open');
+  document.getElementById('preview-panel').classList.remove('open');
+  activeAlertId = null;
+}
+
+function panelMarkWillSource() {
+  if (activeAlertId) markWillSource(activeAlertId);
+}
+
+function panelArchive() {
+  if (activeAlertId) archiveAlert(activeAlertId);
+}
+
+function panelViewRFQ() {
+  showToast('Opening DIBBS solicitation…');
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── THEME ─────────────────────────────────────────────────────────────────────
+function toggleTheme() {
+  const dark = document.body.getAttribute('data-theme') === 'dark';
+  dark ? document.body.removeAttribute('data-theme') : document.body.setAttribute('data-theme','dark');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+renderAlerts();
+</script>
+</body>
+</html>

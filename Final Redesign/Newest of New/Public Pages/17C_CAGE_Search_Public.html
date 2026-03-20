@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CAGE Search — GovScraper</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#F8FAFC; --surface:#FFFFFF; --surface-2:#F1F5F9; --surface-3:#E8EFF7;
+  --border:#E2E8F0; --border-strong:#CBD5E1;
+  --text:#0F172A; --text-dim:#334155; --text-muted:#64748B; --text-faint:#94A3B8;
+  --accent:#2563EB; --accent-hover:#1D4ED8; --accent-bg:#EFF6FF; --accent-border:#BFDBFE;
+  --green:#16A34A; --green-bg:#F0FDF4; --green-border:#BBF7D0;
+  --amber:#D97706; --amber-bg:#FFFBEB; --amber-border:#FDE68A;
+  --red:#DC2626; --red-bg:#FEF2F2; --red-border:#FECACA;
+  --brand-navy:#1B2A4A;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);font-size:13px}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* TOPBAR */
+.topbar{height:56px;background:#fff;border-bottom:2px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:200;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.topbar-left{display:flex;align-items:center;gap:16px}
+.topbar-logo{height:30px}
+.topbar-divider{width:1px;height:24px;background:var(--border)}
+.topbar-nav{display:flex;align-items:center;gap:4px}
+.tn-btn{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:6px 14px;border-radius:7px;border:none;background:transparent;color:var(--text-muted);cursor:pointer;transition:all .15s}
+.tn-btn:hover{color:var(--text);background:var(--surface-2)}
+.tn-btn.active{color:var(--accent);background:var(--accent-bg)}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.tb-btn{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:7px 16px;border-radius:7px;border:1.5px solid var(--border);background:var(--surface);color:var(--text-dim);cursor:pointer;transition:all .15s;white-space:nowrap}
+.tb-btn:hover{border-color:var(--accent-border);color:var(--accent);background:var(--accent-bg)}
+.tb-btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tb-btn-primary:hover{background:var(--accent-hover);color:#fff}
+
+/* MAIN */
+.main{max-width:1100px;margin:0 auto;padding:28px 24px 60px}
+
+/* PAGE HEADER */
+.page-hdr{margin-bottom:22px}
+.page-hdr h1{font-size:22px;font-weight:800;color:var(--text);margin-bottom:5px}
+.page-hdr p{font-size:13px;color:var(--text-muted);line-height:1.6;max-width:560px}
+
+/* SEARCH BAR */
+.search-row{display:flex;gap:10px;margin-bottom:10px}
+.search-wrap{flex:1;background:var(--surface);border:2px solid var(--border);border-radius:12px;padding:10px 16px;box-shadow:0 1px 4px rgba(0,0,0,.05);display:flex;align-items:center;gap:10px;transition:all .15s}
+.search-wrap:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.search-wrap svg{width:18px;height:18px;color:var(--text-faint);flex-shrink:0}
+.search-wrap input{flex:1;border:none;background:transparent;font-family:'Manrope',sans-serif;font-size:15px;color:var(--text);outline:none;font-weight:500}
+.search-wrap input::placeholder{color:var(--text-faint);font-weight:400}
+.search-clear{width:22px;height:22px;border:none;background:var(--surface-2);border-radius:5px;cursor:pointer;color:var(--text-faint);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.search-clear:hover{background:var(--border);color:var(--text-dim)}
+.search-btn{font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:0 28px;height:52px;border-radius:10px;border:none;background:var(--accent);color:#fff;cursor:pointer;transition:background .15s;white-space:nowrap}
+.search-btn:hover{background:var(--accent-hover)}
+.search-hint{font-size:11.5px;color:var(--text-faint);margin-bottom:20px;display:flex;align-items:center;gap:16px}
+.hint-item{display:flex;align-items:center;gap:5px}
+.hint-item kbd{font-family:'Source Code Pro',monospace;font-size:10px;background:var(--surface-2);border:1px solid var(--border);border-radius:4px;padding:1px 5px;color:var(--text-dim)}
+
+
+.results-count strong{color:var(--text-dim);font-weight:700}
+
+/* RESULT CARDS */
+.result-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:0;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04);display:flex;overflow:hidden;transition:box-shadow .15s,border-color .15s;cursor:pointer}
+.result-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.09);border-color:var(--accent-border)}
+.rc-accent{width:5px;flex-shrink:0;background:var(--border)}
+.rc-accent.verified{background:linear-gradient(to bottom,var(--green),#22c55e)}
+.rc-accent.active{background:var(--border)}
+.rc-body{flex:1;padding:14px 18px;display:flex;align-items:center;gap:20px;min-width:0}
+.rc-id{flex-shrink:0;min-width:130px}
+.rc-cage{font-family:'Source Code Pro',monospace;font-size:16px;font-weight:700;letter-spacing:2px;color:var(--text);margin-bottom:3px}
+.rc-status{display:flex;align-items:center;gap:5px}
+.rc-main{flex:1;min-width:0}
+.rc-name{font-size:14px;font-weight:800;color:var(--text);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rc-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rc-loc{font-size:11.5px;color:var(--text-muted);display:flex;align-items:center;gap:4px}
+.rc-loc svg{width:11px;height:11px;color:var(--text-faint)}
+.rc-tags{display:flex;gap:5px;flex-wrap:wrap}
+.tag{display:inline-flex;align-items:center;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:.2px;white-space:nowrap}
+.tag-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.tag-blue{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-border)}
+.tag-gray{background:var(--surface-2);color:var(--text-dim);border:1px solid var(--border)}
+.tag-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.rc-stats{display:flex;gap:14px;flex-shrink:0}
+.rc-stat{display:flex;flex-direction:column;align-items:center;gap:1px;min-width:50px}
+.rc-stat-n{font-family:'Source Code Pro',monospace;font-size:15px;font-weight:700;color:var(--accent);line-height:1}
+.rc-stat-l{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--text-faint)}
+.rc-divider{width:1px;height:32px;background:var(--border);flex-shrink:0;align-self:center}
+.rc-action{flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:6px;padding:14px 16px 14px 0}
+.rc-view-btn{font-family:'Manrope',sans-serif;font-size:11.5px;font-weight:700;padding:7px 16px;border-radius:7px;border:1.5px solid var(--border);background:var(--surface);color:var(--text-dim);cursor:pointer;transition:all .15s;white-space:nowrap}
+.rc-view-btn:hover{border-color:var(--accent-border);color:var(--accent);background:var(--accent-bg)}
+.rc-view-btn.verified{border-color:var(--green-border);color:var(--green);background:var(--green-bg)}
+.rc-view-btn.verified:hover{background:#DCFCE7}
+.vbadge-sm{display:flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;color:var(--green)}
+.vbadge-sm img{height:13px;opacity:.85}
+
+/* INLINE UPSELL CARD */
+.upsell-card{background:linear-gradient(135deg,var(--accent-bg),#E0EAFF);border:1.5px solid var(--accent-border);border-radius:12px;padding:16px 20px;margin-bottom:10px;display:flex;align-items:center;gap:16px}
+.uc-icon{width:38px;height:38px;background:var(--accent);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.uc-icon svg{color:#fff}
+.uc-text{flex:1;min-width:0}
+.uc-title{font-size:13px;font-weight:800;color:var(--accent);margin-bottom:2px}
+.uc-sub{font-size:11.5px;color:var(--text-muted);line-height:1.5}
+.uc-btn{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:8px 18px;border-radius:7px;border:none;background:var(--accent);color:#fff;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .15s}
+.uc-btn:hover{background:var(--accent-hover)}
+
+/* PRE-SEARCH STATE */
+.pre-search{text-align:center;padding:40px 24px 60px}
+.ps-icon{width:64px;height:64px;background:var(--accent-bg);border:2px solid var(--accent-border);border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 18px}
+.ps-icon svg{color:var(--accent)}
+.ps-title{font-size:18px;font-weight:800;color:var(--text);margin-bottom:8px}
+.ps-sub{font-size:13px;color:var(--text-muted);line-height:1.7;max-width:440px;margin:0 auto 28px}
+.ps-examples{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
+.ps-ex{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--surface);color:var(--text-muted);cursor:pointer;transition:all .15s}
+.ps-ex:hover{border-color:var(--accent-border);color:var(--accent);background:var(--accent-bg)}
+.ps-ex kbd{font-family:'Source Code Pro',monospace}
+
+/* WHAT YOU GET GRID */
+.wyg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:680px;margin:0 auto;text-align:left}
+.wyg-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.wyg-ico{font-size:20px;margin-bottom:8px}
+.wyg-title{font-size:12px;font-weight:800;color:var(--text-dim);margin-bottom:3px}
+.wyg-sub{font-size:11px;color:var(--text-faint);line-height:1.5}
+
+/* NO RESULTS */
+.no-results{text-align:center;padding:40px 24px}
+.nr-icon{width:56px;height:56px;background:var(--surface-2);border:1.5px solid var(--border);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.nr-icon svg{color:var(--text-muted)}
+.nr-title{font-size:16px;font-weight:800;color:var(--text-dim);margin-bottom:6px}
+.nr-sub{font-size:12.5px;color:var(--text-muted);line-height:1.7;max-width:360px;margin:0 auto 18px}
+.nr-tips{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 18px;max-width:420px;margin:0 auto;text-align:left}
+.nr-tip{font-size:12px;color:var(--text-muted);padding:5px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.nr-tip:last-child{border-bottom:none}
+.nr-tip svg{flex-shrink:0;margin-top:2px;color:var(--text-faint)}
+
+/* LOAD MORE */
+.load-more-row{text-align:center;padding:16px 0 0}
+.load-more-btn{font-family:'Manrope',sans-serif;font-size:12.5px;font-weight:700;padding:10px 28px;border-radius:8px;border:1.5px solid var(--border);background:var(--surface);color:var(--text-dim);cursor:pointer;transition:all .15s}
+.load-more-btn:hover{border-color:var(--accent-border);color:var(--accent);background:var(--accent-bg)}
+
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--surface);border-radius:18px;width:440px;max-width:calc(100vw - 32px);box-shadow:0 24px 80px rgba(0,0,0,.22);transform:translateY(16px);transition:transform .22s;overflow:hidden}
+.overlay.open .modal{transform:translateY(0)}
+.modal-hdr{padding:24px 28px 18px}
+.modal-hdr-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+.modal-ico{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--accent-bg);border:1px solid var(--accent-border)}
+.modal-ico svg{color:var(--accent)}
+.modal-close{width:30px;height:30px;border:none;background:var(--surface-2);border-radius:7px;cursor:pointer;color:var(--text-muted);display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:var(--border)}
+.modal-title{font-size:20px;font-weight:800;color:var(--text);margin-bottom:6px}
+.modal-sub{font-size:12.5px;color:var(--text-muted);line-height:1.7}
+.modal-body{padding:0 28px 6px}
+.modal-footer{padding:16px 28px 22px;border-top:1px solid var(--border);display:flex;gap:10px;background:var(--surface-2)}
+.m-submit{flex:1;font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:12px;border-radius:9px;border:none;background:var(--accent);color:#fff;cursor:pointer}
+.m-submit:hover{background:var(--accent-hover)}
+.m-cancel{font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;padding:12px 20px;border-radius:9px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer}
+.m-cancel:hover{background:var(--surface-2)}
+.signup-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.signup-opt{border:1.5px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:all .15s;text-align:center}
+.signup-opt:hover{border-color:var(--accent-border);background:var(--accent-bg)}
+.so-ico{font-size:24px;margin-bottom:6px}
+.so-title{font-size:13px;font-weight:800;color:var(--text);margin-bottom:3px}
+.so-sub{font-size:11px;color:var(--text-muted);line-height:1.5}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <!-- Logo -->
+  <a href="#" style="display:flex;align-items:center;flex-shrink:0;text-decoration:none;">
+    <img src="https://govscraper.com/assets/BigLogo-7gv5uAxF.png" alt="GovScraper" class="topbar-logo" onerror="this.outerHTML='<span style=&quot;font-family:Manrope,sans-serif;font-size:18px;font-weight:800;color:var(--text);&quot;>GovScraper</span>'">
+  </a>
+
+  <!-- Nav links -->
+  <nav style="display:flex;align-items:center;gap:28px;margin:0 40px;">
+    <a href="#" style="font-size:13px;font-weight:600;color:var(--text-dim);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">Guided Tour</a>
+    <a href="#" style="font-size:13px;font-weight:600;color:var(--text-dim);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">Pricing</a>
+    <a href="#" style="font-size:13px;font-weight:600;color:var(--text-dim);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">Services</a>
+    <a href="#" style="font-size:13px;font-weight:700;color:var(--accent);text-decoration:none;">Cage Search</a>
+    <a href="18B_NSN_Search_Public.html" style="font-size:13px;font-weight:600;color:var(--text-dim);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">NSN Search</a>
+    <a href="#" style="font-size:13px;font-weight:600;color:var(--text-dim);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">Blog</a>
+  </nav>
+
+  <!-- Auth buttons -->
+  <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+    <button class="tb-btn" onclick="openSignUpModal()">Login</button>
+    <button class="tb-btn tb-btn-primary" onclick="openSignUpModal()">Free Trial</button>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- PAGE HEADER -->
+  <div class="page-hdr">
+    <h1>CAGE Search</h1>
+    <p>Search the GovScraper supplier database by CAGE code or company name. Find vendors, manufacturers, and distributors active in DLA procurement.</p>
+  </div>
+
+  <!-- SEARCH BAR -->
+  <div class="search-row">
+    <div class="search-wrap" id="searchWrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" placeholder="Enter CAGE code (e.g. 96906) or company name…" oninput="handleInput(this.value)" onkeydown="handleKey(event)" autocomplete="off" autocorrect="off" spellcheck="false" value="SPS">
+      <button class="search-clear" id="clearBtn" style="display:flex" onclick="clearSearch()" title="Clear">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <button class="search-btn" onclick="runSearch()">Search</button>
+  </div>
+  <div class="search-hint">
+    <span class="hint-item">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Try a 5-character CAGE code for exact lookup
+    </span>
+    <span class="hint-item">Press <kbd>Enter</kbd> to search</span>
+    <span class="hint-item">or search by company name: <kbd>Boeing</kbd> &nbsp;<kbd>Honeywell</kbd> &nbsp;<kbd>SPS</kbd></span>
+  </div>
+
+  <!-- Upsell bar — shown below hint when results are visible -->
+  <div id="staticUpsell" style="display:none;margin-bottom:16px">
+    <div class="upsell-card">
+      <div class="uc-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+      <div class="uc-text"><div class="uc-title">Members see the full supplier picture</div><div class="uc-sub">Contact details, NSN lists, RFQ history, award data, and supplier inventory — unlocked for GovScraper members.</div></div>
+      <button class="uc-btn" onclick="openSignUpModal()">Start Free Trial →</button>
+    </div>
+  </div>
+  <div id="resultsCount" style="font-size:12px;color:var(--text-muted);margin-bottom:14px;display:none"><strong id="resultsCountText"></strong></div>
+
+  <!-- RESULTS AREA -->
+  <div id="resultsArea">
+
+    <!-- PRE-SEARCH STATE (default) -->
+    <div id="preSearch">
+      <div class="pre-search">
+        <div class="ps-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+        <div class="ps-title">Search the DLA Supplier Database</div>
+        <div class="ps-sub">Over 40,000 CAGE records observed in DIBBS procurement data. Look up any supplier, manufacturer, or distributor active in DLA contracting.</div>
+        <div class="ps-examples">
+          <button class="ps-ex" onclick="fillAndSearch('96906')"><kbd>96906</kbd> — SPS Technologies</button>
+          <button class="ps-ex" onclick="fillAndSearch('Boeing')">Boeing</button>
+          <button class="ps-ex" onclick="fillAndSearch('Honeywell')">Honeywell</button>
+          <button class="ps-ex" onclick="fillAndSearch('0FV87')"><kbd>0FV87</kbd> — Precision Castparts</button>
+          <button class="ps-ex" onclick="fillAndSearch('Fastener')">Fastener suppliers</button>
+          <button class="ps-ex" onclick="fillAndSearch('55683')"><kbd>55683</kbd></button>
+        </div>
+        <div class="wyg-grid">
+          <div class="wyg-card">
+            <div class="wyg-ico">🔍</div>
+            <div class="wyg-title">CAGE Profiles</div>
+            <div class="wyg-sub">Company info, SAM status, business size, and corporate relationships — free to browse.</div>
+          </div>
+          <div class="wyg-card">
+            <div class="wyg-ico">🛡️</div>
+            <div class="wyg-title">Verified Suppliers</div>
+            <div class="wyg-sub">Pages claimed by the supplier include certifications, capabilities, and direct contact info.</div>
+          </div>
+          <div class="wyg-card">
+            <div class="wyg-ico">🔒</div>
+            <div class="wyg-title">Members Get More</div>
+            <div class="wyg-sub">Full NSN lists, RFQ history, award data, and supplier inventory — GovScraper members only.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULTS LIST (hidden until search) -->
+    <div id="resultsList" style="display:none"></div>
+
+    <!-- NO RESULTS (hidden until no results) -->
+    <div id="noResults" style="display:none">
+      <div class="no-results">
+        <div class="nr-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <div class="nr-title">No results found for "<span id="noResultsQuery"></span>"</div>
+        <div class="nr-sub">We couldn't find a CAGE code or company matching that query in our database.</div>
+        <div class="nr-tips">
+          <div class="nr-tip">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
+            CAGE codes are exactly 5 characters — letters and numbers, e.g. <strong>96906</strong> or <strong>0FV87</strong>
+          </div>
+          <div class="nr-tip">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
+            Try a shorter company name — search for <strong>SPS</strong> instead of <strong>SPS Technologies, Inc.</strong>
+          </div>
+          <div class="nr-tip">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
+            Only suppliers observed in DIBBS procurement data are in our database
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<!-- SIGN UP MODAL -->
+<div class="overlay" id="signupOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div class="modal-hdr-top">
+        <div class="modal-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></div>
+        <button class="modal-close" onclick="closeModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="modal-title" id="modal-title">See the Full Picture</div>
+      <div class="modal-sub" id="modal-sub">GovScraper members get complete access to RFQ history, award data, contact information, NSN lists, and more for every supplier in the database.</div>
+    </div>
+    <div class="modal-body" style="padding-bottom:22px">
+      <div class="signup-options">
+        <div class="signup-opt">
+          <div class="so-ico">🚀</div>
+          <div class="so-title">Start Free Trial</div>
+          <div class="so-sub">7 days free, no credit card. Full PRO access from day one.</div>
+        </div>
+        <div class="signup-opt">
+          <div class="so-ico">🔑</div>
+          <div class="so-title">Sign In</div>
+          <div class="so-sub">Already a member? Access the full database instantly.</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--text-faint);text-align:center;line-height:1.6">No contracts. Cancel anytime. Trusted by DLA contractors nationwide.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+var BADGE_SRC = "data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAAoACkDASIAAhEBAxEB/8QAGwAAAgIDAQAAAAAAAAAAAAAABwgABgMEBQn/xAA1EAABAwMDAgMFBQkAAAAAAAABAgMEBQYRAAcSIUETIjEIUmGBoRQXUXGSFSMyQkNTcrHR/8QAGAEAAwEBAAAAAAAAAAAAAAAABAUGAwf/xAAwEQABAwIEBQIDCQAAAAAAAAABAgMRAAQFITFBElFhgZGh8BPR4QYHFCJCcbHB8f/aAAwDAQACEQMRAD8ATmnw5VQmswoMdyRJeUENtoGVKJ0zlg+znbFEpDNd3ZuJTBcC1JpVPBde8hwtKuGSFA9CPUHIIBGu97Cm30GLSpu51ZhfaXGXAxTWijJU6SAMZ75Kcf5A/wAur9utcNC2xq4pFrNCZcSWkYlTyl5FJaytSG2kkDkv94o5Vk448irpjdxSbZAURme/aOcVphmH3GMXX4dj5aZEk7AHLLXrIFYqZtftuhM6G3su5UFRzlh1DjikvoUlCmgXCOPikLysABKACOSiOtQvDZnZS4JEin05+o2RV2lvNgzxwjckHy55YKUrAJSSPMB064BwUOZft40i6LhN21900KGmUS3MWlKiV9UgJICcIStXQdtZrK3amxZCYF5lu5KI6tBeVIQlctgpOUuocxlRQeoCs+nQjQoxFX6tOufvtVW/93zwQv4C0qWjUCQdAcjvkd4pat3Ns7n2zuA0q4Ip4L80eU2MtPp7KSfjj/fcECla9Ntxdu7UvTa1Vl0yJzaRTzPoskuF0uFXmUUqVk5USkn4qSe2kL+6ev8A9xH6DpgmzcfHEymeYGcfQ7dxtUCu9btlFFwqDzOU/Ub9jvFOz7Mgit7AWFxwErqCPFx7/FWM/Ph9NCO8K5PoG9Fz1B6DT56xVHkuxajGS8y63y8oIV6eXjhQwR+XTXR9hy9YlcsyobaVCcYs1Kw/Tne6XE4KSPiOKSB34K/HRJ372tduWVDrlNep7FzyoxEynF4IRO8JI5KaUr0UkEDr0KcZII6j4mkrSlaf38/IyO1Vv2ExC2srtxm7ySscMnQEHfkCIM9e9E3bI0CpWPBqsG2YFCarbAcdhIZbSHMgjB4gBYKRkZH8J9Bpbd9LlhquKpWlRbQo1AiQJBYddZhNCTI44IPIDyIIwQB1I9T21xrvVuXUK7FXVaRcMKRTwlunx40R5DcNKQAnweIPXAHmySceurXRtu7x3EueHWb8aFAjvhqM/JkpDEmoKQk4Sho/1CgYKsAYTkAkY0rUtSxwge/6q5sMNtsIfVfXTySggmOImDOUZ/nyynWdOdFTY5bw2+27+0lXjKRLSjPqWcOEfLAR9NbP7KtX3Y/01uX/AFWBtzb8+5pa4sWDS6eINDiJPRJ4gkkHv5Ujp6IbJ76RT77JXuTf1D/uqixS020PiOcOQG+epPiR3muKY3cOXl466yzxcSlKgwIB0/jxFCy3a1UrfrEerUmU5GlsLCkLQoj0IPb4gflgEYIB02dr+0FZu4lLp9N3KdnUirwEOCLUormEc1pCebiOiV4IBwemQDx6A6mpoC3XxKDShIJ8dR7jnRNyjhSXUmFAeeh9zyouIrNFqECM0xvUpyEh8KWXH1NPKYT4WGyrook8XOSj1PIDsc1K8dxdubeWzUbo3BqN21GHKbmQYkUeC0y4hCUgDIJAynPJA5eZQOQpWZqac3GFMMNlwSY2OnpB9aRW2L3Fw6GjAncDP1kelLBv7vTcO6tY5y1GLSmTiPER0SkZz1HyB7kkD8AEivU1NIHHFOGTVI20lsQn/a//2Q==";
+
+// ── MOCK DATA ──
+var ALL_RESULTS = [
+  // --- 96906 cluster: exact match + 4 related results shown when typing "96906" ---
+  {
+    cage:"96906", name:"SPS Technologies, Inc.", fmr:"Formerly: Standard Pressed Steel Co.",
+    city:"Jenkintown", state:"PA", country:"US",
+    sam:"ACTIVE", size:"Large Business", roles:["Manufacturer","Distributor"],
+    nsns:360, fscs:7, rfqs:47,
+    verified:true, verifiedBy:"Jane Smith, VP Sales", verifiedDate:"Jan 2026",
+    cluster:"96906", href:"CAGE_Public_Claimed.html"
+  },
+  {
+    cage:"324K2", name:"SPS Aerospace Fasteners Inc.", fmr:null,
+    city:"Jenkintown", state:"PA", country:"US",
+    sam:"ACTIVE", size:"Small Business", roles:["Manufacturer"],
+    nsns:41, fscs:3, rfqs:9,
+    verified:false, verifiedBy:null, verifiedDate:null,
+    cluster:"96906", href:"CAGE_Public_Unclaimed.html"
+  },
+  {
+    cage:"7K2P9", name:"SPS Technologies UK Ltd.", fmr:null,
+    city:"Birmingham", state:null, country:"UK",
+    sam:"ACTIVE", size:"Foreign Entity", roles:["Manufacturer"],
+    nsns:67, fscs:4, rfqs:11,
+    verified:false, verifiedBy:null, verifiedDate:null,
+    cluster:"96906", href:"CAGE_Public_Unclaimed.html"
+  },
+  {
+    cage:"0FV87", name:"Precision Castparts Corp.", fmr:null,
+    city:"Portland", state:"OR", country:"US",
+    sam:"ACTIVE", size:"Large Business", roles:["Manufacturer"],
+    nsns:1240, fscs:14, rfqs:312,
+    verified:true, verifiedBy:"Michael Torres, Gov't Sales", verifiedDate:"Nov 2025",
+    cluster:"96906", href:"CAGE_Public_Claimed.html"
+  },
+  {
+    cage:"9K8R3", name:"SPS Industrial Fasteners LLC", fmr:null,
+    city:"Hatboro", state:"PA", country:"US",
+    sam:"INACTIVE", size:"Small Business", roles:["Distributor"],
+    nsns:14, fscs:2, rfqs:0,
+    verified:false, verifiedBy:null, verifiedDate:null,
+    cluster:"96906", href:"CAGE_Public_Unclaimed.html"
+  },
+  // --- General pool (other searches) ---
+  {
+    cage:"55683", name:"Delta Fastener Corp.", fmr:null,
+    city:"Dallas", state:"TX", country:"US",
+    sam:"ACTIVE", size:"Small Business", roles:["Distributor"],
+    nsns:88, fscs:4, rfqs:22,
+    verified:false, verifiedBy:null, verifiedDate:null,
+    cluster:null, href:"CAGE_Public_Unclaimed.html"
+  },
+  {
+    cage:"1H5P6", name:"National Bolt & Nut Corp.", fmr:null,
+    city:"Sterling Heights", state:"MI", country:"US",
+    sam:"ACTIVE", size:"Small Business", roles:["Manufacturer","Distributor"],
+    nsns:203, fscs:6, rfqs:55,
+    verified:true, verifiedBy:"Lisa Park, Owner", verifiedDate:"Dec 2025",
+    cluster:null, href:"CAGE_Public_Claimed.html"
+  },
+  {
+    cage:"6LY89", name:"Aero Hardware Inc.", fmr:null,
+    city:"Burbank", state:"CA", country:"US",
+    sam:"ACTIVE", size:"Small Business", roles:["Distributor"],
+    nsns:512, fscs:9, rfqs:134,
+    verified:false, verifiedBy:null, verifiedDate:null,
+    cluster:null, href:"CAGE_Public_Unclaimed.html"
+  },
+  {
+    cage:"4M107", name:"Allied Defense Supply Corp.", fmr:"Formerly: Allied Hardware Co.",
+    city:"Columbus", state:"OH", country:"US",
+    sam:"INACTIVE", size:"Large Business", roles:["Distributor"],
+    nsns:29, fscs:2, rfqs:3,
+    verified:false, verifiedBy:null, verifiedDate:null,
+    cluster:null, href:"CAGE_Public_Unclaimed.html"
+  },
+  // Boeing cluster
+  {
+    cage:"0KGK0", name:"Boeing Defense, Space & Security", fmr:null,
+    city:"Saint Louis", state:"MO", country:"US",
+    sam:"ACTIVE", size:"Large Business", roles:["Manufacturer"],
+    nsns:8841, fscs:22, rfqs:1204,
+    verified:true, verifiedBy:"R. Caldwell, DLA Programs", verifiedDate:"Oct 2025",
+    cluster:"boeing", href:"CAGE_Public_Claimed.html"
+  },
+  {
+    cage:"81205", name:"The Boeing Company", fmr:null,
+    city:"Arlington", state:"VA", country:"US",
+    sam:"ACTIVE", size:"Large Business", roles:["Manufacturer","Distributor"],
+    nsns:12430, fscs:28, rfqs:2891,
+    verified:true, verifiedBy:"DLA Verified Entity", verifiedDate:"Sep 2025",
+    cluster:"boeing", href:"CAGE_Public_Claimed.html"
+  },
+  {
+    cage:"77272", name:"Boeing Commercial Airplanes", fmr:null,
+    city:"Renton", state:"WA", country:"US",
+    sam:"ACTIVE", size:"Large Business", roles:["Manufacturer"],
+    nsns:5210, fscs:18, rfqs:633,
+    verified:false, verifiedBy:null, verifiedDate:null,
+    cluster:"boeing", href:"CAGE_Public_Unclaimed.html"
+  },
+  {
+    cage:"1W374", name:"Boeing Military Aircraft", fmr:null,
+    city:"Mesa", state:"AZ", country:"US",
+    sam:"ACTIVE", size:"Large Business", roles:["Manufacturer"],
+    nsns:3140, fscs:15, rfqs:441,
+    verified:false, verifiedBy:null, verifiedDate:null,
+    cluster:"boeing", href:"CAGE_Public_Unclaimed.html"
+  },
+  {
+    cage:"3F830", name:"Boeing Rotorcraft Systems", fmr:"Formerly: Boeing Helicopters",
+    city:"Ridley Park", state:"PA", country:"US",
+    sam:"ACTIVE", size:"Large Business", roles:["Manufacturer"],
+    nsns:1870, fscs:11, rfqs:208,
+    verified:false, verifiedBy:null, verifiedDate:null,
+    cluster:"boeing", href:"CAGE_Public_Unclaimed.html"
+  },
+  // Honeywell cluster
+  {
+    cage:"35482", name:"Honeywell International Inc.", fmr:null,
+    city:"Charlotte", state:"NC", country:"US",
+    sam:"ACTIVE", size:"Large Business", roles:["Manufacturer","Distributor"],
+    nsns:9320, fscs:19, rfqs:1876,
+    verified:true, verifiedBy:"T. Walsh, Gov't Contracts", verifiedDate:"Dec 2025",
+    cluster:"honeywell", href:"CAGE_Public_Claimed.html"
+  },
+  {
+    cage:"55939", name:"Honeywell Aerospace Technologies", fmr:null,
+    city:"Phoenix", state:"AZ", country:"US",
+    sam:"ACTIVE", size:"Large Business", roles:["Manufacturer"],
+    nsns:4410, fscs:12, rfqs:789,
+    verified:true, verifiedBy:"T. Walsh, Gov't Contracts", verifiedDate:"Dec 2025",
+    cluster:"honeywell", href:"CAGE_Public_Claimed.html"
+  },
+  {
+    cage:"2H877", name:"Honeywell Federal Manufacturing & Technologies", fmr:null,
+    city:"Kansas City", state:"MO", country:"US",
+    sam:"ACTIVE", size:"Large Business", roles:["Manufacturer"],
+    nsns:2140, fscs:9, rfqs:312,
+    verified:false, verifiedBy:null, verifiedDate:null,
+    cluster:"honeywell", href:"CAGE_Public_Unclaimed.html"
+  },
+  {
+    cage:"6W437", name:"Honeywell Safety Products", fmr:"Formerly: North Safety Products",
+    city:"Smithfield", state:"RI", country:"US",
+    sam:"ACTIVE", size:"Large Business", roles:["Manufacturer","Distributor"],
+    nsns:880, fscs:6, rfqs:94,
+    verified:false, verifiedBy:null, verifiedDate:null,
+    cluster:"honeywell", href:"CAGE_Public_Unclaimed.html"
+  },
+  {
+    cage:"9R211", name:"Honeywell Sensing & Controls", fmr:null,
+    city:"Morristown", state:"NJ", country:"US",
+    sam:"INACTIVE", size:"Large Business", roles:["Manufacturer"],
+    nsns:340, fscs:4, rfqs:0,
+    verified:false, verifiedBy:null, verifiedDate:null,
+    cluster:"honeywell", href:"CAGE_Public_Unclaimed.html"
+  },
+  // Fastener search results
+  {
+    cage:"19207", name:"Textron Fastening Systems", fmr:null,
+    city:"Auburn Hills", state:"MI", country:"US",
+    sam:"ACTIVE", size:"Large Business", roles:["Manufacturer"],
+    nsns:1140, fscs:8, rfqs:187,
+    verified:true, verifiedBy:"J. Novak, Sales Dir.", verifiedDate:"Jan 2026",
+    cluster:null, href:"CAGE_Public_Claimed.html"
+  },
+  {
+    cage:"2W194", name:"Lisi Aerospace Fasteners", fmr:null,
+    city:"Torrance", state:"CA", country:"US",
+    sam:"ACTIVE", size:"Large Business", roles:["Manufacturer"],
+    nsns:622, fscs:5, rfqs:98,
+    verified:false, verifiedBy:null, verifiedDate:null,
+    cluster:null, href:"CAGE_Public_Unclaimed.html"
+  },
+  {
+    cage:"K3P81", name:"Alcoa Fastening Systems", fmr:"Formerly: Huck International",
+    city:"Waco", state:"TX", country:"US",
+    sam:"ACTIVE", size:"Large Business", roles:["Manufacturer"],
+    nsns:493, fscs:5, rfqs:71,
+    verified:false, verifiedBy:null, verifiedDate:null,
+    cluster:null, href:"CAGE_Public_Unclaimed.html"
+  }
+];
+
+var currentQuery = "";
+
+/* ── AUTO-RUN on load ── */
+window.addEventListener('DOMContentLoaded', function(){
+  runSearch();
+});
+
+function buildResultCard(r) {
+  var isVerified = r.verified;
+  var samActive = r.sam === "ACTIVE";
+  var tagsSam = samActive
+    ? '<span class="tag tag-green">● SAM ACTIVE</span>'
+    : '<span class="tag tag-amber">● SAM INACTIVE</span>';
+  var tagsSize = r.size === "Large Business"
+    ? '<span class="tag tag-blue">LARGE BUSINESS</span>'
+    : r.size === "Foreign Entity"
+    ? '<span class="tag tag-gray">FOREIGN ENTITY</span>'
+    : '<span class="tag tag-green">SMALL BUSINESS</span>';
+  var tagsRoles = r.roles.map(function(role) {
+    return '<span class="tag tag-gray">' + role.toUpperCase() + '</span>';
+  }).join('');
+
+  var fmrHtml = r.fmr ? '<div style="font-size:10.5px;color:var(--text-faint);margin-top:2px;font-style:italic">' + r.fmr + '</div>' : '';
+  var loc = [r.city, r.state, r.country].filter(Boolean).join(', ');
+
+  var verifiedBadge = isVerified
+    ? '<div class="vbadge-sm"><img src="' + BADGE_SRC + '" alt="Verified"> Verified Supplier</div>'
+    : '<div style="font-size:9.5px;color:var(--text-faint);font-weight:600">Unclaimed page</div>';
+
+  var actionBtn = isVerified
+    ? '<button class="rc-view-btn verified" onclick="window.location.href=\'"' + r.href + '\'">View Profile →</button>'
+    : '<button class="rc-view-btn" onclick="window.location.href=\'"' + r.href + '\'">View Profile →</button>';
+
+  var accentClass = isVerified ? "verified" : "active";
+
+  return '<div class="result-card" onclick="window.location.href=\'"' + r.href + '\'">' +
+    '<div class="rc-accent ' + accentClass + '"></div>' +
+    '<div class="rc-body">' +
+      '<div class="rc-id">' +
+        '<div class="rc-cage">' + r.cage + '</div>' +
+        '<div class="rc-status">' + tagsSam + '</div>' +
+      '</div>' +
+      '<div class="rc-main">' +
+        '<div class="rc-name">' + r.name + '</div>' +
+        fmrHtml +
+        '<div class="rc-meta" style="margin-top:5px">' +
+          '<span class="rc-loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>' + loc + '</span>' +
+          '<div class="rc-tags">' + tagsSize + ' ' + tagsRoles + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="rc-divider"></div>' +
+      '<div class="rc-stats">' +
+        '<div class="rc-stat"><div class="rc-stat-n">' + r.nsns + '</div><div class="rc-stat-l">NSN Refs</div></div>' +
+        '<div class="rc-stat"><div class="rc-stat-n">' + r.fscs + '</div><div class="rc-stat-l">FSC Cats</div></div>' +
+        '<div class="rc-stat"><div class="rc-stat-n">' + r.rfqs + '</div><div class="rc-stat-l">Active RFQs</div></div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="rc-action">' + actionBtn + verifiedBadge + '</div>' +
+    '</div>';
+}
+
+function buildUpsellCard() {
+  return '<div class="upsell-card">' +
+    '<div class="uc-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>' +
+    '<div class="uc-text"><div class="uc-title">Members see the full supplier picture</div><div class="uc-sub">Contact details, NSN lists, RFQ history, award data, and supplier inventory — unlocked for GovScraper members.</div></div>' +
+    '<button class="uc-btn" onclick="event.stopPropagation();openSignUpModal()">Start Free Trial →</button>' +
+    '</div>';
+}
+
+function matchResult(r, query) {
+  if (!query) return true;
+  var q = query.trim().toLowerCase();
+  // Exact CAGE code match -> show full cluster
+  var exactCage = ALL_RESULTS.find(function(x){ return x.cage.toLowerCase() === q && x.cluster; });
+  if (exactCage) {
+    return r.cluster === exactCage.cluster;
+  }
+  // Name/text search: normal substring match across all fields
+  return r.cage.toLowerCase().indexOf(q) !== -1 ||
+         r.name.toLowerCase().indexOf(q) !== -1 ||
+         (r.fmr && r.fmr.toLowerCase().indexOf(q) !== -1) ||
+         (r.city && r.city.toLowerCase().indexOf(q) !== -1) ||
+         r.roles.some(function(role){ return role.toLowerCase().indexOf(q) !== -1; });
+}
+
+
+
+function runSearch() {
+  var q = document.getElementById("searchInput").value.trim();
+  currentQuery = q;
+  if (!q) { showPreSearch(); return; }
+
+  var matched = ALL_RESULTS.filter(function(r){ return matchResult(r, q); });
+  renderResults(matched, matched);
+}
+
+function renderResults(allMatched, filtered) {
+  document.getElementById("preSearch").style.display = "none";
+  document.getElementById("noResults").style.display = "none";
+
+  if (filtered.length === 0) {
+    document.getElementById("noResults").style.display = "block";
+    document.getElementById("noResultsQuery").textContent = currentQuery;
+    document.getElementById("resultsList").style.display = "none";
+    document.getElementById("resultsCount").style.display = "none";
+    document.getElementById("staticUpsell").style.display = "none";
+    return;
+  }
+
+  var verifiedCount = filtered.filter(function(r){ return r.verified; }).length;
+  document.getElementById("staticUpsell").style.display = "block";
+  var countEl = document.getElementById("resultsCount");
+  countEl.style.display = "block";
+  document.getElementById("resultsCountText").innerHTML =
+    filtered.length + " result" + (filtered.length !== 1 ? "s" : "") +
+    (verifiedCount > 0 ? " &mdash; <span style='color:var(--green);font-weight:700'>" + verifiedCount + " verified</span>" : "");
+
+  var html = "";
+  filtered.forEach(function(r, i) {
+    html += buildResultCard(r);
+  });
+
+  var list = document.getElementById("resultsList");
+  list.innerHTML = html;
+  list.style.display = "block";
+}
+
+function handleInput(val) {
+  document.getElementById("clearBtn").style.display = val ? "flex" : "none";
+  if (!val) showPreSearch();
+}
+
+function handleKey(e) {
+  if (e.key === "Enter") runSearch();
+}
+
+function clearSearch() {
+  document.getElementById("searchInput").value = "";
+  document.getElementById("clearBtn").style.display = "none";
+  showPreSearch();
+}
+
+function showPreSearch() {
+  document.getElementById("preSearch").style.display = "block";
+  document.getElementById("resultsList").style.display = "none";
+  document.getElementById("noResults").style.display = "none";
+  document.getElementById("staticUpsell").style.display = "none";
+  document.getElementById("resultsCount").style.display = "none";
+  currentQuery = "";
+}
+
+function fillAndSearch(q) {
+  document.getElementById("searchInput").value = q;
+  document.getElementById("clearBtn").style.display = "flex";
+  runSearch();
+}
+
+
+
+function openSignUpModal(ctx) {
+  document.getElementById("signupOverlay").classList.add("open");
+}
+function closeModal() {
+  document.getElementById("signupOverlay").classList.remove("open");
+}
+document.addEventListener("keydown", function(e){ if(e.key==="Escape") closeModal(); });
+</script>
+</body>
+</html>

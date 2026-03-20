@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Modals Showcase — GovScraper</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F8FAFC;--surface:#fff;--surface-2:#F1F5F9;
+  --border:#E2E8F0;--border-strong:#CBD5E1;
+  --text:#1E293B;--text-dim:#475569;--text-muted:#6B7280;--text-faint:#94A3B8;
+  --accent:#2563EB;--accent-bg:#EFF6FF;--accent-border:#BFDBFE;--accent-hover:#1D4ED8;
+  --green:#16A34A;--green-bg:#F0FDF4;--green-border:#BBF7D0;
+  --amber:#D97706;--amber-bg:#FFFBEB;--amber-border:#FDE68A;
+  --red:#DC2626;--red-bg:#FEF2F2;--red-border:#FECACA;
+  --purple:#7C3AED;--purple-bg:#F5F3FF;--purple-border:#DDD6FE;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);font-size:13px;padding:40px 32px}
+
+h1{font-size:22px;font-weight:800;color:var(--text);margin-bottom:6px}
+.page-sub{font-size:13px;color:var(--text-muted);margin-bottom:36px}
+
+.section-title{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--text-faint);margin-bottom:14px}
+.btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:48px}
+
+/* ── TRIGGER BUTTONS ── */
+.trigger-btn{
+  font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;
+  padding:11px 22px;border-radius:9px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:8px;transition:all .15s;border:none;
+}
+.trigger-gold{background:linear-gradient(135deg,#B45309,#D97706);color:#fff;box-shadow:0 3px 12px rgba(180,83,9,.25)}
+.trigger-gold:hover{transform:translateY(-1px);box-shadow:0 5px 18px rgba(180,83,9,.32)}
+.trigger-maxx{background:linear-gradient(135deg,#5B21B6,#7C3AED);color:#fff;box-shadow:0 3px 12px rgba(124,58,237,.25)}
+.trigger-maxx:hover{transform:translateY(-1px);box-shadow:0 5px 18px rgba(124,58,237,.32)}
+.trigger-plan{background:var(--accent);color:#fff;box-shadow:0 3px 12px rgba(37,99,235,.2)}
+.trigger-plan:hover{background:var(--accent-hover);transform:translateY(-1px)}
+.trigger-cancel{background:transparent;color:var(--red);border:1.5px solid var(--red-border)!important;border:none}
+.trigger-cancel:hover{background:var(--red);color:#fff}
+
+/* ══════════════════════════════
+   OVERLAY + MODAL BASE
+══════════════════════════════ */
+.overlay{
+  position:fixed;inset:0;background:rgba(15,23,42,.5);
+  z-index:500;display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .2s;padding:20px;
+}
+.overlay.open{opacity:1;pointer-events:all}
+.modal{
+  background:var(--surface);border-radius:16px;width:100%;
+  box-shadow:0 24px 80px rgba(0,0,0,.22);
+  transform:translateY(16px);transition:transform .22s;
+  max-height:90vh;overflow-y:auto;
+}
+.overlay.open .modal{transform:translateY(0)}
+
+/* ── CLOSE BUTTON ── */
+.pcm-close{
+  width:28px;height:28px;border:none;background:var(--surface-2);
+  border-radius:6px;cursor:pointer;color:var(--text-muted);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.pcm-close:hover{background:var(--border);color:var(--text)}
+
+/* ══════════════════════════════
+   GOLD UPGRADE MODAL
+══════════════════════════════ */
+.modal-gold{max-width:460px}
+.gold-hdr{
+  background:linear-gradient(135deg,#78350F,#B45309,#D97706);
+  padding:28px 28px 24px;border-radius:16px 16px 0 0;
+  position:relative;
+}
+.gold-hdr-close{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.2);border:none;border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff}
+.gold-hdr-close:hover{background:rgba(255,255,255,.3)}
+.gold-badge{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:800;letter-spacing:.3px;color:#FDE68A;margin-bottom:10px}
+.gold-hdr-title{font-size:22px;font-weight:900;color:#fff;margin-bottom:4px;letter-spacing:-.02em}
+.gold-hdr-sub{font-size:12.5px;color:rgba(255,255,255,.8);line-height:1.55}
+.gold-price-row{display:flex;align-items:baseline;gap:6px;margin-top:14px}
+.gold-price{font-family:'Source Code Pro',monospace;font-size:28px;font-weight:700;color:#fff}
+.gold-price-sub{font-size:12px;color:rgba(255,255,255,.7)}
+.gold-body{padding:22px 24px}
+.gold-feats{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.gold-feat{display:flex;align-items:flex-start;gap:10px;font-size:12.5px;color:var(--text-dim);line-height:1.4}
+.gold-feat-ico{width:20px;height:20px;border-radius:5px;background:#FFF7ED;border:1px solid #FDE68A;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.gold-feat-ico svg{width:11px;height:11px;color:#D97706}
+.gold-feat strong{color:var(--text);font-weight:700}
+.gold-addOn-note{background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:8px;padding:10px 14px;font-size:11.5px;color:var(--amber);font-weight:600;margin-bottom:18px;display:flex;align-items:center;gap:7px}
+.gold-addOn-note svg{width:13px;height:13px;flex-shrink:0}
+.gold-actions{display:flex;gap:8px}
+.btn-gold-confirm{flex:2;font-family:'Manrope',sans-serif;font-size:13px;font-weight:800;padding:12px;border-radius:8px;border:none;background:linear-gradient(135deg,#B45309,#D97706);color:#fff;cursor:pointer;transition:all .15s}
+.btn-gold-confirm:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(180,83,9,.3)}
+.btn-gold-ghost{flex:1;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;padding:12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer}
+.btn-gold-ghost:hover{background:var(--surface-2)}
+
+/* ══════════════════════════════
+   MAXX UPGRADE MODAL
+══════════════════════════════ */
+.modal-maxx{max-width:480px}
+.maxx-hdr{
+  background:linear-gradient(135deg,#2E1065,#5B21B6,#7C3AED);
+  padding:28px 28px 24px;border-radius:16px 16px 0 0;
+  position:relative;
+}
+.maxx-hdr-close{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.15);border:none;border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff}
+.maxx-hdr-close:hover{background:rgba(255,255,255,.25)}
+.maxx-badge{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:800;letter-spacing:.3px;color:#C4B5FD;margin-bottom:10px}
+.maxx-hdr-title{font-size:22px;font-weight:900;color:#fff;margin-bottom:4px;letter-spacing:-.02em}
+.maxx-hdr-sub{font-size:12.5px;color:rgba(255,255,255,.75);line-height:1.55}
+.maxx-price-row{display:flex;align-items:baseline;gap:6px;margin-top:14px}
+.maxx-price{font-family:'Source Code Pro',monospace;font-size:28px;font-weight:700;color:#fff}
+.maxx-price-sub{font-size:12px;color:rgba(255,255,255,.65)}
+.maxx-body{padding:22px 24px}
+.maxx-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.maxx-card{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:6px}
+.maxx-card-ico{width:32px;height:32px;border-radius:8px;background:var(--purple-bg);border:1px solid var(--purple-border);display:flex;align-items:center;justify-content:center}
+.maxx-card-ico svg{width:15px;height:15px;color:var(--purple)}
+.maxx-card-title{font-size:12px;font-weight:800;color:var(--text)}
+.maxx-card-sub{font-size:11px;color:var(--text-muted);line-height:1.4}
+.maxx-includes{background:var(--purple-bg);border:1px solid var(--purple-border);border-radius:8px;padding:10px 14px;font-size:11.5px;color:var(--purple);font-weight:600;margin-bottom:18px;display:flex;align-items:center;gap:7px}
+.maxx-includes svg{width:13px;height:13px;flex-shrink:0}
+.maxx-actions{display:flex;gap:8px}
+.btn-maxx-confirm{flex:2;font-family:'Manrope',sans-serif;font-size:13px;font-weight:800;padding:12px;border-radius:8px;border:none;background:linear-gradient(135deg,#5B21B6,#7C3AED);color:#fff;cursor:pointer;transition:all .15s}
+.btn-maxx-confirm:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(124,58,237,.3)}
+.btn-maxx-ghost{flex:1;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;padding:12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer}
+.btn-maxx-ghost:hover{background:var(--surface-2)}
+
+/* ══════════════════════════════
+   PLAN CHANGE CONFIRMATION MODAL
+══════════════════════════════ */
+.modal-pcm{max-width:440px}
+.pcm-hdr{padding:24px 24px 0;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.pcm-ico{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pcm-ico.up{background:var(--accent-bg);border:1px solid var(--accent-border)}
+.pcm-ico.down{background:var(--amber-bg);border:1px solid var(--amber-border)}
+.pcm-body{padding:16px 24px 24px}
+.pcm-direction{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-faint);margin-bottom:2px}
+.pcm-title{font-size:17px;font-weight:800;color:var(--text);margin-bottom:6px}
+.pcm-sub{font-size:12.5px;color:var(--text-muted);line-height:1.6;margin-bottom:20px}
+.pcm-summary{background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:16px;margin-bottom:20px}
+.pcm-row{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;padding:5px 0}
+.pcm-row:not(:last-child){border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:5px}
+.pcm-row .lbl{color:var(--text-muted)}
+.pcm-row .val{font-weight:700;color:var(--text)}
+.pcm-row .val.accent{color:var(--accent)}
+.pcm-row .val.amber{color:var(--amber)}
+.pcm-row .val.red{color:var(--red)}
+.pcm-actions{display:flex;gap:10px}
+.btn-ghost{font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;padding:10px 20px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;flex:1}
+.btn-ghost:hover{background:var(--surface-2)}
+.btn-confirm{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:10px 20px;border-radius:8px;border:none;background:var(--accent);color:#fff;cursor:pointer;flex:2;transition:background .15s}
+.btn-confirm:hover{background:var(--accent-hover)}
+.btn-confirm.amber{background:var(--amber)}
+.btn-confirm.amber:hover{background:#B45309}
+.btn-confirm.red{background:var(--red)}
+.btn-confirm.red:hover{background:#B91C1C}
+
+/* ══════════════════════════════
+   CANCEL MEMBERSHIP MODAL
+══════════════════════════════ */
+.modal-cancel{max-width:520px}
+.cm-hdr{padding:28px 28px 0}
+.cm-ico{width:52px;height:52px;border-radius:14px;background:var(--red-bg);border:1px solid var(--red-border);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.cm-title{font-size:19px;font-weight:800;color:var(--text);margin-bottom:8px}
+.cm-sub{font-size:13px;color:var(--text-muted);line-height:1.65;margin-bottom:4px}
+.cm-body{padding:20px 28px 28px}
+.lose-box{background:var(--red-bg);border:1px solid var(--red-border);border-radius:10px;padding:16px 18px;margin-bottom:18px}
+.lose-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--red);margin-bottom:12px}
+.lose-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.lose-item{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-dim)}
+.lose-item svg{color:var(--red);flex-shrink:0}
+.demo-box{background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:10px;padding:16px 18px;margin-bottom:20px;display:flex;align-items:center;gap:14px}
+.demo-ico{width:40px;height:40px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.demo-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
+.demo-sub{font-size:11.5px;color:var(--text-muted);line-height:1.5}
+.btn-demo{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:9px 16px;border-radius:7px;border:none;background:var(--accent);color:#fff;cursor:pointer;white-space:nowrap;flex-shrink:0;margin-left:auto;transition:background .15s}
+.btn-demo:hover{background:var(--accent-hover)}
+.cm-actions{display:flex;flex-direction:column;gap:8px}
+.btn-stay{font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:12px;border-radius:8px;border:none;background:var(--accent);color:#fff;cursor:pointer;width:100%;transition:background .15s}
+.btn-stay:hover{background:var(--accent-hover)}
+.btn-confirm-cancel{font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;padding:10px;border-radius:8px;border:1px solid var(--red-border);background:transparent;color:var(--red);cursor:pointer;width:100%;transition:all .15s}
+.btn-confirm-cancel:hover{background:var(--red);color:#fff}
+
+/* ══════════════════════════════
+   SUCCESS MODAL
+══════════════════════════════ */
+.modal-success{max-width:360px;text-align:center;padding:44px 32px}
+.sm-ico{width:64px;height:64px;border-radius:50%;background:var(--green-bg);border:2px solid var(--green-border);display:flex;align-items:center;justify-content:center;margin:0 auto 18px}
+.sm-title{font-size:19px;font-weight:800;color:var(--text);margin-bottom:8px}
+.sm-sub{font-size:12.5px;color:var(--text-muted);line-height:1.7;margin-bottom:24px}
+.btn-done{font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:11px 40px;border-radius:8px;border:none;background:var(--accent);color:#fff;cursor:pointer}
+.btn-done:hover{background:var(--accent-hover)}
+</style>
+</head>
+<body>
+
+<h1>GovScraper Modals</h1>
+<p class="page-sub">Click each button to preview the modal. These are embedded on the subscription and dashboard pages.</p>
+
+<!-- GOLD -->
+<div class="section-title">Intelligence Add-On</div>
+<div class="btn-row">
+  <button class="trigger-btn trigger-gold" onclick="openModal('goldModal')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+    GOLD Upgrade Modal
+  </button>
+
+  <!-- MAXX -->
+  <button class="trigger-btn trigger-maxx" onclick="openModal('maxxModal')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+    MAXX Upgrade Modal
+  </button>
+
+  <!-- Plan Change -->
+  <button class="trigger-btn trigger-plan" onclick="openModal('planModal')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/><polyline points="17,6 23,6 23,12"/></svg>
+    Plan Change Confirmation
+  </button>
+
+  <!-- Cancel -->
+  <button class="trigger-btn trigger-cancel" onclick="openModal('cancelModal')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+    Cancel Membership
+  </button>
+</div>
+
+
+<!-- ════════════════════════════
+     GOLD UPGRADE MODAL
+════════════════════════════ -->
+<div class="overlay" id="goldModal" onclick="closeIfBg(event,'goldModal')">
+  <div class="modal modal-gold">
+    <div class="gold-hdr">
+      <button class="gold-hdr-close" onclick="closeModal('goldModal')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="gold-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+        Intelligence Add-On
+      </div>
+      <div class="gold-hdr-title">Add GOLD to your PRO plan</div>
+      <div class="gold-hdr-sub">Instant alerts the moment a matching RFQ drops — so you bid first and win more.</div>
+      <div class="gold-price-row">
+        <span class="gold-price">$149</span>
+        <span class="gold-price-sub">/mo total · +$49 on top of PRO</span>
+      </div>
+    </div>
+    <div class="gold-body">
+      <div class="gold-feats">
+        <div class="gold-feat">
+          <div class="gold-feat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <div><strong>NSN Watch List</strong> — track up to 500 NSNs you care about across all FSCs</div>
+        </div>
+        <div class="gold-feat">
+          <div class="gold-feat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg></div>
+          <div><strong>RFQ Alerts feed</strong> — get notified the instant a solicitation matches a watched NSN</div>
+        </div>
+        <div class="gold-feat">
+          <div class="gold-feat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></div>
+          <div><strong>One-click Will Source</strong> — send matching RFQs straight into your pipeline</div>
+        </div>
+        <div class="gold-feat">
+          <div class="gold-feat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div>
+          <div><strong>Alert history</strong> — full log of every NSN match, never miss a solicitation</div>
+        </div>
+      </div>
+      <div class="gold-addOn-note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        GOLD is an add-on billed on top of your PRO base. MAXX includes everything in GOLD.
+      </div>
+      <div class="gold-actions">
+        <button class="btn-gold-ghost" onclick="closeModal('goldModal')">Maybe Later</button>
+        <button class="btn-gold-confirm" onclick="closeModal('goldModal');openModal('successModal')">
+          Add GOLD — +$49/mo →
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════
+     MAXX UPGRADE MODAL
+════════════════════════════ -->
+<div class="overlay" id="maxxModal" onclick="closeIfBg(event,'maxxModal')">
+  <div class="modal modal-maxx">
+    <div class="maxx-hdr">
+      <button class="maxx-hdr-close" onclick="closeModal('maxxModal')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="maxx-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Full Supplier Ecosystem
+      </div>
+      <div class="maxx-hdr-title">Unlock the full GovScraper MAXX</div>
+      <div class="maxx-hdr-sub">Everything in GOLD, plus your complete Supplier Portal — inventory, RFQ matching, and a verified contractor-facing profile.</div>
+      <div class="maxx-price-row">
+        <span class="maxx-price">$225</span>
+        <span class="maxx-price-sub">/mo total · +$125 on top of PRO · Includes GOLD</span>
+      </div>
+    </div>
+    <div class="maxx-body">
+      <div class="maxx-cards">
+        <div class="maxx-card">
+          <div class="maxx-card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg></div>
+          <div class="maxx-card-title">Supplier Portal</div>
+          <div class="maxx-card-sub">Full CAGE management dashboard with editable company profile</div>
+        </div>
+        <div class="maxx-card">
+          <div class="maxx-card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21,8 21,21 3,21 3,8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg></div>
+          <div class="maxx-card-title">Inventory Upload</div>
+          <div class="maxx-card-sub">List your NSN stock and capabilities for contractor visibility</div>
+        </div>
+        <div class="maxx-card">
+          <div class="maxx-card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg></div>
+          <div class="maxx-card-title">Supplier RFQ Alerts</div>
+          <div class="maxx-card-sub">Get notified when a contractor needs parts you stock</div>
+        </div>
+        <div class="maxx-card">
+          <div class="maxx-card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg></div>
+          <div class="maxx-card-title">Verified Profile</div>
+          <div class="maxx-card-sub">GovScraper Verified badge visible to all searching contractors</div>
+        </div>
+      </div>
+      <div class="maxx-includes">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+        MAXX includes everything in GOLD — NSN Watch List, RFQ Alerts, one-click Will Source.
+      </div>
+      <div class="maxx-actions">
+        <button class="btn-maxx-ghost" onclick="closeModal('maxxModal')">Maybe Later</button>
+        <button class="btn-maxx-confirm" onclick="closeModal('maxxModal');openModal('successModal')">
+          ⚡ Add MAXX — +$125/mo →
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════
+     PLAN CHANGE CONFIRMATION
+════════════════════════════ -->
+<div class="overlay" id="planModal" onclick="closeIfBg(event,'planModal')">
+  <div class="modal modal-pcm">
+    <div class="pcm-hdr">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="pcm-ico up">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/><polyline points="17,6 23,6 23,12"/></svg>
+        </div>
+        <div>
+          <div class="pcm-direction">Upgrade Plan</div>
+          <div class="pcm-title">Switch to GOLD</div>
+        </div>
+      </div>
+      <button class="pcm-close" onclick="closeModal('planModal')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="pcm-body">
+      <div class="pcm-sub">You're upgrading your plan. The change takes effect immediately and you'll be charged the prorated difference today.</div>
+      <div class="pcm-summary">
+        <div class="pcm-row">
+          <span class="lbl">Current plan</span>
+          <span class="val">PRO — $100/mo</span>
+        </div>
+        <div class="pcm-row">
+          <span class="lbl">New plan</span>
+          <span class="val accent">GOLD — $149/mo</span>
+        </div>
+        <div class="pcm-row">
+          <span class="lbl">Additional charge today</span>
+          <span class="val accent">$24.50 prorated</span>
+        </div>
+        <div class="pcm-row">
+          <span class="lbl">Effective</span>
+          <span class="val">Immediately</span>
+        </div>
+      </div>
+      <div class="pcm-actions">
+        <button class="btn-ghost" onclick="closeModal('planModal')">Keep Current Plan</button>
+        <button class="btn-confirm" onclick="closeModal('planModal');openModal('successModal')">Confirm Switch</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════
+     CANCEL MEMBERSHIP MODAL
+════════════════════════════ -->
+<div class="overlay" id="cancelModal" onclick="closeIfBg(event,'cancelModal')">
+  <div class="modal modal-cancel">
+    <div class="cm-hdr">
+      <button class="pcm-close" onclick="closeModal('cancelModal')" style="float:right">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div style="clear:both">
+        <div class="cm-ico">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="cm-title">Before you cancel…</div>
+        <div class="cm-sub">We'd hate to see you go. Here's what you'll lose access to on <strong>March 14, 2026</strong> — and a few ways we can help if you're running into issues.</div>
+      </div>
+    </div>
+    <div class="cm-body">
+      <div class="lose-box">
+        <div class="lose-title">What you'll lose on March 14</div>
+        <div class="lose-grid">
+          <div class="lose-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>All FSC feeds &amp; 47 active RFQs</div>
+          <div class="lose-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Bid pricing tool &amp; margin history</div>
+          <div class="lose-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Full NSN bid intelligence</div>
+          <div class="lose-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>KPI &amp; award win/loss tracking</div>
+          <div class="lose-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>CAGE &amp; supplier intelligence</div>
+          <div class="lose-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Nightly DIBBS RFQ refresh</div>
+          <div class="lose-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>20% off GovPacking orders</div>
+          <div class="lose-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Award tracking &amp; learning loop</div>
+        </div>
+      </div>
+      <div class="demo-box">
+        <div class="demo-ico">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div class="demo-text">
+          <div class="demo-title">Not getting the most out of GovScraper?</div>
+          <div class="demo-sub">Schedule a free 1-on-1 walkthrough. We'll show you how to maximize your bid-to-award ratio.</div>
+        </div>
+        <button class="btn-demo">Schedule Demo</button>
+      </div>
+      <div class="cm-actions">
+        <button class="btn-stay" onclick="closeModal('cancelModal')">Keep My Membership</button>
+        <button class="btn-confirm-cancel" onclick="closeModal('cancelModal');openModal('successCancelModal')">Yes, cancel my membership</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════
+     SUCCESS MODAL (upgrade)
+════════════════════════════ -->
+<div class="overlay" id="successModal">
+  <div class="modal modal-success">
+    <div class="sm-ico">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+    </div>
+    <div class="sm-title">Plan Updated!</div>
+    <div class="sm-sub">Your plan has been upgraded successfully. New features are available in your dashboard right now.</div>
+    <button class="btn-done" onclick="closeModal('successModal')">Done</button>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════
+     SUCCESS MODAL (cancellation)
+════════════════════════════ -->
+<div class="overlay" id="successCancelModal">
+  <div class="modal modal-success">
+    <div class="sm-ico" style="background:var(--surface-2);border-color:var(--border)">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+    </div>
+    <div class="sm-title">Membership Cancelled</div>
+    <div class="sm-sub">Your membership will remain active until <strong>March 14, 2026</strong>. You won't be charged again. We're sorry to see you go.</div>
+    <button class="btn-done" onclick="closeModal('successCancelModal')">Done</button>
+  </div>
+</div>
+
+
+<script>
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function closeIfBg(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.overlay.open').forEach(o => o.classList.remove('open'));
+});
+</script>
+</body>
+</html>

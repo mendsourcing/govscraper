@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CAGE 96906 — SPS Technologies, Inc. — GovScraper</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#F8FAFC; --surface:#FFFFFF; --surface-2:#F1F5F9; --surface-3:#E8EFF7;
+  --border:#E2E8F0; --border-strong:#CBD5E1;
+  --text:#0F172A; --text-dim:#334155; --text-muted:#64748B; --text-faint:#94A3B8;
+  --accent:#2563EB; --accent-hover:#1D4ED8; --accent-bg:#EFF6FF; --accent-border:#BFDBFE;
+  --green:#16A34A; --green-bg:#F0FDF4; --green-border:#BBF7D0;
+  --amber:#D97706; --amber-bg:#FFFBEB; --amber-border:#FDE68A;
+  --red:#DC2626; --red-bg:#FEF2F2; --red-border:#FECACA;
+  --brand-navy:#1B2A4A;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);font-size:13px}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* TOPBAR */
+.topbar{height:56px;background:#fff;border-bottom:2px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:200;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.topbar-left{display:flex;align-items:center;gap:16px}
+.topbar-logo{height:30px}
+.topbar-divider{width:1px;height:24px;background:var(--border)}
+.bc{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-muted)}
+.bc a{color:var(--text-muted);font-weight:500}.bc a:hover{color:var(--accent)}
+.bc .sep{color:var(--border-strong)}.bc .cur{color:var(--text-dim);font-weight:600;font-family:'Source Code Pro',monospace}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.tb-btn{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:7px 16px;border-radius:7px;border:1.5px solid var(--border);background:var(--surface);color:var(--text-dim);cursor:pointer;transition:all .15s;white-space:nowrap}
+.tb-btn:hover{border-color:var(--accent-border);color:var(--accent);background:var(--accent-bg)}
+.tb-btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tb-btn-primary:hover{background:var(--accent-hover);color:#fff}
+
+/* MAIN */
+.main{max-width:1140px;margin:0 auto;padding:28px 24px 60px}
+
+/* SEARCH BAR */
+.search-wrap{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 18px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.04);display:flex;align-items:center;gap:10px}
+.search-wrap:focus-within{border-color:var(--accent-border);box-shadow:0 0 0 3px rgba(37,99,235,.07)}
+.search-wrap svg{width:18px;height:18px;color:var(--text-faint);flex-shrink:0}
+.search-wrap input{flex:1;border:none;background:transparent;font-family:'Manrope',sans-serif;font-size:14px;color:var(--text);outline:none}
+.search-wrap input::placeholder{color:var(--text-faint)}
+.search-btn{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:8px 20px;border-radius:7px;border:none;background:var(--accent);color:#fff;cursor:pointer;transition:background .15s}
+.search-btn:hover{background:var(--accent-hover)}
+
+/* HERO */
+.hero{background:linear-gradient(160deg,#1B2A4A 0%,#1e3560 100%);border-radius:14px;padding:26px 28px;margin-bottom:16px;box-shadow:0 2px 12px rgba(27,42,74,.18)}
+.hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:20px}
+.cage-code{font-family:'Source Code Pro',monospace;font-size:30px;font-weight:700;letter-spacing:3px;color:#fff;margin-bottom:4px}
+.cage-co{font-size:20px;font-weight:800;color:#fff;margin-bottom:4px}
+.cage-fmr{font-size:11.5px;color:rgba(255,255,255,.5);margin-bottom:10px;font-style:italic}
+.cage-tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag-hero-green{display:inline-flex;align-items:center;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:5px;letter-spacing:.2px;background:rgba(22,163,74,.2);color:#86EFAC;border:1px solid rgba(134,239,172,.25)}
+.tag-hero-blue{display:inline-flex;align-items:center;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:5px;letter-spacing:.2px;background:rgba(37,99,235,.25);color:#93C5FD;border:1px solid rgba(147,197,253,.25)}
+.tag-hero-gray{display:inline-flex;align-items:center;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:5px;letter-spacing:.2px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.15)}
+.ha{display:flex;flex-direction:column;gap:10px;flex-shrink:0;align-items:flex-end}
+.vbadge-claimed{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;color:#86EFAC;padding:7px 14px;border-radius:8px;border:1.5px solid rgba(134,239,172,.3);background:rgba(22,163,74,.15)}
+.vbadge-claimed img{height:18px;opacity:.9}
+.vbadge-sub{font-size:10px;color:rgba(255,255,255,.45);text-align:right;line-height:1.5}
+.ss{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(255,255,255,.1);padding-top:18px}
+.ss-i{display:flex;flex-direction:column;align-items:center;gap:3px;padding:0 12px;border-right:1px solid rgba(255,255,255,.1)}
+.ss-i:first-child{align-items:flex-start;padding-left:0}
+.ss-i:last-child{border-right:none}
+.ss-n{font-family:'Source Code Pro',monospace;font-size:28px;font-weight:700;color:#60A5FA;line-height:1}
+.ss-l{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:rgba(255,255,255,.4);margin-top:3px}
+
+/* VERIFIED BANNER */
+.verified-banner{background:linear-gradient(135deg,#052e16,#14532d);border:1.5px solid rgba(134,239,172,.2);border-radius:14px;padding:18px 24px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.vb-left{display:flex;align-items:center;gap:14px}
+.vb-icon{width:42px;height:42px;background:rgba(22,163,74,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(134,239,172,.25)}
+.vb-icon svg{color:#86EFAC}
+.vb-title{font-size:14px;font-weight:800;color:#86EFAC;margin-bottom:3px}
+.vb-sub{font-size:12px;color:rgba(134,239,172,.65);line-height:1.5}
+.vb-meta{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.vb-meta-chip{font-size:11px;font-weight:700;color:#86EFAC;background:rgba(22,163,74,.15);border:1px solid rgba(134,239,172,.2);padding:5px 12px;border-radius:6px;white-space:nowrap}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.card.no-mb{margin-bottom:0}
+.ch{padding:11px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface-2)}
+.ch h3{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--text-dim)}
+.src-t{font-family:'Source Code Pro',monospace;font-size:10px;color:var(--text-faint)}
+.cb{padding:16px 20px}
+.kvg{display:grid;gap:14px}
+.c2{grid-template-columns:1fr 1fr}
+.kv label{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--text-faint);display:block;margin-bottom:3px}
+.kv .v{font-size:12.5px;font-weight:600;color:var(--text-dim)}
+.kv .v.mo{font-family:'Source Code Pro',monospace}
+.kv .v.gr{color:var(--green)}
+.kv .v.fa{color:var(--text-faint);font-style:italic;font-weight:400;font-size:11.5px}
+.kv .v.lnk{color:var(--accent)}
+
+/* CONTACT CARD */
+.contact-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:0;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.contact-field{padding:11px 18px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:10px}
+.contact-field:last-child{border-bottom:none}
+.cf-ico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.cf-ico.locked{background:var(--surface-2);border:1px solid var(--border)}
+.cf-ico.locked svg{color:var(--text-faint)}
+.cf-lbl{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--text-faint);margin-bottom:3px}
+.cf-val{font-size:12.5px;font-weight:600;color:var(--text-dim)}
+.cf-locked-blur{font-size:12.5px;font-weight:700;color:var(--text-dim);letter-spacing:1px;filter:blur(3.5px);user-select:none;pointer-events:none;opacity:.7}
+.contact-verified-banner{padding:9px 18px;background:linear-gradient(135deg,var(--green-bg),#DCFCE7);border-bottom:1px solid var(--green-border);display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:700;color:var(--green)}
+.contact-upsell{padding:12px 18px;background:linear-gradient(135deg,var(--accent-bg),#E0EAFF);border-top:1px solid var(--accent-border);display:flex;flex-direction:column;align-items:stretch;gap:8px}
+.cu-txt{font-size:12px;font-weight:600;color:var(--accent);line-height:1.5}
+.cu-btn{font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;padding:9px;border-radius:7px;border:none;background:var(--accent);color:#fff;cursor:pointer;width:100%;text-align:center;transition:background .15s}
+.cu-btn:hover{background:var(--accent-hover)}
+
+/* CORPORATE */
+.cr-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border)}
+.cr-row:last-child{border-bottom:none}
+.cr-l{display:flex;align-items:center;gap:10px}
+.cr-role{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--text-faint);width:68px;flex-shrink:0}
+
+/* TAG */
+.tag{display:inline-flex;align-items:center;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:5px;letter-spacing:.2px}
+.tag-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.tag-blue{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-border)}
+.tag-gray{background:var(--surface-2);color:var(--text-dim);border:1px solid var(--border)}
+.tag-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+
+/* CERT GRID */
+.cert-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.cert-tile{padding:14px 12px;border-radius:9px;text-align:center;border:1.5px solid var(--border);background:var(--surface-2)}
+.cert-tile.active{border-color:var(--green-border);background:var(--green-bg)}
+.cert-tile.na{border-color:var(--border);background:var(--surface-2);opacity:.6}
+.ct-check{font-size:17px;margin-bottom:5px}
+.ct-nm{font-size:11.5px;font-weight:800;color:var(--text-dim);margin-bottom:2px}
+.ct-tile.active .ct-nm{color:var(--green)}
+.ct-sub{font-size:10px;color:var(--text-faint)}
+
+/* SET-ASIDE */
+.sa-row{display:flex;gap:8px;flex-wrap:wrap;padding:4px 0}
+.sa-chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 12px;border-radius:6px;border:1.5px solid var(--border);color:var(--text-faint);background:var(--surface-2)}
+.sa-chip.active{border-color:var(--green-border);color:var(--green);background:var(--green-bg)}
+.notice{font-size:11.5px;color:var(--text-muted);background:var(--surface-2);border:1px solid var(--border);border-radius:7px;padding:9px 12px;line-height:1.6;margin-top:12px}
+
+/* CAPABILITIES */
+.role-display{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.role-badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;padding:6px 14px;border-radius:7px;border:1.5px solid var(--border);color:var(--text-faint);background:var(--surface-2)}
+.role-badge.active{border-color:var(--accent-border);color:var(--accent);background:var(--accent-bg)}
+.cap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+.cap-tile{padding:12px 14px;border-radius:9px;border:1.5px solid var(--border);background:var(--surface-2);opacity:.5}
+.cap-tile.active{border-color:var(--accent-border);background:var(--accent-bg);opacity:1}
+.ct-ico{font-size:18px;margin-bottom:5px}
+.ct-txt .ct-nm{font-size:11.5px;font-weight:800;color:var(--text-dim)}
+.cap-tile.active .ct-nm{color:var(--accent)}
+.ct-txt .ct-sub{font-size:10px;color:var(--text-faint);margin-top:1px}
+
+/* SPEC */
+.spec-block{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.spec-block:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.spec-label{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--text-faint);margin-bottom:5px}
+
+/* FSC BARS */
+.fsc-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border)}.fsc-row:last-child{border-bottom:none}
+.fsc-code{font-family:'Source Code Pro',monospace;font-size:11px;font-weight:700;color:var(--accent);width:36px;flex-shrink:0}
+.fsc-nm{font-size:11.5px;color:var(--text-dim);width:130px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fsc-bw{flex:1;height:8px;background:var(--surface-2);border-radius:4px;overflow:hidden}
+.fsc-b{height:100%;border-radius:4px;background:var(--accent)}
+.fsc-cn{font-family:'Source Code Pro',monospace;font-size:11px;font-weight:700;color:var(--text-dim);width:32px;text-align:right;flex-shrink:0}
+
+/* ACTIVITY TABLES */
+.dt{width:100%;border-collapse:collapse;font-size:12px}
+.dt thead th{font-size:9.5px;text-transform:uppercase;letter-spacing:.4px;font-weight:800;color:var(--text-faint);padding:9px 14px;border-bottom:2px solid var(--border);text-align:left;background:var(--surface-2)}
+.dt tbody td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim)}
+.dt tbody tr:last-child td{border-bottom:none}
+.dt tbody tr:hover{background:var(--accent-bg)}
+.dt .mo{font-family:'Source Code Pro',monospace}
+.dt a{color:var(--accent);font-weight:600}
+.see-more-row{background:linear-gradient(to bottom,var(--surface),var(--accent-bg));border-top:1px solid var(--accent-border);padding:13px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+
+/* LOCK CARD */
+.lock-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.04);position:relative}
+.lock-body{position:relative;overflow:hidden}
+.lock-blur{filter:blur(5px);pointer-events:none;user-select:none;opacity:.55;padding:18px 20px}
+.lock-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:rgba(248,250,252,.7);backdrop-filter:blur(1px)}
+.lock-icon{width:44px;height:44px;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.lock-icon svg{color:var(--text-muted)}
+.lock-msg{font-size:12.5px;font-weight:700;color:var(--text-dim);text-align:center;max-width:280px;line-height:1.5}
+.lock-sub{font-size:11.5px;color:var(--text-muted);text-align:center;max-width:300px;line-height:1.5;margin-top:-4px}
+.lock-actions{display:flex;gap:8px}
+.lock-cta{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:8px 20px;border-radius:7px;border:none;background:var(--accent);color:#fff;cursor:pointer;transition:background .15s}
+.lock-cta:hover{background:var(--accent-hover)}
+.lock-cta-ghost{font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;padding:8px 16px;border-radius:7px;border:1.5px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;transition:all .15s}
+.lock-cta-ghost:hover{background:var(--surface-2)}
+
+/* INVENTORY CARD */
+.inv-table{width:100%;border-collapse:collapse;font-size:12px}
+.inv-table thead th{font-size:9.5px;text-transform:uppercase;letter-spacing:.4px;font-weight:800;color:var(--text-faint);padding:9px 14px;border-bottom:2px solid var(--border);text-align:left;background:var(--surface-2)}
+.inv-table tbody td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim)}
+.inv-table tbody tr:last-child td{border-bottom:none}
+.inv-note{display:inline-flex;align-items:center;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:.2px}
+.inv-note.oem{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-border)}
+.inv-note.stock{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.inv-note.cert{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+
+/* MEMBER BANNER */
+.member-banner{background:linear-gradient(135deg,#1B2A4A,#1e3a8a);border-radius:14px;padding:24px 28px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.mb-left{display:flex;align-items:center;gap:16px}
+.mb-icon{width:48px;height:48px;background:rgba(255,255,255,.12);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mb-icon svg{color:#fff}
+.mb-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:4px}
+.mb-sub{font-size:12.5px;color:rgba(255,255,255,.7);line-height:1.5;max-width:500px}
+.mb-perks{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.mb-perk{font-size:11px;font-weight:700;color:rgba(255,255,255,.8);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);padding:4px 10px;border-radius:5px}
+.mb-actions{display:flex;gap:10px;flex-shrink:0;flex-direction:column;align-items:flex-end}
+.mb-btn{font-family:'Manrope',sans-serif;font-size:12.5px;font-weight:700;padding:10px 22px;border-radius:8px;border:none;cursor:pointer;transition:all .15s;white-space:nowrap}
+.mb-btn-primary{background:#fff;color:#1B2A4A}
+.mb-btn-primary:hover{background:#EFF6FF;color:var(--accent)}
+.mb-btn-ghost{background:rgba(255,255,255,.12);color:#fff;border:1.5px solid rgba(255,255,255,.25)}
+.mb-btn-ghost:hover{background:rgba(255,255,255,.2)}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+
+/* MODALS */
+.overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--surface);border-radius:18px;width:520px;max-width:calc(100vw - 32px);box-shadow:0 24px 80px rgba(0,0,0,.22);transform:translateY(16px);transition:transform .22s;overflow:hidden}
+.overlay.open .modal{transform:translateY(0)}
+.modal-sm{width:440px}
+.modal-hdr{padding:24px 28px 18px}
+.modal-hdr-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+.modal-ico{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.modal-ico.blue{background:var(--accent-bg);border:1px solid var(--accent-border)}.modal-ico.blue svg{color:var(--accent)}
+.modal-ico.green{background:var(--green-bg);border:1px solid var(--green-border)}.modal-ico.green svg{color:var(--green)}
+.modal-close{width:30px;height:30px;border:none;background:var(--surface-2);border-radius:7px;cursor:pointer;color:var(--text-muted);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.modal-close:hover{background:var(--border)}
+.modal-title{font-size:20px;font-weight:800;color:var(--text);margin-bottom:6px}
+.modal-sub{font-size:12.5px;color:var(--text-muted);line-height:1.7}
+.modal-body{padding:0 28px 6px}
+.modal-footer{padding:16px 28px 22px;border-top:1px solid var(--border);display:flex;gap:10px;background:var(--surface-2)}
+.m-submit{flex:1;font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:12px;border-radius:9px;border:none;background:var(--accent);color:#fff;cursor:pointer;transition:background .15s}
+.m-submit:hover{background:var(--accent-hover)}
+.m-cancel{font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;padding:12px 20px;border-radius:9px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer}
+.m-cancel:hover{background:var(--surface-2)}
+.signup-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.signup-opt{border:1.5px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:all .15s;text-align:center}
+.signup-opt:hover{border-color:var(--accent-border);background:var(--accent-bg)}
+.so-ico{font-size:24px;margin-bottom:6px}
+.so-title{font-size:13px;font-weight:800;color:var(--text);margin-bottom:3px}
+.so-sub{font-size:11px;color:var(--text-muted);line-height:1.5}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <!-- Logo -->
+  <a href="#" style="display:flex;align-items:center;flex-shrink:0;text-decoration:none;">
+    <img src="https://govscraper.com/assets/BigLogo-7gv5uAxF.png" alt="GovScraper" class="topbar-logo" onerror="this.outerHTML='<span style=&quot;font-family:Manrope,sans-serif;font-size:18px;font-weight:800;color:var(--text);&quot;>GovScraper</span>'">
+  </a>
+
+  <!-- Nav links -->
+  <nav style="display:flex;align-items:center;gap:28px;margin:0 40px;">
+    <a href="#" style="font-size:13px;font-weight:600;color:var(--text-dim);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">Guided Tour</a>
+    <a href="#" style="font-size:13px;font-weight:600;color:var(--text-dim);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">Pricing</a>
+    <a href="#" style="font-size:13px;font-weight:600;color:var(--text-dim);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">Services</a>
+    <a href="#" style="font-size:13px;font-weight:700;color:var(--accent);text-decoration:none;">Cage Search</a>
+    <a href="18B_NSN_Search_Public.html" style="font-size:13px;font-weight:600;color:var(--text-dim);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">NSN Search</a>
+    <a href="#" style="font-size:13px;font-weight:600;color:var(--text-dim);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">Blog</a>
+  </nav>
+
+  <!-- Auth buttons -->
+  <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+    <button class="tb-btn" onclick="openSignUpModal()">Login</button>
+    <button class="tb-btn tb-btn-primary" onclick="openSignUpModal()">Free Trial</button>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- Search Bar -->
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" placeholder="Search by CAGE code or company name…" value="96906">
+    <button class="search-btn">Search</button>
+  </div>
+
+  <!-- HERO — dark navy, same as member view -->
+  <div class="hero">
+    <div class="hero-top">
+      <div>
+        <div class="cage-code">96906</div>
+        <div class="cage-co">SPS Technologies, Inc.</div>
+        <div class="cage-fmr">Formerly: Standard Pressed Steel Co.</div>
+        <div class="cage-tags">
+          <span class="tag-hero-green">● SAM ACTIVE</span>
+          <span class="tag-hero-blue">LARGE BUSINESS</span>
+          <span class="tag-hero-blue">MANUFACTURER</span>
+          <span class="tag-hero-gray">DISTRIBUTOR</span>
+          <span class="tag-hero-gray">EST. 1956</span>
+        </div>
+      </div>
+      <div class="ha">
+        <div class="vbadge-claimed">
+          <img src="data:image/png;base64,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" alt="GovScraper Verified">
+          GovScraper Verified Supplier
+        </div>
+        <div class="vbadge-sub">Page claimed by Jane Smith, VP Sales<br>Verified Jan 14, 2026</div>
+      </div>
+    </div>
+    <div class="ss">
+      <div class="ss-i"><span class="ss-n">360</span><span class="ss-l">Total NSN Refs</span></div>
+      <div class="ss-i"><span class="ss-n">342</span><span class="ss-l">As Manufacturer</span></div>
+      <div class="ss-i"><span class="ss-n">18</span><span class="ss-l">As Distributor</span></div>
+      <div class="ss-i"><span class="ss-n">7</span><span class="ss-l">FSC Categories</span></div>
+    </div>
+  </div>
+
+  <!-- VERIFIED SUPPLIER BANNER — replaces the red "Claim This Page" banner -->
+  <div class="verified-banner">
+    <div class="vb-left">
+      <div class="vb-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9,12 11,14 15,10"/></svg>
+      </div>
+      <div>
+        <div class="vb-title">Verified Supplier Profile</div>
+        <div class="vb-sub">SPS Technologies has claimed and verified this page. Contact details, certifications, and capabilities have been confirmed directly by the supplier.</div>
+      </div>
+    </div>
+    <div class="vb-meta">
+      <div class="vb-meta-chip">✓ Verified Jan 2026</div>
+      <div class="vb-meta-chip">✓ Active on GovScraper</div>
+    </div>
+  </div>
+
+  <!-- ROW 1: Company Info (left) + Contact Info gated (right) -->
+  <div style="display:grid;grid-template-columns:1.35fr 0.95fr;gap:16px;margin-bottom:16px;align-items:start">
+
+    <!-- Company Information — fully visible -->
+    <div class="card no-mb">
+      <div class="ch"><h3>Company Information</h3><span class="src-t">SAM.gov / FLIS</span></div>
+      <div class="cb">
+        <div class="kvg c2">
+          <div class="kv"><label>CAGE Code</label><div class="v mo">96906</div></div>
+          <div class="kv"><label>Legal Entity</label><div class="v">SPS Technologies, Inc.</div></div>
+          <div class="kv"><label>Address</label><div class="v">301 Highland Ave, Ste 200</div></div>
+          <div class="kv"><label>Location</label><div class="v">Jenkintown, PA 19046 — US</div></div>
+          <div class="kv"><label>CAGE Status</label><div class="v gr">A — Active</div></div>
+          <div class="kv"><label>SAM.gov Updated</label><div class="v">14-Aug-2025</div></div>
+          <div class="kv"><label>Business Size</label><div class="v">L — Large Business</div></div>
+          <div class="kv"><label>Primary Role</label><div class="v">MFR — Manufacturer</div></div>
+          <div class="kv"><label>Year Established</label><div class="v">1956</div></div>
+          <div class="kv"><label>Production Volume</label><div class="v">High-volume aerospace & defense fasteners</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Information — GATED, but richer teaser because supplier filled it in -->
+    <div class="contact-card">
+      <!-- Header with Members Only badge -->
+      <div class="ch" style="background:linear-gradient(135deg,#FFF7ED,#FFFBEB);border-bottom:1px solid var(--amber-border)">
+        <h3 style="color:var(--text-dim)">Contact Information</h3>
+        <span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:800;color:var(--amber);background:var(--amber-bg);border:1px solid var(--amber-border);padding:2px 8px;border-radius:5px;letter-spacing:.2px">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          MEMBERS ONLY
+        </span>
+      </div>
+      <!-- Green verified teaser banner -->
+      <div class="contact-verified-banner">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9,12 11,14 15,10"/></svg>
+        Supplier-verified contact details on file
+      </div>
+      <!-- Blurred field values -->
+      <div class="contact-field">
+        <div class="cf-ico"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10A15.3 15.3 0 0112 2z"/></svg></div>
+        <div style="flex:1"><div class="cf-lbl">Website</div><a href="https://www.spstechnologies.com" target="_blank" rel="noopener" style="font-size:13.5px;font-weight:600;color:var(--accent);text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">www.spstechnologies.com ↗</a></div>
+      </div>
+      <div class="contact-field">
+        <div class="cf-ico locked"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div style="flex:1">
+          <div class="cf-lbl">RFQ Contact</div>
+          <div class="cf-locked-blur">J••• S•••••</div>
+          <div style="font-size:10px;color:var(--text-faint);margin-top:2px;filter:blur(3px);opacity:.6">VP, Government Sales</div>
+        </div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-faint)" stroke-width="2" style="flex-shrink:0;margin-top:14px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      </div>
+      <div class="contact-field">
+        <div class="cf-ico locked"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2A19.79 19.79 0 013.09 5.18 2 2 0 015.07 3h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L9.09 10a16 16 0 006.91 6.91l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg></div>
+        <div style="flex:1"><div class="cf-lbl">Direct Phone</div><div class="cf-locked-blur">(2••) •••-••••</div></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-faint)" stroke-width="2" style="flex-shrink:0;margin-top:14px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      </div>
+      <div class="contact-field">
+        <div class="cf-ico locked"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+        <div style="flex:1"><div class="cf-lbl">RFQ Email</div><div class="cf-locked-blur">rfq@spstech•••.com</div></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-faint)" stroke-width="2" style="flex-shrink:0;margin-top:14px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      </div>
+      <div class="contact-field">
+        <div class="cf-ico locked"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+        <div style="flex:1"><div class="cf-lbl">Mobile</div><div class="cf-locked-blur">(2••) •••-••••</div></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-faint)" stroke-width="2" style="flex-shrink:0;margin-top:14px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      </div>
+      <!-- Upsell CTA -->
+      <div class="contact-upsell">
+        <div class="cu-txt"><strong>🔒 Verified contact details available to members</strong>
+        SPS Technologies has added direct RFQ contact info. Members see the real name, phone, and email.
+        </div>
+        <button class="cu-btn" onclick="openSignUpModal('contact')">Start Free Trial — Unlock Contact Info →</button>
+        <div style="font-size:10.5px;color:var(--accent);text-align:center">Already a member? <a href="#" style="font-weight:700">Sign In</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 1B: Corporate Relationships -->
+  <div class="card">
+    <div class="ch"><h3>Corporate Relationships</h3><span class="src-t">V_CAGE_ADDRESS</span></div>
+    <div class="cb">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0">
+        <div class="cr-row" style="padding-right:20px">
+          <div class="cr-l">
+            <span class="cr-role">Parent</span>
+            <a href="#" style="font-family:'Source Code Pro',monospace;font-size:11.5px;font-weight:700">0FV87</a>
+            <span style="font-size:12px;color:var(--text-dim);font-weight:600;margin-left:6px">Precision Castparts Corp.</span>
+          </div>
+          <span class="tag tag-green">ACTIVE</span>
+        </div>
+        <div class="cr-row" style="padding:0 20px;border-left:1px solid var(--border);border-right:1px solid var(--border)">
+          <div class="cr-l">
+            <span class="cr-role">Subsidiary</span>
+            <a href="#" style="font-family:'Source Code Pro',monospace;font-size:11.5px;font-weight:700">324K2</a>
+            <span style="font-size:12px;color:var(--text-dim);font-weight:600;margin-left:6px">SPS Aerospace Fasteners Inc.</span>
+          </div>
+          <span class="tag tag-green">ACTIVE</span>
+        </div>
+        <div class="cr-row" style="padding-left:20px">
+          <div class="cr-l">
+            <span class="cr-role">Subsidiary</span>
+            <a href="#" style="font-family:'Source Code Pro',monospace;font-size:11.5px;font-weight:700">7K2P9</a>
+            <span style="font-size:12px;color:var(--text-dim);font-weight:600;margin-left:6px">SPS Technologies UK Ltd.</span>
+          </div>
+          <span class="tag tag-gray">FOREIGN</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lock-card">
+    <div class="ch"><h3>Small Business &amp; Set-Aside Status</h3><span class="src-t" style="color:var(--amber);font-weight:700;font-family:'Manrope',sans-serif">🔒 Members only</span></div>
+    <div class="lock-body">
+      <div class="lock-blur"><div style="display:flex;gap:10px;flex-wrap:wrap;padding:20px 24px"><span class="tag tag-green" style="font-size:13px;padding:7px 14px;border-radius:7px">8(a) Certified</span><span class="tag tag-blue" style="font-size:13px;padding:7px 14px;border-radius:7px">HUBZone</span><span class="tag tag-green" style="font-size:13px;padding:7px 14px;border-radius:7px">WOSB</span><span class="tag tag-gray" style="font-size:13px;padding:7px 14px;border-radius:7px">SDVOSB</span><span class="tag tag-green" style="font-size:13px;padding:7px 14px;border-radius:7px">Large Business</span></div></div>
+      <div class="lock-overlay">
+        <div class="lock-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+        <div class="lock-msg">Set-Aside Status — Members Only</div>
+        <div class="lock-sub">Small business certifications and set-aside qualifications visible to GovScraper members.</div>
+        <div class="lock-actions"><button class="lock-cta" onclick="openSignUpModal()">Start Free Trial</button><button class="lock-cta-ghost" onclick="openSignUpModal()">Log In</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lock-card">
+    <div class="ch"><h3>Certifications &amp; Standards</h3><span class="src-t" style="color:var(--amber);font-weight:700;font-family:'Manrope',sans-serif">🔒 Members only</span></div>
+    <div class="lock-body">
+      <div class="lock-blur"><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:20px 24px"><div style="padding:14px;border:1.5px solid var(--green-border);background:var(--green-bg);border-radius:9px;text-align:center;font-size:13px;font-weight:700;color:var(--green)">✓ ISO 9001:2015</div><div style="padding:14px;border:1.5px solid var(--green-border);background:var(--green-bg);border-radius:9px;text-align:center;font-size:13px;font-weight:700;color:var(--green)">✓ AS9100 Rev D</div><div style="padding:14px;border:1.5px solid var(--green-border);background:var(--green-bg);border-radius:9px;text-align:center;font-size:13px;font-weight:700;color:var(--green)">✓ ITAR</div><div style="padding:14px;border:1.5px solid var(--border);background:var(--surface-2);border-radius:9px;text-align:center;font-size:13px;font-weight:700;color:var(--text-muted)">— NADCAP</div></div></div>
+      <div class="lock-overlay">
+        <div class="lock-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+        <div class="lock-msg">Certifications &amp; Standards — Members Only</div>
+        <div class="lock-sub">ISO, AS9100, ITAR, NADCAP, CMMC, and MIL-SPEC certifications visible to members.</div>
+        <div class="lock-actions"><button class="lock-cta" onclick="openSignUpModal()">Start Free Trial</button><button class="lock-cta-ghost" onclick="openSignUpModal()">Log In</button></div>
+      </div>
+    </div>
+  </div>
+
+    <div class="lock-card">
+    <div class="ch"><h3>Supplier Capabilities &amp; Role</h3><span class="src-t" style="color:var(--amber);font-weight:700;font-family:'Manrope',sans-serif">🔒 Members only</span></div>
+    <div class="lock-body">
+      <!-- Role badges — always visible, not gated -->
+      <div style="padding:12px 18px;border-bottom:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;background:var(--surface)">
+        <span style="display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;padding:6px 14px;border-radius:7px;border:1.5px solid var(--accent-border);color:var(--accent);background:var(--accent-bg)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8,21 12,17 16,21"/></svg>
+          Manufacturer
+        </span>
+        <span style="display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;padding:6px 14px;border-radius:7px;border:1.5px solid var(--accent-border);color:var(--accent);background:var(--accent-bg)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          Distributor
+        </span>
+        <span style="font-size:11px;color:var(--text-faint);align-self:center;font-style:italic;margin-left:4px">Detailed capabilities — members only</span>
+      </div>
+      <!-- Capability tiles — blurred -->
+      <div class="lock-blur"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:16px 20px"><div style="padding:14px 16px;border:1.5px solid var(--accent-border);background:var(--accent-bg);border-radius:9px;font-size:13.5px;font-weight:700;color:var(--accent)">🔩 Fasteners &amp; Hardware</div><div style="padding:14px 16px;border:1.5px solid var(--accent-border);background:var(--accent-bg);border-radius:9px;font-size:13.5px;font-weight:700;color:var(--accent)">⚙️ CNC Machining</div><div style="padding:14px 16px;border:1.5px solid var(--border);background:var(--surface-2);border-radius:9px;font-size:13.5px;font-weight:700;color:var(--text-muted)">🛡️ Surface Treatment</div><div style="padding:14px 16px;border:1.5px solid var(--border);background:var(--surface-2);border-radius:9px;font-size:13.5px;font-weight:700;color:var(--text-muted)">🔧 Castings &amp; Forgings</div><div style="padding:14px 16px;border:1.5px solid var(--border);background:var(--surface-2);border-radius:9px;font-size:13.5px;font-weight:700;color:var(--text-muted)">📦 MIL-SPEC Packaging</div><div style="padding:14px 16px;border:1.5px solid var(--border);background:var(--surface-2);border-radius:9px;font-size:13.5px;font-weight:700;color:var(--text-muted)">🔬 Testing &amp; Inspection</div></div></div>
+      <div class="lock-overlay">
+        <div class="lock-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+        <div class="lock-msg">Detailed Capabilities — Members Only</div>
+        <div class="lock-sub">Manufacturing capabilities, materials, and specializations visible to members.</div>
+        <div class="lock-actions"><button class="lock-cta" onclick="openSignUpModal()">Start Free Trial</button><button class="lock-cta-ghost" onclick="openSignUpModal()">Log In</button></div>
+      </div>
+    </div>
+  </div>
+
+    <div class="lock-card">
+    <div class="ch"><h3>Specialization &amp; Materials</h3><span class="src-t" style="color:var(--amber);font-weight:700;font-family:'Manrope',sans-serif">🔒 Members only</span></div>
+    <div class="lock-body">
+      <div class="lock-blur">
+        <div style="padding:14px 20px">
+          <div style="margin-bottom:12px"><div style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--text-faint);margin-bottom:6px">Materials</div><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="tag tag-blue">Steel Alloys</span><span class="tag tag-blue">Stainless Steel</span><span class="tag tag-blue">Titanium</span><span class="tag tag-blue">Inconel</span><span class="tag tag-blue">Aluminum</span></div></div>
+          <div style="margin-bottom:12px"><div style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--text-faint);margin-bottom:6px">FSC Specialization</div><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="tag tag-blue">FSC 5306 — Bolts</span><span class="tag tag-blue">FSC 5305 — Screws</span><span class="tag tag-blue">FSC 5307 — Studs</span></div></div>
+          <div style="font-size:12.5px;color:var(--text-dim);line-height:1.7">SPS Technologies is a premier manufacturer of high-strength aerospace fasteners with dedicated DLA government contracts team.</div>
+        </div>
+      </div>
+      <div class="lock-overlay">
+        <div class="lock-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+        <div class="lock-msg">Specialization &amp; Materials — Members Only</div>
+        <div class="lock-sub">Materials, size range, FSC specialization, and full company description visible to GovScraper members.</div>
+        <div class="lock-actions"><button class="lock-cta" onclick="openSignUpModal()">Start Free Trial</button><button class="lock-cta-ghost" onclick="openSignUpModal()">Log In</button></div>
+      </div>
+    </div>
+  </div>
+
+    <div class="two-col">
+    <div class="lock-card" style="margin-bottom:0">
+      <div class="ch"><h3>FSC Categories Supplied</h3><span class="src-t">7 categories</span></div>
+      <div style="padding:14px 20px">
+        <div class="fsc-row"><span class="fsc-code">5306</span><span class="fsc-nm">Bolts</span><div class="fsc-bw"><div class="fsc-b" style="width:100%"></div></div><span class="fsc-cn">187</span></div>
+        <div class="fsc-row"><span class="fsc-code">5305</span><span class="fsc-nm">Screws</span><div class="fsc-bw"><div class="fsc-b" style="width:54%"></div></div><span class="fsc-cn">100</span></div>
+        <div class="fsc-row"><span class="fsc-code">5307</span><span class="fsc-nm">Studs</span><div class="fsc-bw"><div class="fsc-b" style="width:21%"></div></div><span class="fsc-cn">40</span></div>
+        <div class="fsc-row"><span class="fsc-code">5310</span><span class="fsc-nm">Nuts &amp; Washers</span><div class="fsc-bw"><div class="fsc-b" style="width:11%"></div></div><span class="fsc-cn">20</span></div>
+        <div class="fsc-row"><span class="fsc-code">5315</span><span class="fsc-nm">Nails, Keys &amp; Pins</span><div class="fsc-bw"><div class="fsc-b" style="width:4%"></div></div><span class="fsc-cn">8</span></div>
+        <div class="fsc-row"><span class="fsc-code">5320</span><span class="fsc-nm">Rivets</span><div class="fsc-bw"><div class="fsc-b" style="width:2%"></div></div><span class="fsc-cn">4</span></div>
+        <div class="fsc-row"><span class="fsc-code">5330</span><span class="fsc-nm">Packing &amp; Gaskets</span><div class="fsc-bw"><div class="fsc-b" style="width:1%"></div></div><span class="fsc-cn">1</span></div>
+      </div>
+    </div>
+    <div class="lock-card" style="margin-bottom:0">
+      <div class="ch"><h3>NSN References</h3><span class="src-t" style="color:var(--amber);font-weight:700;font-family:'Manrope',sans-serif">🔒 Members only</span></div>
+      <div class="lock-body">
+        <div class="lock-blur"><table class="dt"><thead><tr><th>NSN</th><th>Item Name</th><th>Part No.</th><th>Role</th></tr></thead><tbody><tr><td class="mo">5306-01-482-3791</td><td>BOLT, MACHINE</td><td class="mo">ST2015-020</td><td>MFR</td></tr><tr><td class="mo">5305-01-391-2048</td><td>SCREW, CAP</td><td class="mo">B1821-4</td><td>MFR</td></tr></tbody></table></div>
+        <div class="lock-overlay">
+          <div class="lock-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+          <div class="lock-msg">NSN References — Members Only</div>
+          <div class="lock-sub">Full list of 360 active NSNs with part numbers.</div>
+          <button class="lock-cta" style="margin-top:4px" onclick="openSignUpModal()">Start Free Trial</button>
+        </div>
+      </div>
+    </div>
+  </div>
+    <div style="height:16px"></div>
+
+  <!-- Supplier Inventory — NEW section, fully gated -->
+  <div class="lock-card">
+    <div class="ch" style="background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border-bottom:1px solid var(--green-border)">
+      <h3 style="color:#166534">Supplier Inventory</h3>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:var(--green);background:var(--green-bg);border:1px solid var(--green-border);padding:2px 8px;border-radius:5px">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+          Supplier Uploaded
+        </span>
+        <span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:800;color:var(--amber);background:var(--amber-bg);border:1px solid var(--amber-border);padding:2px 8px;border-radius:5px;letter-spacing:.2px">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          MEMBERS ONLY
+        </span>
+      </div>
+    </div>
+    <div class="lock-body">
+      <div class="lock-blur">
+        <table class="inv-table">
+          <thead><tr><th>NSN</th><th>Part Number</th><th>Condition</th><th>Lead Time</th><th>MIL-PKG</th><th>Type</th></tr></thead>
+          <tbody>
+            <tr><td class="mo">5306-01-482-3791</td><td class="mo">ST2015-020</td><td>New</td><td>14 days</td><td>Yes</td><td><span class="inv-note oem">OEM</span></td></tr>
+            <tr><td class="mo">5305-01-391-2048</td><td class="mo">B1821-4</td><td>New</td><td>21 days</td><td>Yes</td><td><span class="inv-note stock">Stock</span></td></tr>
+            <tr><td class="mo">5307-01-215-6633</td><td class="mo">SS-440C-18</td><td>New</td><td>30 days</td><td>Yes</td><td><span class="inv-note cert">Cert</span></td></tr>
+            <tr><td class="mo">5310-01-044-8876</td><td class="mo">NAS1291C10</td><td>New</td><td>7 days</td><td>Yes</td><td><span class="inv-note stock">Stock</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="lock-overlay">
+        <div class="lock-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+        <div class="lock-msg">Supplier Inventory — Members Only</div>
+        <div class="lock-sub">SPS Technologies has uploaded their stocked NSNs, lead times, and MIL-SPEC packaging capability. Members can see the full inventory list.</div>
+        <div class="lock-actions">
+          <button class="lock-cta" onclick="openSignUpModal('inventory')">Start Free Trial</button>
+          <button class="lock-cta-ghost" onclick="openSignUpModal()">Log In</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RFQ Activity + Award History -->
+  <div class="two-col">
+    <div class="card no-mb">
+      <div class="ch"><h3>Recent RFQ Activity</h3><span class="src-t">DIBBS Data</span></div>
+      <table class="dt">
+        <thead><tr><th>Solicitation</th><th>NSN</th><th>Due Date</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td class="mo"><a href="#">SPE4A6-26-Q-0537</a></td><td class="mo">5306-01-482-3791</td><td style="color:var(--amber);font-weight:600">Feb 11, 2026</td><td><span class="tag tag-green" style="font-size:9.5px">OPEN</span></td></tr>
+          <tr><td class="mo"><a href="#">SPE4A6-26-Q-0412</a></td><td class="mo">5305-01-391-2048</td><td>Feb 08, 2026</td><td><span class="tag tag-gray" style="font-size:9.5px">CLOSED</span></td></tr>
+          <tr><td class="mo"><a href="#">SPE4A6-26-Q-0389</a></td><td class="mo">5306-01-482-3791</td><td>Jan 30, 2026</td><td><span class="tag tag-gray" style="font-size:9.5px">CLOSED</span></td></tr>
+        </tbody>
+      </table>
+      <div class="see-more-row">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:26px;height:26px;background:var(--accent-bg);border:1.5px solid var(--accent-border);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          </div>
+          <span style="font-size:12px;font-weight:700;color:var(--text-dim)">44 more RFQs hidden — <span style="color:var(--accent)">members only</span></span>
+        </div>
+        <button style="background:var(--accent);color:#fff;border-radius:7px;padding:6px 14px;font-size:11.5px;font-weight:700;border:none;cursor:pointer;font-family:'Manrope',sans-serif" onclick="openSignUpModal('rfq')">See All 47 RFQs →</button>
+      </div>
+    </div>
+    <div class="card no-mb">
+      <div class="ch"><h3>Award History</h3><span class="src-t">DIBBS — Last 5</span></div>
+      <table class="dt">
+        <thead><tr><th>CAGE</th><th>Qty</th><th>Unit Price</th><th>Date</th></tr></thead>
+        <tbody>
+          <tr><td><a class="mo" href="#">1H5P6</a></td><td>18</td><td style="color:var(--green);font-weight:600">$25.10</td><td class="mo">20150319</td></tr>
+          <tr><td><a class="mo" href="#">55683</a></td><td>16</td><td style="color:var(--green);font-weight:600">$26.28</td><td class="mo">20141206</td></tr>
+          <tr><td><a class="mo" href="#">6LY89</a></td><td>25</td><td style="color:var(--green);font-weight:600">$26.82</td><td class="mo">20140515</td></tr>
+          <tr><td><a class="mo" href="#">1A424</a></td><td>15</td><td style="color:var(--amber);font-weight:600">$41.60</td><td class="mo">20140404</td></tr>
+          <tr><td><a class="mo" href="#">4M107</a></td><td>5</td><td style="color:var(--red);font-weight:600">$81.50</td><td class="mo">20001023</td></tr>
+        </tbody>
+      </table>
+      <div class="see-more-row">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:26px;height:26px;background:var(--accent-bg);border:1.5px solid var(--accent-border);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          </div>
+          <span style="font-size:12px;font-weight:700;color:var(--text-dim)">Full award history hidden — <span style="color:var(--accent)">members only</span></span>
+        </div>
+        <button style="background:var(--accent);color:#fff;border-radius:7px;padding:6px 14px;font-size:11.5px;font-weight:700;border:none;cursor:pointer;font-family:'Manrope',sans-serif" onclick="openSignUpModal('award')">See Full History →</button>
+      </div>
+    </div>
+  </div>
+  <div style="height:16px"></div>
+
+  <!-- MEMBER UPSELL BANNER -->
+  <div class="member-banner">
+    <div class="mb-left">
+      <div class="mb-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div>
+        <div class="mb-title">This supplier is active and ready to quote.</div>
+        <div class="mb-sub">SPS Technologies has claimed this page. As a GovScraper member, you get their verified contact info, full NSN list, uploaded inventory, and complete RFQ history.</div>
+        <div class="mb-perks">
+          <span class="mb-perk">✓ Direct RFQ contact</span>
+          <span class="mb-perk">✓ 360 NSN references</span>
+          <span class="mb-perk">✓ Supplier inventory</span>
+          <span class="mb-perk">✓ Full award history</span>
+          <span class="mb-perk">✓ All 7 FSC categories</span>
+        </div>
+      </div>
+    </div>
+    <div class="mb-actions">
+      <button class="mb-btn mb-btn-primary" onclick="openSignUpModal()">Start Free Trial →</button>
+      <button class="mb-btn mb-btn-ghost" onclick="openSignUpModal()">Log In</button>
+    </div>
+  </div>
+
+</main>
+
+<!-- SIGN UP MODAL -->
+<div class="overlay" id="signupOverlay" onclick="if(event.target===this)closeAll()">
+  <div class="modal modal-sm">
+    <div class="modal-hdr">
+      <div class="modal-hdr-top">
+        <div class="modal-ico blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></div>
+        <button class="modal-close" onclick="closeAll()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="modal-title" id="signup-title">See the Full Picture</div>
+      <div class="modal-sub" id="signup-sub">GovScraper members get full access to contact details, inventory, RFQ history, award data, and more for every verified supplier in the database.</div>
+    </div>
+    <div class="modal-body" style="padding-bottom:22px">
+      <div class="signup-options">
+        <div class="signup-opt" onclick="window.location.href='#'">
+          <div class="so-ico">🚀</div>
+          <div class="so-title">Start Free Trial</div>
+          <div class="so-sub">7 days free, no credit card. Full PRO access from day one.</div>
+        </div>
+        <div class="signup-opt" onclick="window.location.href='#'">
+          <div class="so-ico">🔑</div>
+          <div class="so-title">Sign In</div>
+          <div class="so-sub">Already a member? Sign in to access the full database.</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--text-faint);text-align:center;line-height:1.6">No contracts. Cancel anytime. Trusted by DLA contractors nationwide.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+var signupTitles = {
+  contact: 'Unlock Verified Contact Details',
+  inventory: 'See This Supplier\'s Inventory',
+  nsn: 'See All 360 NSN References',
+  fsc: 'See All 7 FSC Categories',
+  rfq: 'See All 47 RFQs for This Supplier',
+  award: 'See Full Award History',
+  '': 'See the Full Picture'
+};
+var signupSubs = {
+  contact: 'SPS Technologies has uploaded direct RFQ contact info. Members see the real name, phone number, and email — not blurred.',
+  inventory: 'SPS Technologies has uploaded their stocked NSNs, lead times, and packaging capability. Members see the full inventory list.',
+  nsn: 'Members get the complete list of all 360 NSNs this supplier manufactures or distributes — with part numbers and roles.',
+  fsc: 'Members see all 7 Federal Supply Classes this supplier is active in, with NSN counts for each.',
+  rfq: 'Members get the complete RFQ activity feed for every CAGE in the database — open solicitations, closed bids, and patterns.',
+  award: 'Members see the full award history for this supplier — all contract awards, winning CAGEs, unit prices, and quantity trends.',
+  '': 'GovScraper members get full access to contact details, inventory, RFQ history, award data, and more for every verified supplier.'
+};
+function openSignUpModal(ctx) {
+  var k = ctx || '';
+  document.getElementById('signup-title').textContent = signupTitles[k] || signupTitles[''];
+  document.getElementById('signup-sub').textContent = signupSubs[k] || signupSubs[''];
+  document.getElementById('signupOverlay').classList.add('open');
+}
+function closeAll() {
+  document.getElementById('signupOverlay').classList.remove('open');
+}
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeAll(); });
+</script>
+</body>
+</html>

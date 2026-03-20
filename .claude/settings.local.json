@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_start",
+      "Bash(ruby --version)",
+      "Bash(php --version)",
+      "Bash(xargs -I{} basename {})",
+      "Bash(echo \"cage-rfq-alerts.html:*)",
+      "Bash(cp \"/Users/tris10/Library/Mobile Documents/com~apple~CloudDocs/PARA/Projects/GovScraper/_Claude Code/prototype/\"*.html /tmp/govscraper-prototype/)",
+      "Bash(ls /tmp/govscraper-prototype/*.html)",
+      "Bash(open /tmp/govscraper-deploy)",
+      "Bash(gh auth:*)",
+      "Bash(git --version)",
+      "Read(//Users/tris10/Downloads/**)",
+      "Bash(sudo cp:*)",
+      "Bash(gh --version)",
+      "Bash(mkdir -p ~/bin)",
+      "Bash(cp \"/Users/tris10/Downloads/gh_2.88.1_macOS_amd64/bin/gh\" ~/bin/gh)",
+      "Bash(chmod +x ~/bin/gh)",
+      "Bash(export PATH=\"$HOME/bin:$PATH\")"
+    ]
+  }
+}

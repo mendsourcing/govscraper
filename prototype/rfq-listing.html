@@ -1,0 +1,2634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My RFQs — GovScraper</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+  :root {
+    --bg: #F8FAFC;
+    --surface: #FFFFFF;
+    --surface-2: #F1F5F9;
+    --surface-3: #E8EFF7;
+    --border: #E2E8F0;
+    --border-strong: #CBD5E1;
+    --text: #0F172A;
+    --text-dim: #334155;
+    --text-muted: #64748B;
+    --text-faint: #94A3B8;
+    --accent: #2563EB;
+    --accent-hover: #1D4ED8;
+    --accent-bg: #EFF6FF;
+    --accent-border: #BFDBFE;
+    --green: #16A34A;
+    --green-bg: #F0FDF4;
+    --green-border: #BBF7D0;
+    --amber: #D97706;
+    --amber-bg: #FFFBEB;
+    --amber-border: #FDE68A;
+    --red: #DC2626;
+    --red-bg: #FEF2F2;
+    --red-border: #FECACA;
+    --purple: #7C3AED;
+    --purple-bg: #F5F3FF;
+    --cyan: #0891B2;
+    --cyan-bg: #ECFEFF;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Manrope',sans-serif; background:var(--bg); color:var(--text); font-size:13px; }
+  a { color:var(--accent); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  .mono { font-family:'Source Code Pro',monospace; }
+
+  /* TOPBAR */
+  .topbar {
+    height:56px; background:var(--surface);
+    border-bottom:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 24px; position:sticky; top:0; z-index:100;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .topbar-left { display:flex; align-items:center; gap:20px; }
+  .topbar-logo { height:30px; width:auto; }
+  .topbar-divider { width:1px; height:24px; background:var(--border); }
+  .breadcrumb { font-size:12px; color:var(--text-muted); font-weight:500; }
+  .breadcrumb a { color:var(--text-muted); }
+  .breadcrumb a:hover { color:var(--accent); }
+  .breadcrumb .sep { margin:0 6px; color:var(--text-faint); }
+  .topbar-right { display:flex; align-items:center; gap:10px; }
+  .topbar-icon-btn {
+    width:34px; height:34px; border-radius:8px;
+    border:1px solid var(--border); background:var(--surface);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; color:var(--text-muted); transition:all .15s;
+  }
+  .topbar-icon-btn:hover { background:var(--surface-2); color:var(--accent); border-color:var(--accent-border); }
+  .topbar-icon-btn svg { width:16px; height:16px; }
+  .avatar {
+    width:34px; height:34px; border-radius:8px;
+    background:linear-gradient(135deg, #1B2A4A 0%, #2563EB 100%);
+    color:#fff; display:flex; align-items:center; justify-content:center;
+    font-size:12px; font-weight:700; cursor:pointer;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width:224px; position:fixed; top:56px; left:0; bottom:0;
+    background:var(--surface); border-right:1px solid var(--border);
+    padding:20px 0 16px; overflow-y:auto; z-index:90;
+    display:flex; flex-direction:column;
+  }
+  .sidebar-label {
+    font-size:9.5px; font-weight:800; text-transform:uppercase;
+    letter-spacing:0.8px; color:var(--text-faint); padding:14px 20px 5px;
+  }
+  .sidebar-item {
+    display:flex; align-items:center; gap:10px; padding:8px 20px;
+    font-size:12.5px; font-weight:500; color:var(--text-dim);
+    text-decoration:none; border-left:3px solid transparent; transition:all .15s;
+  }
+  .sidebar-item:hover { background:var(--accent-bg); color:var(--accent); text-decoration:none; border-left-color:var(--accent-border); }
+  .sidebar-item.active { color:var(--accent); font-weight:700; border-left-color:var(--accent); background:var(--accent-bg); }
+  .sidebar-item svg { width:16px; height:16px; flex-shrink:0; opacity:0.8; }
+  .sidebar-item.active svg { opacity:1; }
+  .sidebar-badge { margin-left:auto; background:var(--accent); color:#fff; font-size:9.5px; font-weight:800; padding:2px 7px; border-radius:10px; }
+  .sidebar-spacer { flex:1; min-height:32px; }
+
+  /* MAIN */
+  .main { margin-left:224px; padding:24px 28px 40px; min-height:calc(100vh - 56px); }
+
+  /* PAGE HEADER */
+  .page-header { margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; }
+  .page-header h1 { font-size:20px; font-weight:800; color:var(--text); letter-spacing:-0.3px; }
+
+  /* ============================================================
+     STATS BAR — matches the screenshot exactly
+     Bold colored number + muted label, pipe separators
+     ============================================================ */
+  .stats-bar {
+    display:flex; align-items:center; gap:0;
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:10px; padding:12px 20px;
+    margin-bottom:14px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.04);
+    flex-wrap:wrap; row-gap:8px;
+  }
+  .stat-item {
+    display:flex; align-items:center; gap:5px;
+    padding:0 14px; position:relative;
+  }
+  .stat-item:first-child { padding-left:0; }
+  .stat-item:not(:last-child)::after {
+    content:''; position:absolute; right:0; top:50%; transform:translateY(-50%);
+    width:1px; height:16px; background:var(--border);
+  }
+  /* Pipe separator (explicit) */
+  .stat-pipe {
+    width:1px; height:20px; background:var(--border-strong);
+    margin:0 6px; flex-shrink:0;
+  }
+  .stat-num {
+    font-family:'Source Code Pro', monospace;
+    font-size:15px; font-weight:700; line-height:1;
+  }
+  .stat-num.blue { color:var(--accent); }
+  .stat-num.default { color:var(--text); }
+  .stat-num.amber { color:var(--amber); }
+  .stat-num.green { color:var(--green); }
+  .stat-num.purple { color:var(--purple); }
+  .stat-num.gray { color:var(--text-muted); }
+  .stat-num.red { color:var(--red); }
+  .stat-lbl {
+    font-size:12.5px; font-weight:500; color:var(--text-muted); line-height:1;
+    white-space:nowrap;
+  }
+
+  /* ============================================================
+     FILTER PANEL
+     ============================================================ */
+  .filter-panel {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:10px; padding:14px 18px; margin-bottom:14px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  }
+  .filter-grid {
+    display:grid; grid-template-columns:repeat(5, 1fr); gap:10px;
+    margin-bottom:10px;
+  }
+  .filter-grid:last-of-type { margin-bottom:0; }
+  .filter-grid-2 {
+    display:grid; grid-template-columns:repeat(5, 1fr); gap:10px;
+    margin-bottom:10px; align-items:end;
+  }
+  .filter-grid-3 {
+    display:grid; grid-template-columns:repeat(5, 1fr); gap:10px;
+    align-items:end;
+  }
+  /* Watchlist gold star label */
+  .fg-gold label { color:var(--amber); }
+  .fg-gold select, .fg-gold input { border-color:var(--amber-border); }
+  .fg-gold select:focus, .fg-gold input:focus { border-color:var(--amber); box-shadow:0 0 0 3px rgba(217,119,6,0.1); }
+  .fg-placeholder select, .fg-placeholder input { border-style:dashed; color:var(--text-faint); background:var(--surface-2); cursor:default; }
+  .fg-placeholder label { font-style:italic; }
+  .fg { display:flex; flex-direction:column; gap:3px; }
+  .fg label {
+    font-size:9.5px; font-weight:800; text-transform:uppercase;
+    letter-spacing:0.5px; color:var(--text-faint);
+  }
+  .fg select, .fg input {
+    width:100%; font-family:'Manrope',sans-serif; font-size:12px;
+    padding:7px 10px; border:1px solid var(--border); border-radius:6px;
+    background:var(--surface); color:var(--text); outline:none;
+    transition:border-color .15s;
+  }
+  .fg select:focus, .fg input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(37,99,235,0.08); }
+  .fg input::placeholder { color:var(--text-faint); }
+  .filter-actions { display:flex; align-items:flex-end; gap:6px; justify-content:flex-end; }
+
+  /* BUTTONS */
+  .btn {
+    font-family:'Manrope',sans-serif; font-size:11.5px; font-weight:700;
+    padding:7px 14px; border-radius:7px; border:1px solid var(--border);
+    cursor:pointer; display:inline-flex; align-items:center; gap:5px;
+    transition:all .15s; white-space:nowrap;
+  }
+  .btn-primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .btn-primary:hover { background:var(--accent-hover); }
+  .btn-ghost { background:transparent; color:var(--text-dim); }
+  .btn-ghost:hover { background:var(--surface-2); }
+  .btn-amber { background:var(--amber-bg); color:var(--amber); border-color:var(--amber-border); }
+  .btn-amber:hover { background:#FEF3C7; }
+  .btn-accent { background:var(--accent-bg); color:var(--accent); border-color:var(--accent-border); }
+  .btn-accent:hover { background:#DBEAFE; }
+  .btn-sm { padding:5px 10px; font-size:11px; }
+  .btn-red { background:var(--red-bg); color:var(--red); border-color:var(--red-border); }
+
+  /* ============================================================
+     TABLE
+     ============================================================ */
+  .tbl-wrap {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:10px; overflow:hidden;
+    box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  }
+  .tbl-scroll { overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; font-size:12px; min-width:1200px; }
+  thead th {
+    font-size:10px; text-transform:uppercase; letter-spacing:0.5px;
+    font-weight:800; color:var(--text-faint); padding:11px 10px;
+    border-bottom:1px solid var(--border); text-align:left;
+    background:var(--surface-2); white-space:nowrap;
+    position:sticky; top:0;
+  }
+  thead th.sortable { cursor:pointer; user-select:none; }
+  thead th.sortable:hover { color:var(--accent); }
+  thead th .sort-arrow { color:var(--text-faint); font-size:10px; margin-left:3px; }
+  tbody td {
+    padding:9px 10px; border-bottom:1px solid var(--border);
+    color:var(--text-dim); white-space:nowrap; vertical-align:middle;
+  }
+  tbody tr:last-child td { border-bottom:none; }
+  tbody tr { cursor:pointer; transition:background .1s; }
+  tbody tr:hover td { background:var(--accent-bg); }
+  tbody tr:hover .id-link { color:var(--accent-hover); }
+
+  /* TABLE SPECIFIC CELLS */
+  .star-btn { color:var(--border); font-size:15px; cursor:pointer; background:none; border:none; padding:0; transition:color .15s; }
+  .star-btn.filled { color:var(--amber); }
+  .star-btn:hover { color:var(--amber); }
+  .id-link {
+    font-family:'Source Code Pro',monospace; color:var(--accent);
+    font-weight:700; font-size:11.5px; letter-spacing:0.3px;
+  }
+  .sol-num { font-family:'Source Code Pro',monospace; font-size:11px; color:var(--text-dim); }
+  .aaa-val { font-family:'Source Code Pro',monospace; font-weight:600; font-size:12px; }
+  .aaa-val.green { color:var(--green); }
+  .aaa-val.unknown { color:var(--text-faint); font-weight:400; font-size:11px; font-style:italic; }
+  .due-red { color:var(--red); font-weight:700; }
+  .due-normal { color:var(--text-dim); }
+  .cage-list { font-size:11px; color:var(--text-muted); max-width:100px; overflow:hidden; text-overflow:ellipsis; }
+  .cage-na { font-size:11px; color:var(--text-faint); font-style:italic; }
+  .pkg-cell { font-size:11px; color:var(--text-muted); max-width:90px; overflow:hidden; text-overflow:ellipsis; }
+  td.fsc-cell { font-family:'Source Code Pro',monospace; font-size:12px; font-weight:600; color:var(--text-dim); }
+  td.pn-cell { font-family:'Source Code Pro',monospace; font-size:11px; color:var(--text-dim); max-width:110px; overflow:hidden; text-overflow:ellipsis; }
+
+  /* STATUS TAGS */
+  .status-tag {
+    display:inline-flex; align-items:center; gap:4px;
+    font-size:10.5px; font-weight:700; padding:3px 8px;
+    border-radius:5px; white-space:nowrap; letter-spacing:0.2px;
+  }
+  .status-tag .dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+  .st-new { background:var(--accent-bg); color:var(--accent); }
+  .st-new .dot { background:var(--accent); }
+  .st-source { background:var(--amber-bg); color:var(--amber); }
+  .st-source .dot { background:var(--amber); }
+  .st-ready { background:var(--green-bg); color:var(--green); }
+  .st-ready .dot { background:var(--green); }
+  .st-nobid { background:var(--surface-2); color:var(--text-muted); }
+  .st-nobid .dot { background:var(--text-faint); }
+  .st-complete { background:var(--purple-bg); color:var(--purple); }
+  .st-complete .dot { background:var(--purple); }
+  .st-trace { background:var(--cyan-bg); color:var(--cyan); }
+  .st-trace .dot { background:var(--cyan); }
+
+  /* SET-ASIDE TAGS */
+  .sa-tag {
+    display:inline-block; font-size:10px; font-weight:800;
+    padding:2px 7px; border-radius:4px; letter-spacing:0.3px;
+  }
+  .sa-sb { background:var(--accent-bg); color:var(--accent); }
+  .sa-un { background:var(--surface-2); color:var(--text-faint); }
+  .sa-sdvosb { background:var(--amber-bg); color:var(--amber); }
+  .sa-hubzone { background:var(--green-bg); color:var(--green); }
+  .sa-wosb { background:var(--purple-bg); color:var(--purple); }
+
+  /* TABLE FOOTER */
+  .tbl-footer {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:12px 16px; border-top:1px solid var(--border);
+    background:var(--surface-2); font-size:12px; color:var(--text-muted);
+  }
+  .pagination { display:flex; align-items:center; gap:4px; }
+  .page-btn {
+    width:28px; height:28px; border:1px solid var(--border); border-radius:5px;
+    background:var(--surface); font-size:12px; font-weight:600;
+    color:var(--text-dim); cursor:pointer; display:flex; align-items:center;
+    justify-content:center; transition:all .15s;
+  }
+  .page-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .page-btn:hover:not(.active) { background:var(--surface-2); border-color:var(--border-strong); }
+
+  /* ============================================================
+     SLIDE-IN PANEL
+     ============================================================ */
+  .panel-overlay {
+    position:fixed; inset:0; background:rgba(15,23,42,0.4);
+    z-index:200; display:none; justify-content:flex-end;
+    backdrop-filter:blur(2px);
+  }
+  .panel-overlay.open { display:flex; }
+  .panel {
+    width:90%; max-width:1400px; height:100%; background:var(--surface);
+    display:flex; flex-direction:column; overflow:hidden;
+    box-shadow:-6px 0 32px rgba(0,0,0,0.14);
+    animation:slideIn .2s ease;
+  }
+  @keyframes slideIn { from { transform:translateX(100%); } to { transform:translateX(0); } }
+
+  /* PANEL HEADER */
+  .panel-top {
+    padding:16px 24px 0; border-bottom:1px solid var(--border);
+    background:var(--surface); flex-shrink:0;
+  }
+  .panel-top-row1 {
+    display:flex; align-items:flex-start; justify-content:space-between;
+    margin-bottom:6px;
+  }
+  .panel-title {
+    font-family:'Source Code Pro',monospace; font-size:21px;
+    font-weight:700; color:var(--text); letter-spacing:0.3px;
+  }
+  .panel-subtitle { font-size:12.5px; color:var(--text-muted); margin-bottom:0; }
+  .panel-close {
+    width:28px; height:28px; border-radius:6px; border:1px solid var(--border);
+    background:var(--surface); cursor:pointer; font-size:14px; color:var(--text-muted);
+    display:flex; align-items:center; justify-content:center; transition:all .15s;
+    flex-shrink:0; margin-left:12px;
+  }
+  .panel-close:hover { background:var(--red-bg); color:var(--red); border-color:var(--red-border); }
+
+  /* STATUS ROW — spread out, no excess white space */
+  /* ── STATUS ROW base container ── */
+  .status-row {
+    display:flex; align-items:center; gap:0;
+    overflow-x:auto;
+  }
+  .status-row .spill {
+    flex:1; display:flex; align-items:center;
+    cursor:pointer; white-space:nowrap;
+    justify-content:center; text-align:center;
+    transition:all .18s;
+  }
+  .status-row .sarrow { flex-shrink:0; }
+
+  /* ══ VARIANT A — Segmented Boxes ══ */
+  .sv-a {
+    padding:12px 0 12px; border-bottom:1px solid var(--border);
+  }
+  .sv-a .sarrow { display:none; }
+  .sv-a .spill {
+    border-radius:0; border:1.5px solid var(--border);
+    background:var(--surface-2); color:var(--text-muted);
+    font-size:11px; font-weight:700; padding:9px 10px;
+    margin-right:-1px; position:relative;
+  }
+  .sv-a .spill:first-child { border-radius:7px 0 0 7px; }
+  .sv-a .spill:last-child  { border-radius:0 7px 7px 0; margin-right:0; }
+  .sv-a .spill:hover { background:var(--accent-bg); color:var(--accent); border-color:var(--accent-border); z-index:1; }
+  .sv-a .spill.past { background:var(--surface-3); color:var(--text-dim); border-color:var(--border-strong); }
+  .sv-a .spill.active {
+    background:var(--accent); color:#fff; border-color:var(--accent);
+    z-index:2; box-shadow:0 2px 10px rgba(37,99,235,0.3);
+  }
+
+  /* ══ VARIANT B — Step Cards with numbered badges ══ */
+  .sv-b-wrap { padding:12px 0 12px; border-bottom:1px solid var(--border); }
+  .sv-b {
+    display:flex; align-items:stretch; gap:0;
+    background:var(--surface-2); border-radius:10px;
+    padding:10px 10px; border:1px solid var(--border);
+    overflow-x:auto;
+  }
+  .sv-b .sarrow { display:none; }
+  .sv-b .spill {
+    flex:1; flex-direction:column; gap:3px; border-radius:7px;
+    padding:8px 6px 7px; border:1.5px solid transparent;
+    background:transparent; color:var(--text-faint);
+    font-size:10.5px; font-weight:700;
+    position:relative; min-width:64px;
+  }
+  .sv-b .spill::before {
+    content:attr(data-step);
+    display:flex; align-items:center; justify-content:center;
+    width:18px; height:18px; border-radius:50%; margin:0 auto 3px;
+    font-size:9px; font-weight:800;
+    background:var(--border-strong); color:var(--text-faint);
+    transition:all .18s; flex-shrink:0;
+  }
+  .sv-b .spill:hover { background:var(--accent-bg); color:var(--accent); border-color:var(--accent-border); }
+  .sv-b .spill:hover::before { background:var(--accent-border); color:var(--accent); }
+  .sv-b .spill.past { color:var(--green); }
+  .sv-b .spill.past::before { background:var(--green-border); color:var(--green); content:'✓'; font-size:9px; }
+  .sv-b .spill.active { background:var(--accent); color:#fff; border-color:var(--accent); box-shadow:0 2px 10px rgba(37,99,235,0.25); }
+  .sv-b .spill.active::before { background:rgba(255,255,255,.25); color:#fff; }
+
+  /* ══ VARIANT C — Chevron Pills with ✓ past states ══ */
+  .sv-c {
+    gap:3px; padding:12px 0 12px; border-bottom:1px solid var(--border);
+  }
+  .sv-c .sarrow { display:none; }
+  .sv-c .spill {
+    border-radius:5px; padding:7px 9px;
+    background:var(--surface-2); color:var(--text-faint);
+    border:1.5px solid var(--border);
+    font-size:10.5px; font-weight:700;
+    position:relative; gap:4px;
+  }
+  .sv-c .spill::after {
+    content:'›';
+    position:absolute; right:-8px; top:50%; transform:translateY(-50%);
+    font-size:13px; color:var(--border-strong); z-index:3; line-height:1;
+  }
+  .sv-c .spill:last-child::after { display:none; }
+  .sv-c .spill:hover { background:var(--accent-bg); color:var(--accent); border-color:var(--accent-border); z-index:1; position:relative; }
+  .sv-c .spill.past { background:var(--green-bg); color:var(--green); border-color:var(--green-border); }
+  .sv-c .spill.active { background:var(--accent); color:#fff; border-color:var(--accent); box-shadow:0 2px 8px rgba(37,99,235,0.25); z-index:2; position:relative; }
+
+  /* ── variant switcher ── */
+  .variant-switcher {
+    display:flex; align-items:center; gap:5px;
+    padding:8px 0 6px;
+  }
+  .variant-switcher .vs-lbl {
+    font-size:9px; font-weight:800; text-transform:uppercase;
+    letter-spacing:.6px; color:var(--text-faint); margin-right:3px;
+  }
+  .vsw-btn {
+    font-family:'Manrope',sans-serif; font-size:10px; font-weight:700;
+    padding:3px 10px; border-radius:5px; cursor:pointer;
+    border:1.5px solid var(--border); background:var(--surface-2); color:var(--text-muted);
+    transition:all .15s;
+  }
+  .vsw-btn:hover { border-color:var(--accent-border); color:var(--accent); background:var(--accent-bg); }
+  .vsw-btn.vsw-active { background:var(--accent); color:#fff; border-color:var(--accent); }
+
+  /* META ROW — compact, spread out */
+  .meta-row {
+    display:flex; align-items:center; gap:0;
+    padding:10px 0 14px;
+  }
+  .meta-row .mitem {
+    flex:1; display:flex; flex-direction:column; gap:2px;
+    padding:0 16px; border-right:1px solid var(--border);
+  }
+  .meta-row .mitem:first-child { padding-left:0; }
+  .meta-row .mitem:last-child { border-right:none; }
+  .meta-row .mlabel {
+    font-size:9px; font-weight:800; text-transform:uppercase;
+    letter-spacing:0.6px; color:var(--text-faint);
+  }
+  .meta-row .mval {
+    font-size:12.5px; font-weight:600; color:var(--text-dim);
+    font-family:'Source Code Pro',monospace;
+  }
+  .meta-row .mval.green { color:var(--green); }
+  .meta-row .mval.red { color:var(--red); }
+  .meta-row .mval.amber { color:var(--amber); }
+  .meta-row .mval.faint { color:var(--text-faint); font-style:italic; font-family:'Manrope',sans-serif; font-weight:400; font-size:12px; }
+  .meta-editable {
+    font-family:'Source Code Pro',monospace; font-size:12.5px; font-weight:700;
+    color:var(--accent); background:transparent;
+    border:none; border-bottom:1.5px solid var(--accent-border);
+    outline:none; padding:1px 2px; width:100%; transition:border-color .15s;
+  }
+  .meta-editable:focus { border-bottom-color:var(--accent); background:var(--accent-bg); border-radius:3px; }
+  .meta-editable::placeholder { color:var(--text-faint); font-style:italic; font-weight:400; font-family:'Manrope',sans-serif; }
+  @keyframes metaSaved {
+    0%   { background:var(--green-bg); border-color:var(--green); color:var(--green); }
+    80%  { background:var(--green-bg); border-color:var(--green); color:var(--green); }
+    100% { background:transparent; border-color:var(--accent-border); color:var(--accent); }
+  }
+  .meta-editable.meta-saved { animation:metaSaved 1.6s ease forwards; }
+
+  .panel-content { display:flex; flex:1; overflow:hidden; }
+  .panel-scroll { flex:1; overflow-y:auto; padding:14px 24px 24px; }
+
+  /* PANEL SECTIONS — match screenshot style */
+  .ps-sec { margin-bottom:12px; border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+  .ps-sec-hdr {
+    padding:11px 16px; background:var(--surface-2);
+    font-size:13px; font-weight:700; cursor:pointer;
+    display:flex; justify-content:space-between; align-items:center;
+    color:var(--accent); user-select:none; transition:background .15s;
+  }
+  .ps-sec-hdr:hover { background:var(--surface-3); }
+  .ps-sec-hdr .chev { transition:transform .2s; color:var(--text-faint); font-size:14px; }
+  .ps-sec.open .chev { transform:rotate(180deg); }
+  .ps-sec-body { padding:0; }
+  .ps-sec-body.hidden { display:none; }
+
+  /* Info table — matches screenshot: label col + value col, single row per field */
+  .info-table { width:100%; border-collapse:collapse; }
+  .info-table tr { border-bottom:1px solid var(--border); }
+  .info-table tr:last-child { border-bottom:none; }
+  .info-table td { padding:9px 16px; font-size:12.5px; color:var(--text-dim); vertical-align:top; }
+  .info-table td:first-child {
+    width:220px; font-weight:600; color:var(--text-dim);
+    background:var(--surface-2); border-right:1px solid var(--border);
+    white-space:nowrap;
+  }
+  .info-table .val-mono { font-family:'Source Code Pro',monospace; }
+  .info-table .val-green { color:var(--green); font-weight:600; }
+  .info-table .val-faint { color:var(--text-faint); font-style:italic; }
+
+  /* Inline action button in table */
+  .tbl-btn {
+    font-family:'Manrope',sans-serif; font-size:11px; font-weight:700;
+    padding:4px 12px; border-radius:12px; border:none; cursor:pointer;
+    background:var(--accent); color:#fff; margin-left:10px; transition:background .15s;
+  }
+  .tbl-btn:hover { background:var(--accent-hover); }
+  .copy-icon { color:var(--text-faint); cursor:pointer; font-size:12px; margin-left:6px; transition:color .15s; }
+  .copy-icon:hover { color:var(--accent); }
+
+  /* Procurement History table — matches screenshot */
+  .ph-table { width:100%; border-collapse:collapse; font-size:12.5px; }
+  .ph-table thead tr { border-bottom:2px solid var(--border); }
+  .ph-table thead th { padding:10px 16px; font-size:11px; font-weight:700; color:var(--text-dim); text-align:left; background:transparent; }
+  .ph-table tbody tr { border-bottom:1px solid var(--border); }
+  .ph-table tbody tr:last-child { border-bottom:none; }
+  .ph-table tbody td { padding:9px 16px; color:var(--text-dim); }
+  .ph-table .cage-link { color:var(--accent); font-family:'Source Code Pro',monospace; font-weight:600; }
+  .ph-cage-icon { color:var(--accent); font-size:11px; margin-left:4px; cursor:pointer; }
+
+  /* Vendor Reference Table — editable rows like screenshot */
+  .vrt-table { width:100%; border-collapse:collapse; font-size:12px; min-width:980px; }
+  .vrt-table thead tr { border-bottom:2px solid var(--border); }
+  .vrt-table thead th { padding:9px 10px; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.4px; color:var(--text-dim); text-align:left; white-space:nowrap; }
+  .vrt-table tbody tr { border-bottom:1px solid var(--border); }
+  .vrt-table tbody tr:last-child { border-bottom:none; }
+  .vrt-table tbody td { padding:7px 8px; }
+  /* Wrap VRT in scrollable div */
+  .vrt-scroll { overflow-x:auto; }
+  .vrt-input {
+    width:100%; font-family:'Manrope',sans-serif; font-size:11.5px;
+    padding:5px 8px; border:1px solid var(--border); border-radius:5px;
+    background:var(--surface); color:var(--text); outline:none; transition:border-color .15s;
+  }
+  .vrt-input:focus { border-color:var(--accent); }
+  .vrt-na { font-size:11px; color:var(--text-faint); }
+  .vrt-save-btn {
+    font-family:'Manrope',sans-serif; font-size:11px; font-weight:700;
+    padding:5px 14px; border-radius:5px; border:none;
+    background:var(--accent); color:#fff; cursor:pointer; white-space:nowrap;
+  }
+  .vrt-save-btn:hover { background:var(--accent-hover); }
+  /* FILE button — blue square icon button like screenshot */
+  .vrt-file-btn {
+    width:30px; height:28px; border-radius:5px; border:none;
+    background:var(--accent); color:#fff; cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center;
+    transition:background .15s;
+  }
+  .vrt-file-btn:hover { background:var(--accent-hover); }
+  /* EMAIL button — ghost send icon */
+  .vrt-email-btn {
+    background:none; border:none; cursor:pointer;
+    color:var(--text-faint); padding:4px; transition:color .15s;
+    display:inline-flex; align-items:center; justify-content:center;
+  }
+  .vrt-email-btn:hover { color:var(--accent); }
+  .add-row-btn {
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:'Manrope',sans-serif; font-size:12px; font-weight:700;
+    padding:7px 16px; border-radius:6px; border:none;
+    background:var(--accent); color:#fff; cursor:pointer; margin:12px 16px;
+    transition:background .15s;
+  }
+  .add-row-btn:hover { background:var(--accent-hover); }
+
+  /* CLIN section */
+  .clin-block { border-bottom:1px solid var(--border); }
+  .clin-block:last-child { border-bottom:none; }
+  .clin-hdr {
+    padding:10px 16px; background:var(--surface-2); font-size:13px;
+    font-weight:700; color:var(--accent); display:flex;
+    justify-content:space-between; align-items:center; cursor:pointer;
+    border-bottom:1px solid var(--border);
+  }
+  .clin-body { padding:0; }
+  .clin-table { width:100%; border-collapse:collapse; font-size:12px; }
+  .clin-table thead th { padding:9px 14px; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.4px; color:var(--text-dim); border-bottom:1px solid var(--border); text-align:left; background:var(--surface-2); }
+  .clin-table tbody td { padding:9px 14px; border-bottom:1px solid var(--border); color:var(--text-dim); }
+  .clin-table tbody tr:last-child td { border-bottom:none; }
+  .pkg-req-row td { background:var(--surface); padding:12px 14px; vertical-align:top; }
+  .pkg-req-label { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-faint); margin-bottom:6px; }
+  /* Packaging requirements — spaced out, not squished */
+  .pkg-req-text {
+    font-size:12px; color:var(--text-dim); line-height:1.8;
+    max-width:100%;
+  }
+  .pkg-req-text p { margin-bottom:8px; }
+  .pkg-req-text p:last-child { margin-bottom:0; }
+
+  /* ── PRICE SHEET MODAL ── */
+  /* ── PRICE SHEET — slide-in side panel inside RFQ panel ── */
+  .price-sheet {
+    width:0; overflow:hidden; flex-shrink:0;
+    border-left:0px solid var(--border); background:var(--surface);
+    transition:width .28s cubic-bezier(0.4,0,0.2,1), border-left-width .28s ease;
+    display:flex; flex-direction:column;
+  }
+  .panel.ps-on .price-sheet {
+    width:380px; border-left-width:1px; overflow-y:auto;
+  }
+  .ps-inner {
+    width:380px; min-width:380px; padding:20px 22px 28px; flex-shrink:0;
+  }
+  .ps-inner-title { font-size:13px; font-weight:800; color:var(--text); margin-bottom:2px; }
+  .ps-inner-sub { font-size:11px; color:var(--text-muted); margin-bottom:16px; }
+  .ps-section-lbl {
+    font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:0.8px;
+    color:var(--text-faint); margin:12px 0 7px; display:block;
+  }
+  .ps-group { display:flex; flex-direction:column; gap:4px; margin-bottom:10px; }
+  .ps-group label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; color:var(--text-faint); }
+  .ps-group input {
+    width:100%; font-family:'Source Code Pro',monospace; font-size:12.5px; font-weight:500;
+    padding:7px 10px; border:1px solid var(--border); border-radius:6px;
+    background:var(--surface); color:var(--text); outline:none; transition:border-color .15s;
+  }
+  .ps-group input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(37,99,235,0.08); }
+  .ps-group input.computed { background:var(--surface-2); color:var(--text-muted); cursor:default; }
+  .ps-group input.val-blue { background:var(--accent-bg); border-color:var(--accent-border); color:var(--accent); font-weight:700; }
+  .ps-group input.val-green { background:var(--green-bg); border-color:var(--green-border); color:var(--green); font-weight:700; }
+  .ps-inner hr { border:none; border-top:1px solid var(--border); margin:14px 0; }
+  .ps-footer { display:flex; gap:8px; margin-top:16px; padding-top:14px; border-top:1px solid var(--border); }
+  .ps-footer .ps-cancel {
+    flex:1; font-family:'Manrope',sans-serif; font-size:11.5px; font-weight:700;
+    padding:8px; border-radius:7px; border:1px solid var(--red-border);
+    background:var(--surface); color:var(--red); cursor:pointer; transition:all .15s;
+  }
+  .ps-footer .ps-cancel:hover { background:var(--red-bg); }
+  .ps-footer .ps-save {
+    flex:2; font-family:'Manrope',sans-serif; font-size:11.5px; font-weight:700;
+    padding:8px; border-radius:7px; border:none;
+    background:var(--accent); color:#fff; cursor:pointer; transition:background .15s;
+  }
+  .ps-footer .ps-save:hover { background:var(--accent-hover); }
+
+  @media(max-width:900px) {
+    .sidebar { display:none; }
+    .main { margin-left:0; padding:16px; }
+    .filter-grid, .filter-grid-2, .filter-grid-3 { grid-template-columns:1fr 1fr; }
+    .panel { width:100%; }
+  }
+
+
+/* ─── ACCOUNT PANEL STYLES ─── */
+
+:root{--bg:#F8FAFC;--surface:#fff;--surface-2:#F1F5F9;--border:#E2E8F0;--border-strong:#CBD5E1;--text:#1E293B;--text-dim:#475569;--text-muted:#6B7280;--text-faint:#94A3B8;--accent:#2563EB;--accent-bg:#EFF6FF;--accent-border:#BFDBFE;--accent-hover:#1D4ED8;--green:#16A34A;--green-bg:#F0FDF4;--green-border:#BBF7D0;--amber:#D97706;--amber-bg:#FFF7ED;--amber-border:#FDE68A;--red:#DC2626;--red-bg:#FEF2F2;--red-border:#FECACA}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);font-size:13px}
+
+/* ─── TOPBAR ─── */
+.topbar{height:56px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.topbar-left{display:flex;align-items:center;gap:16px}.topbar-logo{height:30px}
+.bc{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-muted)}.bc a{color:var(--text-muted);font-weight:500;text-decoration:none}.bc a:hover{color:var(--accent)}.bc .sep{color:var(--border-strong)}.bc .cur{color:var(--text-dim);font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.tib{width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-muted);transition:all .15s}.tib:hover{background:var(--surface-2);border-color:var(--border-strong)}
+
+/* AVATAR BUTTON */
+.avatar-btn{width:36px;height:36px;border-radius:9px;border:2px solid var(--border);background:linear-gradient(135deg,var(--accent),#1D4ED8);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;cursor:pointer;overflow:hidden;padding:0;transition:all .15s;position:relative}
+.avatar-btn:hover{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.avatar-btn.panel-open{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.avatar-btn img{width:100%;height:100%;object-fit:cover;display:none}.avatar-btn img.loaded{display:block}.avatar-btn .initials{line-height:1}
+
+/* ─── SIDEBAR ─── */
+.nav-sb{width:224px;position:fixed;top:56px;left:0;bottom:0;background:var(--surface);border-right:1px solid var(--border);padding:14px 0;overflow-y:auto;z-index:90}
+.sb-lbl{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--text-faint);padding:12px 20px 4px}
+.sb-a{display:flex;align-items:center;gap:10px;padding:8px 20px;font-size:12.5px;font-weight:500;color:var(--text-dim);text-decoration:none;border-left:3px solid transparent;transition:all .15s}.sb-a:hover{background:var(--accent-bg);color:var(--accent)}.sb-a.active{color:var(--accent);font-weight:700;border-left-color:var(--accent);background:var(--accent-bg)}.sb-a svg{width:16px;height:16px;flex-shrink:0;opacity:.8}
+.sb-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:10px}
+.sb-divider{height:1px;background:var(--border);margin:10px 20px}
+.sb-logout{display:flex;align-items:center;gap:10px;padding:8px 20px;font-size:12.5px;font-weight:500;color:var(--red);text-decoration:none;border-left:3px solid transparent;cursor:pointer;transition:all .15s;background:none;border-top:none;border-right:none;border-bottom:none;width:100%;font-family:'Manrope',sans-serif}.sb-logout:hover{background:var(--red-bg)}.sb-logout svg{width:16px;height:16px;flex-shrink:0}
+
+/* ─── MAIN ─── */
+.main{margin-left:224px;padding:28px;min-height:calc(100vh - 56px)}
+.demo-notice{background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:10px;padding:20px 24px;text-align:center;color:var(--accent);font-weight:600;font-size:13px;margin-bottom:20px}
+.demo-notice p{margin-top:6px;font-size:12px;font-weight:400;color:var(--text-muted)}
+
+/* ─── ACCOUNT PANEL OVERLAY ─── */
+.ap-overlay{position:fixed;inset:0;background:rgba(15,23,42,.35);z-index:1000;opacity:0;pointer-events:none;transition:opacity .25s}
+.ap-overlay.open{opacity:1;pointer-events:all}
+
+/* ─── ACCOUNT PANEL ─── */
+.ap{position:fixed;top:0;right:0;bottom:0;width:380px;background:var(--surface);border-left:1px solid var(--border);z-index:1100;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);box-shadow:-8px 0 40px rgba(0,0,0,.12)}
+.ap.open{transform:translateX(0)}
+
+/* PANEL HEADER */
+.ap-hdr{padding:18px 20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.ap-hdr-left{display:flex;align-items:center;gap:12px}
+.ap-avatar-wrap{position:relative;cursor:pointer}
+.ap-avatar{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#1D4ED8);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;overflow:hidden;border:2px solid var(--border)}
+.ap-avatar img{width:100%;height:100%;object-fit:cover;display:none}.ap-avatar img.loaded{display:block}
+.ap-avatar-edit{position:absolute;bottom:-4px;right:-4px;width:20px;height:20px;border-radius:50%;background:var(--accent);border:2px solid var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.ap-avatar-edit svg{color:#fff}
+.ap-name{font-size:14px;font-weight:800;color:var(--text)}
+.ap-email{font-size:11.5px;color:var(--text-muted);margin-top:1px}
+.ap-close{width:30px;height:30px;border:none;background:var(--surface-2);border-radius:7px;cursor:pointer;color:var(--text-muted);display:flex;align-items:center;justify-content:center;flex-shrink:0}.ap-close:hover{background:var(--border);color:var(--text)}
+
+/* PANEL BODY */
+.ap-body{flex:1;overflow-y:auto;padding:8px 0}
+
+/* ACCORDION */
+.acc-item{border-bottom:1px solid var(--border)}
+.acc-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:none;border:none;font-family:'Manrope',sans-serif;cursor:pointer;gap:12px;transition:background .15s}.acc-trigger:hover{background:var(--surface-2)}
+.acc-trigger-left{display:flex;align-items:center;gap:10px}
+.acc-ico{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.acc-ico.blue{background:var(--accent-bg)}.acc-ico.green{background:var(--green-bg)}.acc-ico.amber{background:var(--amber-bg)}.acc-ico.purple{background:#F5F3FF}.acc-ico.red{background:var(--red-bg)}
+.acc-label{font-size:13px;font-weight:700;color:var(--text);text-align:left}
+.acc-sub{font-size:11px;color:var(--text-faint);margin-top:1px;text-align:left}
+.acc-chevron{color:var(--text-faint);transition:transform .2s;flex-shrink:0}
+.acc-trigger.open .acc-chevron{transform:rotate(180deg)}
+.acc-body{display:none;padding:0 20px 18px}.acc-body.open{display:block}
+
+/* FORM FIELDS */
+.field{margin-bottom:14px}.field:last-of-type{margin-bottom:0}
+.field-label{font-size:11px;font-weight:700;color:var(--text-dim);display:block;margin-bottom:5px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fi{width:100%;font-family:'Manrope',sans-serif;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;transition:all .15s}.fi:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.08)}.fi::placeholder{color:var(--text-faint)}
+.fi-wrap{position:relative}.fi-wrap .fi{padding-right:38px}
+.fi-eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-faint);display:flex;align-items:center}.fi-eye:hover{color:var(--text-dim)}
+
+/* PHOTO UPLOAD */
+.photo-upload{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.photo-preview{width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#1D4ED8);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;overflow:hidden;border:2px solid var(--border);flex-shrink:0}
+.photo-preview img{width:100%;height:100%;object-fit:cover;display:none}.photo-preview img.loaded{display:block}
+.photo-actions{display:flex;flex-direction:column;gap:6px}
+.btn-upload{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:7px 14px;border-radius:7px;border:1.5px solid var(--accent-border);background:var(--accent-bg);color:var(--accent);cursor:pointer;transition:all .15s}.btn-upload:hover{background:var(--accent);color:#fff}
+.btn-remove-photo{font-family:'Manrope',sans-serif;font-size:11.5px;font-weight:600;padding:5px 14px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer}.btn-remove-photo:hover{background:var(--red-bg);color:var(--red);border-color:var(--red-border)}
+.photo-hint{font-size:10.5px;color:var(--text-faint);line-height:1.5;margin-top:2px}
+input[type=file]{display:none}
+
+/* SAVE BUTTON */
+.btn-save{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:9px 20px;border-radius:8px;border:none;background:var(--accent);color:#fff;cursor:pointer;transition:background .15s;margin-top:16px;width:100%}.btn-save:hover{background:var(--accent-hover)}
+.btn-save.success{background:var(--green)}
+
+/* PASSWORD RESET SECTION */
+.pw-reset-box{background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:16px;margin-bottom:4px}
+.pw-reset-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+.pw-reset-sub{font-size:12px;color:var(--text-muted);line-height:1.6;margin-bottom:14px}
+.btn-send-reset{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:9px 18px;border-radius:8px;border:1.5px solid var(--accent-border);background:var(--accent-bg);color:var(--accent);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:7px;width:100%;justify-content:center}.btn-send-reset:hover{background:var(--accent);color:#fff}
+.pw-sent-state{display:none;text-align:center;padding:12px}
+.pw-sent-state.show{display:block}
+.pw-sent-ico{width:40px;height:40px;border-radius:50%;background:var(--green-bg);border:2px solid var(--green-border);display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.pw-sent-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+.pw-sent-sub{font-size:11.5px;color:var(--text-muted);line-height:1.6}
+
+/* SUBSCRIPTION SUMMARY */
+.sub-summary{background:linear-gradient(135deg,#1E3A5F,#2563EB);border-radius:9px;padding:14px 16px;margin-bottom:14px}
+.sub-plan{font-size:15px;font-weight:800;color:#fff;margin-bottom:2px}
+.sub-price{font-size:12px;color:rgba(255,255,255,.7);margin-bottom:10px}
+.sub-renews{font-size:11px;color:rgba(255,255,255,.55)}
+.sub-renews strong{color:rgba(255,255,255,.85)}
+.sub-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.sub-stat{background:var(--surface-2);border:1px solid var(--border);border-radius:7px;padding:10px 12px}
+.sub-stat-n{font-family:'Source Code Pro',monospace;font-size:17px;font-weight:700;color:var(--text)}
+.sub-stat-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--text-faint);margin-top:1px}
+.btn-manage-sub{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:9px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;width:100%;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px}.btn-manage-sub:hover{background:var(--surface-2);border-color:var(--border-strong)}
+
+/* FSC SHORTCUT */
+.fsc-shortcut{background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:14px 16px;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.fsc-sc-left .fsc-sc-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
+.fsc-sc-left .fsc-sc-sub{font-size:11.5px;color:var(--text-muted);line-height:1.5}
+.fsc-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;margin-bottom:4px}
+.fsc-chip{font-family:'Source Code Pro',monospace;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:var(--accent-bg);border:1px solid var(--accent-border);color:var(--accent)}
+.btn-edit-fsc{font-family:'Manrope',sans-serif;font-size:11.5px;font-weight:700;padding:7px 14px;border-radius:7px;border:1.5px solid var(--accent-border);background:var(--accent-bg);color:var(--accent);cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s}.btn-edit-fsc:hover{background:var(--accent);color:#fff}
+
+/* LOGOUT */
+.logout-zone{padding:4px 0}
+.btn-logout{font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:12px 20px;border:none;background:transparent;color:var(--red);cursor:pointer;width:100%;text-align:left;display:flex;align-items:center;gap:10px;transition:all .15s}.btn-logout:hover{background:var(--red-bg)}
+
+/* PANEL FOOTER */
+.ap-footer{padding:14px 20px;border-top:1px solid var(--border);flex-shrink:0}
+.ap-footer-txt{font-size:10.5px;color:var(--text-faint);text-align:center;line-height:1.5}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:#1E293B;color:#fff;font-size:12.5px;font-weight:600;padding:12px 18px;border-radius:10px;display:flex;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(0,0,0,.2);opacity:0;transition:opacity .2s;pointer-events:none;z-index:1200}
+.toast.show{opacity:1}
+
+
+.avatar-btn {
+  width:34px; height:34px; border-radius:8px;
+  border:2px solid var(--border);
+  background:linear-gradient(135deg, #1B2A4A 0%, #2563EB 100%);
+  color:#fff; display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:700; cursor:pointer; letter-spacing:0.5px;
+  transition:all .15s; padding:0; font-family:'Manrope',sans-serif;
+}
+.avatar-btn:hover { border-color:var(--accent); box-shadow:0 0 0 3px rgba(37,99,235,.15); }
+.avatar-btn.panel-open { border-color:var(--accent); box-shadow:0 0 0 3px rgba(37,99,235,.15); }
+
+
+
+
+/* ═══ MODE SWITCHER — white topbar ═══ */
+.topbar {
+  background: #FFFFFF !important;
+  border-bottom: 2px solid var(--border) !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+}
+.topbar-divider { background: var(--border) !important; }
+.breadcrumb, .breadcrumb a { color: var(--text-muted) !important; }
+.breadcrumb a:hover { color: var(--accent) !important; }
+.topbar-icon-btn {
+  border-color: var(--border) !important;
+  background: var(--surface) !important;
+  color: var(--text-muted) !important;
+}
+.topbar-icon-btn:hover {
+  background: var(--surface-2) !important;
+  color: var(--accent) !important;
+  border-color: var(--accent-border) !important;
+}
+.mode-switcher {
+  display: flex; align-items: center;
+  background: var(--surface-2);
+  border: 1.5px solid var(--border-strong);
+  border-radius: 9px; padding: 3px; gap: 3px;
+}
+.mode-btn {
+  font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 700;
+  padding: 6px 14px; border-radius: 6px; border: none; cursor: pointer;
+  display: flex; align-items: center; gap: 7px; white-space: nowrap;
+  transition: all .2s; line-height: 1;
+}
+.mode-btn.inactive { background: transparent; color: var(--text-muted); }
+.mode-btn.inactive:hover { background: var(--surface-3); color: var(--text-dim); }
+.mode-btn.active-member { background: #1B2A4A; color: #fff; box-shadow: 0 1px 4px rgba(27,42,74,0.3); }
+.mode-btn.active-supplier { background: #16A34A; color: #fff; box-shadow: 0 1px 4px rgba(22,163,74,0.35); }
+.mode-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; display: inline-block; }
+.mode-btn.inactive .mode-dot.blue { background: #2563EB; }
+.mode-btn.inactive .mode-dot.green { background: #16A34A; }
+.mode-btn.active-member .mode-dot,
+.mode-btn.active-supplier .mode-dot { background: rgba(255,255,255,0.6); }
+
+
+  /* ── PLAN BADGE ── */
+  .plan-badge { display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:800;padding:4px 12px;border-radius:20px;letter-spacing:.3px;flex-shrink:0; }
+  .plan-badge.pro { background:#EFF6FF;color:#2563EB;border:1px solid #BFDBFE; }
+
+  /* ── SIDEBAR LOCKED ITEMS ── */
+  .sidebar-item.sb-locked-click { opacity:.65;cursor:pointer; }
+  .sidebar-item.sb-locked-click:hover { background:var(--surface-2);color:var(--text-dim); }
+  .lock-pip { margin-left:auto;font-size:9px;font-weight:800;padding:2px 6px;border-radius:8px;white-space:nowrap; }
+  .lock-pip.gold { background:#FFF7ED;color:#D97706;border:1px solid #FDE68A; }
+  .lock-pip.maxx { background:#F5F3FF;color:#7C3AED;border:1px solid #DDD6FE; }
+
+  /* ── UPGRADE MODAL ── */
+  .upgrade-backdrop { display:none;position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:9000;align-items:center;justify-content:center; }
+  .upgrade-backdrop.open { display:flex; }
+  .upgrade-box { background:var(--surface);border-radius:16px;width:440px;max-width:calc(100vw - 32px);box-shadow:0 24px 64px rgba(0,0,0,.18);border:1px solid var(--border);overflow:hidden; }
+  .upgrade-box-hdr { padding:22px 24px 18px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between; }
+  .upgrade-box-hdr h3 { font-size:16px;font-weight:900;color:var(--text);margin-bottom:4px; }
+  .upgrade-box-hdr p  { font-size:12.5px;color:var(--text-muted);line-height:1.5; }
+  .upgrade-box-close { background:none;border:none;cursor:pointer;color:var(--text-faint);font-size:18px;padding:2px 6px;border-radius:5px;line-height:1;flex-shrink:0;margin-left:12px; }
+  .upgrade-box-close:hover { background:var(--surface-2);color:var(--text); }
+  .upgrade-features { padding:18px 24px; }
+  .upgrade-features ul { list-style:none;display:flex;flex-direction:column;gap:9px; }
+  .upgrade-features li { display:flex;align-items:center;gap:10px;font-size:12.5px;font-weight:500;color:var(--text-dim); }
+  .upgrade-features li svg { color:var(--green);flex-shrink:0; }
+  .upgrade-box-footer { padding:14px 24px 20px;display:flex;gap:10px; }
+  .upgrade-cta { flex:1;font-family:'Manrope',sans-serif;font-size:13px;font-weight:800;padding:11px 20px;border-radius:9px;border:none;cursor:pointer;color:#fff;transition:opacity .15s; }
+  .upgrade-cta:hover { opacity:.9; }
+  .upgrade-cta.gold { background:#D97706; }
+  .upgrade-cta.maxx { background:#7C3AED; }
+  .upgrade-cancel { font-family:'Manrope',sans-serif;font-size:12.5px;font-weight:600;padding:11px 18px;border-radius:9px;border:1px solid var(--border);background:var(--surface);color:var(--text-dim);cursor:pointer; }
+  .upgrade-cancel:hover { background:var(--surface-2); }
+
+  
+  /* ── FSC AUTOCOMPLETE ── */
+  .fsc-ac-wrap { position:relative; }
+  .fsc-ac-input { width:100%;box-sizing:border-box; }
+  .fsc-drop { display:none;position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.10);z-index:500;overflow:hidden;margin-top:3px; }
+  .fsc-drop.open { display:block; }
+  .fsc-opt { padding:8px 12px;font-size:12.5px;font-weight:500;color:var(--text-dim);cursor:pointer;display:flex;align-items:center;gap:8px; }
+  .fsc-opt:hover { background:var(--accent-bg);color:var(--accent); }
+  .fsc-opt b { color:var(--accent); }
+  .fsc-opt-desc { font-size:11px;color:var(--text-faint);margin-left:auto; }
+
+  /* ── ARCHIVE MODE ── */
+  .row-cb { width:15px;height:15px;cursor:pointer;accent-color:var(--amber);flex-shrink:0; }
+  .first-col { width:28px;text-align:center;vertical-align:middle; }
+  body.archive-mode .row-cb { display:inline-block !important; }
+  body.archive-mode #selectAll { display:inline-block !important; }
+  body.archive-mode .star-btn { display:none !important; }
+  body.archive-mode #archiveBtn { background:var(--amber);color:#fff;border-color:var(--amber); }
+  body.archive-mode #archiveBtn::after { content:' (Confirm)'; }
+  tr.row-archiving { animation:fadeArchive .4s forwards; }
+  @keyframes fadeArchive { to { opacity:0;transform:translateX(12px); } }
+
+  /* ── STAR (NSN Watch) ── */
+  .star-btn { color:var(--border);font-size:15px;cursor:pointer;background:none;border:none;padding:0;transition:color .15s; }
+  .star-btn.filled { color:var(--amber); }
+  .star-btn:hover { color:var(--amber); }
+  .star-btn.gold-locked { color:var(--border);cursor:pointer; }
+  .star-btn.gold-locked:hover { color:#D97706; }
+
+  
+  /* Meta field row — display + edit button */
+  .meta-field-row { display:flex; align-items:center; gap:5px; min-height:20px; }
+  .meta-display { font-size:12.5px; font-weight:600; color:var(--text-dim); font-family:'Source Code Pro',monospace; }
+  .meta-display.has-value { color:var(--accent); font-weight:700; }
+  .meta-edit-btn {
+    flex-shrink:0; width:22px; height:22px; border-radius:5px;
+    border:1px solid var(--border); background:var(--surface-2);
+    color:var(--text-muted); cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center;
+    transition:all .15s; padding:0;
+  }
+  .meta-edit-btn:hover { background:var(--accent-bg); border-color:var(--accent-border); color:var(--accent); }
+
+  /* ── SIDEBAR LOCK PIPS + TOUR BUTTON ── */
+  .sidebar-lock-pip { margin-left:auto; font-size:9px; font-weight:800; padding:2px 6px; border-radius:8px; white-space:nowrap; }
+  .sidebar-lock-pip.gold { background:#FFF7ED; color:#D97706; border:1px solid #FDE68A; }
+  .sidebar-lock-pip.pro  { background:var(--accent-bg); color:var(--accent); border:1px solid var(--accent-border); }
+  .sb-tour-btn { width:100%; font-family:'Manrope',sans-serif; display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px; border:1.5px solid #E2E8F0; background:#F8FAFC; cursor:pointer; transition:all .15s; text-align:left; }
+  .sb-tour-btn:hover { background:#fff; border-color:#CBD5E1; box-shadow:0 2px 8px rgba(0,0,0,.06); }
+  .sb-tour-ico { width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .sb-tour-ico svg { width:15px; height:15px; }
+  .sb-tour-label { font-size:12px; font-weight:800; color:#334155; }
+  .sb-tour-sub { font-size:10.5px; color:#94A3B8; margin-top:1px; }
+</style>
+</head>
+<body>
+
+
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-left">
+    <a href="dashboard.html">
+      <img src="https://govscraper.com/assets/BigLogo-7gv5uAxF.png" alt="GovScraper" class="topbar-logo" onerror="this.style.display='none'">
+    </a>
+    <div class="topbar-divider"></div>
+    <div class="mode-switcher">
+      <button class="mode-btn active-member" onclick="setMode('member')">
+        <span class="mode-dot blue"></span>
+        Member Portal
+      </button>
+      <button class="mode-btn inactive" onclick="setMode('supplier')">
+        <span class="mode-dot green"></span>
+        Supplier Portal
+      </button>
+    </div>
+    <div class="topbar-divider"></div>
+    <div class="breadcrumb">
+      <a href="dashboard.html">Dashboard</a>
+      <span class="sep">›</span>
+      My RFQs
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-icon-btn" title="Notifications">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+    </div>
+    <div class="avatar" title="Account">JD</div>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+
+  <div class="sidebar-label">Main</div>
+  <a class="sidebar-item" href="dashboard.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    Dashboard
+  </a>
+  <a class="sidebar-item active" href="rfq-listing.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+    My RFQs <span class="sidebar-badge">47</span>
+  </a>
+
+  <div class="sidebar-label">Intelligence</div>
+  <a class="sidebar-item" href="nsn-search.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    NSN Search
+  </a>
+  <a class="sidebar-item" href="cage-search.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+    CAGE Search
+  </a>
+  <a class="sidebar-item" href="fsc-lookup.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+    FSC Lookup
+  </a>
+
+  <div class="sidebar-label">Results</div>
+  <a class="sidebar-item" href="awarded-contracts.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+    Awarded Contracts
+  </a>
+  <a class="sidebar-item" href="nsn-watchlist.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    NSN Watch List
+  </a>
+  <a class="sidebar-item" href="archived.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+    Archived
+  </a>
+  <a class="sidebar-item" href="rfq-alerts.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+    RFQ Alerts
+  </a>
+
+  <div class="sidebar-label">Account</div>
+  <a class="sidebar-item" href="account.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    Account
+  </a>
+
+  <div class="sidebar-spacer"></div>
+</nav>
+
+
+<!-- MAIN -->
+<main class="main">
+
+  <div class="page-header">
+    <h1>My RFQs</h1>
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-ghost btn-sm">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export
+      </button>
+      <button class="btn btn-amber btn-sm" id="archiveBtn" onclick="toggleArchiveMode()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21,8 21,21 3,21 3,8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+        Archive Selected
+      </button>
+    </div>
+  </div>
+
+  <!-- ── STATS BAR (matches screenshot) ── -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <span class="stat-num blue">138</span>
+      <span class="stat-lbl">Total RFQs</span>
+    </div>
+    <div class="stat-pipe"></div>
+    <div class="stat-item">
+      <span class="stat-num default">72</span>
+      <span class="stat-lbl">New</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num amber">9</span>
+      <span class="stat-lbl">Sourcing</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num green">3</span>
+      <span class="stat-lbl">Ready to Bid</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num purple">5</span>
+      <span class="stat-lbl">Bid Complete</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num gray">49</span>
+      <span class="stat-lbl">No Bid</span>
+    </div>
+    <div class="stat-pipe"></div>
+    <div class="stat-item">
+      <span class="stat-num red">6</span>
+      <span class="stat-lbl">Expiring ≤3 days</span>
+    </div>
+  </div>
+
+  <!-- ── FILTERS ── -->
+  <div class="filter-panel">
+
+    <!-- ROW 1: Status, FSC, Set Aside, Solicitation #, NSN -->
+    <div class="filter-grid">
+      <div class="fg"><label>Status</label><select><option>All Statuses</option><option>New Opportunity</option><option>Will Source</option><option>Currently Sourcing</option><option>Vendor Pricing Received</option><option>Ready to Bid</option><option>Bid Complete</option><option>Trace</option><option>Award Won</option><option>Award Lost</option><option>No Bid</option></select></div>
+      <div class="fg fsc-ac-wrap"><label>FSC</label>
+        <input id="fscInput" class="fsc-ac-input" placeholder="e.g. 5306" autocomplete="off" oninput="fscFilter(this.value)" onfocus="fscFilter(this.value)" onblur="setTimeout(()=>hideFscDrop(),180)">
+        <div class="fsc-drop" id="fscDrop"></div>
+      </div>
+      <div class="fg"><label>Set Aside</label><select><option>All Set-Asides</option><option>Small Business (SB)</option><option>SDVOSB</option><option>HUBZone</option><option>WOSB</option><option>Unrestricted</option></select></div>
+      <div class="fg"><label>Solicitation #</label><input placeholder="SPE4A6-…"></div>
+      <div class="fg"><label>NSN Number</label><input placeholder="5306-01-…"></div>
+    </div>
+
+    <!-- ROW 2: Part #, Description, CAGEs, Packaging, Tech Docs -->
+    <div class="filter-grid-2">
+      <div class="fg"><label>Part Number</label><input placeholder="Search…"></div>
+      <div class="fg"><label>Description</label><input placeholder="Search…"></div>
+      <div class="fg"><label>CAGEs</label><input placeholder="Search…"></div>
+      <div class="fg"><label>Packaging</label><select><option>All</option><option>MIL-STD-2073</option><option>ASTM</option></select></div>
+      <div class="fg"><label>Tech Docs</label><select><option>All</option><option>Required</option><option>Not Required</option></select></div>
+    </div>
+
+    <!-- ROW 3: Award Min/Max, ID, ⭐ Watchlist (GOLD), placeholders, actions -->
+    <div class="filter-grid-3">
+      <div class="fg"><label>Award Min ($)</label><input placeholder="0"></div>
+      <div class="fg"><label>Award Max ($)</label><input placeholder="Any"></div>
+      <div class="fg"><label>ID Number</label><input placeholder="Search…"></div>
+
+      <!-- ⭐ Watchlist — GOLD feature -->
+      <div class="fg fg-gold" title="NSN Watch List is a GOLD feature">
+        <label>⭐ Watchlist Match</label>
+        <select disabled onclick="showUpgrade('gold');return false;" style="cursor:pointer;">
+          <option>— Upgrade to GOLD —</option>
+          <option>On My Watch List</option>
+          <option>Not on Watch List</option>
+        </select>
+      </div>
+
+      <!-- Placeholder slot -->
+      <div class="fg fg-placeholder">
+        <label>— Coming Soon —</label>
+        <input placeholder="Future Filter" disabled>
+      </div>
+    </div>
+
+    <!-- Action buttons row -->
+    <div style="display:flex;justify-content:flex-end;gap:6px;margin-top:10px;">
+      <button class="btn btn-ghost btn-sm">Clear</button>
+      <button class="btn btn-accent btn-sm">Save Search</button>
+      <button class="btn btn-primary btn-sm">Apply</button>
+    </div>
+
+  </div>
+
+  <!-- ── TABLE ── -->
+  <div class="tbl-wrap">
+    <div class="tbl-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th class="cb-col" style="width:28px;"><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)" style="display:none"></th>
+            <th class="sortable">Issue Date <span class="sort-arrow">↕</span></th>
+            <th>Status</th>
+            <th>ID Number</th>
+            <th class="sortable">Solicitation # <span class="sort-arrow">↕</span></th>
+            <th class="sortable">A.A.A. <span class="sort-arrow">↕</span></th>
+            <th>FSC</th>
+            <th>Part Number</th>
+            <th>Description</th>
+            <th>CAGEs</th>
+            <th>Packaging</th>
+            <th class="sortable">Due Date <span class="sort-arrow">↕</span></th>
+            <th>Set Aside</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr onclick="openPanel()">
+            <td class="first-col">
+              <input type="checkbox" class="row-cb" style="display:none" onclick="event.stopPropagation()">
+              <button class="star-btn filled" onclick="event.stopPropagation();handleStar(this)">★</button>
+            </td>
+            <td>02/04/2026</td>
+            <td><span class="status-tag st-ready"><span class="dot"></span>Ready to Bid</span></td>
+            <td><span class="id-link">XSVKS2W7</span></td>
+            <td class="sol-num">SPE4A6-26-Q-0537</td>
+            <td><span class="aaa-val unknown">Unknown</span></td>
+            <td class="fsc-cell">5306</td>
+            <td class="pn-cell">ST2015-020</td>
+            <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;">BOLT, MACHINE</td>
+            <td><span class="cage-list">0UCY9, 526…</span></td>
+            <td><span class="pkg-cell">MIL-STD-2073</span></td>
+            <td><span class="due-normal">02/11/2026</span></td>
+            <td><span class="sa-tag sa-sb">SB</span></td>
+          </tr>
+          <tr onclick="openPanel()">
+            <td class="first-col">
+              <input type="checkbox" class="row-cb" style="display:none" onclick="event.stopPropagation()">
+              <button class="star-btn" onclick="event.stopPropagation();handleStar(this)">☆</button>
+            </td>
+            <td>02/04/2026</td>
+            <td><span class="status-tag st-new"><span class="dot"></span>New Opportunity</span></td>
+            <td><span class="id-link">0XF576S8</span></td>
+            <td class="sol-num">SPE4A6-26-T-626K</td>
+            <td><span class="aaa-val green">$612.18</span></td>
+            <td class="fsc-cell">5306</td>
+            <td class="pn-cell">ST3M735-4-…</td>
+            <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;">BOLT, CLOSE TOLERANCE</td>
+            <td><span class="cage-list">0UCY9, 763…</span></td>
+            <td><span class="pkg-cell">MIL-STD-2073</span></td>
+            <td><span class="due-normal">02/11/2026</span></td>
+            <td><span class="sa-tag sa-un">UN</span></td>
+          </tr>
+          <tr onclick="openPanel()">
+            <td class="first-col">
+              <input type="checkbox" class="row-cb" style="display:none" onclick="event.stopPropagation()">
+              <button class="star-btn" onclick="event.stopPropagation();handleStar(this)">☆</button>
+            </td>
+            <td>02/04/2026</td>
+            <td><span class="status-tag st-new"><span class="dot"></span>New Opportunity</span></td>
+            <td><span class="id-link">QDIIEIHS</span></td>
+            <td class="sol-num">SPE4A6-26-T-627Y</td>
+            <td><span class="aaa-val green">$13,697.25</span></td>
+            <td class="fsc-cell">Multi</td>
+            <td class="pn-cell">Multi</td>
+            <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;">BOLT, INTERNAL WRENCHING</td>
+            <td><span class="cage-list">0UCY9, 974…</span></td>
+            <td><span class="pkg-cell">MIL-STD-2073</span></td>
+            <td><span class="due-normal">02/11/2026</span></td>
+            <td><span class="sa-tag sa-sb">SB</span></td>
+          </tr>
+          <tr onclick="openPanel()">
+            <td class="first-col">
+              <input type="checkbox" class="row-cb" style="display:none" onclick="event.stopPropagation()">
+              <button class="star-btn" onclick="event.stopPropagation();handleStar(this)">☆</button>
+            </td>
+            <td>01/30/2026</td>
+            <td><span class="status-tag st-new"><span class="dot"></span>New Opportunity</span></td>
+            <td><span class="id-link">0CCSQUFC</span></td>
+            <td class="sol-num">SPE4A1-26-T-1302</td>
+            <td><span class="aaa-val unknown">Unknown</span></td>
+            <td class="fsc-cell">5306</td>
+            <td class="pn-cell">ST1411-20</td>
+            <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;">BOLT, MACHINE</td>
+            <td><span class="cage-list">0UCY9, 526…</span></td>
+            <td><span class="pkg-cell">MIL-STD-2073</span></td>
+            <td><span class="due-red">02/06/2026</span></td>
+            <td><span class="sa-tag sa-un">UN</span></td>
+          </tr>
+          <tr onclick="openPanel()">
+            <td class="first-col">
+              <input type="checkbox" class="row-cb" style="display:none" onclick="event.stopPropagation()">
+              <button class="star-btn" onclick="event.stopPropagation();handleStar(this)">☆</button>
+            </td>
+            <td>01/30/2026</td>
+            <td><span class="status-tag st-new"><span class="dot"></span>New Opportunity</span></td>
+            <td><span class="id-link">NASR3YX7</span></td>
+            <td class="sol-num">SPE4A6-26-T-612Z</td>
+            <td><span class="aaa-val green">$4,790.85</span></td>
+            <td class="fsc-cell">5306</td>
+            <td class="pn-cell">SS5211-4H12</td>
+            <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;">BOLT, SHEAR</td>
+            <td><span class="cage-list">78286, 9221…</span></td>
+            <td><span class="pkg-cell">MIL-STD-2073</span></td>
+            <td><span class="due-red">02/06/2026</span></td>
+            <td><span class="sa-tag sa-un">UN</span></td>
+          </tr>
+          <tr onclick="openPanel()">
+            <td class="first-col">
+              <input type="checkbox" class="row-cb" style="display:none" onclick="event.stopPropagation()">
+              <button class="star-btn" onclick="event.stopPropagation();handleStar(this)">☆</button>
+            </td>
+            <td>01/29/2026</td>
+            <td><span class="status-tag st-new"><span class="dot"></span>New Opportunity</span></td>
+            <td><span class="id-link">JLH606WX</span></td>
+            <td class="sol-num">SPE4A1-26-T-1298</td>
+            <td><span class="aaa-val unknown">Unknown</span></td>
+            <td class="fsc-cell">5306</td>
+            <td class="pn-cell">70209-2701…</td>
+            <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;">BOLT, SHEAR</td>
+            <td><span class="cage-na">Not Available</span></td>
+            <td><span class="pkg-cell">MIL-STD-2073</span></td>
+            <td><span class="due-red">02/05/2026</span></td>
+            <td><span class="sa-tag sa-sdvosb">SDVOSB</span></td>
+          </tr>
+          <tr onclick="openPanel()">
+            <td class="first-col">
+              <input type="checkbox" class="row-cb" style="display:none" onclick="event.stopPropagation()">
+              <button class="star-btn" onclick="event.stopPropagation();handleStar(this)">☆</button>
+            </td>
+            <td>01/28/2026</td>
+            <td><span class="status-tag st-new"><span class="dot"></span>New Opportunity</span></td>
+            <td><span class="id-link">GCW7NNZ5</span></td>
+            <td class="sol-num">SPE4A6-26-U-1324</td>
+            <td><span class="aaa-val unknown">Unknown</span></td>
+            <td class="fsc-cell">5306</td>
+            <td class="pn-cell">NAS6209-2…</td>
+            <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;">BOLT, SHEAR</td>
+            <td><span class="cage-na">Not Available</span></td>
+            <td><span class="pkg-cell">ASTM</span></td>
+            <td><span class="due-normal">02/11/2026</span></td>
+            <td><span class="sa-tag sa-sdvosb">SDVOSB</span></td>
+          </tr>
+          <tr onclick="openPanel()">
+            <td class="first-col">
+              <input type="checkbox" class="row-cb" style="display:none" onclick="event.stopPropagation()">
+              <button class="star-btn filled" onclick="event.stopPropagation();handleStar(this)">★</button>
+            </td>
+            <td>01/27/2026</td>
+            <td><span class="status-tag st-source"><span class="dot"></span>Will Source</span></td>
+            <td><span class="id-link">5NDQCQ6B</span></td>
+            <td class="sol-num">SPE4A7-26-T-8441</td>
+            <td><span class="aaa-val green">$3,159.15</span></td>
+            <td class="fsc-cell">5306</td>
+            <td class="pn-cell">1-100-292-02</td>
+            <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;">BOLT, EXTERNAL WRENCHING</td>
+            <td><span class="cage-list">D0272, 0UC…</span></td>
+            <td><span class="pkg-cell">MIL-STD-2073</span></td>
+            <td><span class="due-normal">02/03/2026</span></td>
+            <td><span class="sa-tag sa-un">UN</span></td>
+          </tr>
+          <tr onclick="openPanel()">
+            <td class="first-col">
+              <input type="checkbox" class="row-cb" style="display:none" onclick="event.stopPropagation()">
+              <button class="star-btn" onclick="event.stopPropagation();handleStar(this)">☆</button>
+            </td>
+            <td>01/26/2026</td>
+            <td><span class="status-tag st-new"><span class="dot"></span>New Opportunity</span></td>
+            <td><span class="id-link">RGS5SER8</span></td>
+            <td class="sol-num">SPE4A6-26-T-575C</td>
+            <td><span class="aaa-val green">$198,656.79</span></td>
+            <td class="fsc-cell">5306</td>
+            <td class="pn-cell">Multi</td>
+            <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;">BOLT, MACHINE</td>
+            <td><span class="cage-list">84256, 16258</span></td>
+            <td><span class="pkg-cell">MIL-STD-2073</span></td>
+            <td><span class="due-normal">02/02/2026</span></td>
+            <td><span class="sa-tag sa-sdvosb">SDVOSB</span></td>
+          </tr>
+          <tr onclick="openPanel()">
+            <td class="first-col">
+              <input type="checkbox" class="row-cb" style="display:none" onclick="event.stopPropagation()">
+              <button class="star-btn" onclick="event.stopPropagation();handleStar(this)">☆</button>
+            </td>
+            <td>01/26/2026</td>
+            <td><span class="status-tag st-new"><span class="dot"></span>New Opportunity</span></td>
+            <td><span class="id-link">82HZQAFJ</span></td>
+            <td class="sol-num">SPE4A6-26-T-580F</td>
+            <td><span class="aaa-val green">$988.90</span></td>
+            <td class="fsc-cell">5306</td>
+            <td class="pn-cell">3030T31P01</td>
+            <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;">PIN, SHOULDER</td>
+            <td><span class="cage-list">0UCY9, 992…</span></td>
+            <td><span class="pkg-cell">MIL-STD-2073</span></td>
+            <td><span class="due-normal">02/02/2026</span></td>
+            <td><span class="sa-tag sa-un">UN</span></td>
+          </tr>
+          <tr onclick="openPanel()">
+            <td class="first-col">
+              <input type="checkbox" class="row-cb" style="display:none" onclick="event.stopPropagation()">
+              <button class="star-btn" onclick="event.stopPropagation();handleStar(this)">☆</button>
+            </td>
+            <td>01/23/2026</td>
+            <td><span class="status-tag st-nobid"><span class="dot"></span>No Bid</span></td>
+            <td><span class="id-link">PA594NR5</span></td>
+            <td class="sol-num">SPE4A6-26-T-568P</td>
+            <td><span class="aaa-val green">$610.55</span></td>
+            <td class="fsc-cell">5306</td>
+            <td class="pn-cell">SS5021-10-…</td>
+            <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;">BOLT, MACHINE</td>
+            <td><span class="cage-list">0UCY9, 782…</span></td>
+            <td><span class="pkg-cell">MIL-STD-2073</span></td>
+            <td><span class="due-normal">01/30/2026</span></td>
+            <td><span class="sa-tag sa-un">UN</span></td>
+          </tr>
+          <tr onclick="openPanel()">
+            <td class="first-col">
+              <input type="checkbox" class="row-cb" style="display:none" onclick="event.stopPropagation()">
+              <button class="star-btn" onclick="event.stopPropagation();handleStar(this)">☆</button>
+            </td>
+            <td>01/22/2026</td>
+            <td><span class="status-tag st-nobid"><span class="dot"></span>No Bid</span></td>
+            <td><span class="id-link">J8KB07AP</span></td>
+            <td class="sol-num">SPE4A6-26-T-528S</td>
+            <td><span class="aaa-val green">$18,150.72</span></td>
+            <td class="fsc-cell">5306</td>
+            <td class="pn-cell">HR240-4-11</td>
+            <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;">BOLT, MACHINE</td>
+            <td><span class="cage-list">73197, 56878</span></td>
+            <td><span class="pkg-cell">ASTM</span></td>
+            <td><span class="due-normal">01/29/2026</span></td>
+            <td><span class="sa-tag sa-sdvosb">SDVOSB</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tbl-footer">
+      <span>Showing <strong>1–12</strong> of <strong>138</strong> RFQs</span>
+      <div class="pagination">
+        <button class="page-btn">‹</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <span style="padding:0 4px;color:var(--text-faint);">…</span>
+        <button class="page-btn">12</button>
+        <button class="page-btn">›</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ── SLIDE-IN DETAIL PANEL ── -->
+<div class="panel-overlay" id="rfqPanel" onclick="if(event.target===this)closePanel()">
+  <div class="panel" id="panelInner">
+
+    <!-- PANEL HEADER -->
+    <div class="panel-top">
+      <div class="panel-top-row1">
+        <div>
+          <div class="panel-title">SPE4A6-26-Q-0537
+            <span class="copy-icon" title="Copy">⎘</span>
+          </div>
+          <div class="panel-subtitle">BOLT, MACHINE &nbsp;·&nbsp; FSC 5306 &nbsp;·&nbsp; ST2015-020 &nbsp;·&nbsp; ID: XSVKS2W7</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <button class="btn btn-accent btn-sm" onclick="togglePriceSheet()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            Price Sheet
+          </button>
+          <button class="panel-close" onclick="closePanel()">✕</button>
+        </div>
+      </div>
+
+      <!-- STATUS ROW — Chevron Pills only -->
+      <div class="status-row sv-c">
+        <div class="spill past">New Opportunity</div>
+        <div class="spill past">Will Source</div>
+        <div class="spill past">Currently Sourcing</div>
+        <div class="spill active">Ready to Bid</div>
+        <div class="spill">Bid Complete</div>
+        <div class="spill">Trace</div>
+        <div class="spill">Award Won</div>
+        <div class="spill">Award Lost</div>
+        <div class="spill">No Bid</div>
+      </div>
+
+      <!-- META ROW -->
+      <div class="meta-row">
+        <div class="mitem">
+          <span class="mlabel">Issue Date</span>
+          <span class="mval">02/04/2026</span>
+        </div>
+        <div class="mitem">
+          <span class="mlabel">Due Date</span>
+          <span class="mval amber">02/11/2026</span>
+        </div>
+        <div class="mitem">
+          <span class="mlabel">Set-Aside</span>
+          <span class="mval">Small Business</span>
+        </div>
+        <div class="mitem">
+          <span class="mlabel">FSC</span>
+          <span class="mval">5306</span>
+        </div>
+        <div class="mitem">
+          <span class="mlabel">Est. Award</span>
+          <span class="mval faint">Unknown</span>
+        </div>
+        <!-- BID PRICE — display + inline edit -->
+        <div class="mitem">
+          <span class="mlabel">Bid Price</span>
+          <div class="meta-field-row">
+            <span class="mval meta-display" id="displayBidPrice">—</span>
+            <input id="metaBidPrice" class="meta-editable" placeholder="e.g. $24.50" value="" style="display:none" title="Enter bid price" onblur="commitMetaField('BidPrice')" onkeydown="if(event.key==='Enter')commitMetaField('BidPrice');if(event.key==='Escape')cancelMetaField('BidPrice')">
+            <button class="meta-edit-btn" id="editBtnBidPrice" onclick="editMetaField('BidPrice')" title="Edit bid price">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </button>
+          </div>
+        </div>
+        <!-- DELIVERY DAYS — display + inline edit -->
+        <div class="mitem" style="border-right:none">
+          <span class="mlabel">Delivery Days</span>
+          <div class="meta-field-row">
+            <span class="mval meta-display" id="displayDelivDays">—</span>
+            <input id="metaDelivDays" class="meta-editable" placeholder="e.g. 30" value="" style="display:none" title="Enter delivery days" type="number" min="1" max="999" onblur="commitMetaField('DelivDays')" onkeydown="if(event.key==='Enter')commitMetaField('DelivDays');if(event.key==='Escape')cancelMetaField('DelivDays')">
+            <button class="meta-edit-btn" id="editBtnDelivDays" onclick="editMetaField('DelivDays')" title="Edit delivery days">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div><!-- /panel-top -->
+
+    <div class="panel-content">
+      <div class="panel-scroll">
+
+        <!-- 1. SOLICITATION INFORMATION -->
+        <div class="ps-sec" id="sec-sol">
+          <div class="ps-sec-hdr" onclick="toggleSec('sec-sol')">
+            Solicitation Information &nbsp;<span style="font-size:11px;font-weight:500;color:var(--text-faint)">ID Number: <span style="font-family:'Source Code Pro',monospace;font-weight:800;font-size:14px;color:var(--text);letter-spacing:.5px">XSVKS2W7</span> <span class="copy-icon">⎘</span></span>
+            <span class="chev">▴</span>
+          </div>
+          <div class="ps-sec-body">
+            <table class="info-table">
+              <tr><td>Solicitation Number</td><td><span class="val-mono">SPE4A6-26-Q-0537</span> <span class="copy-icon">⎘</span> <button class="tbl-btn">Open PDF</button></td></tr>
+              <tr><td>Set Aside</td><td>Small Business (SB)</td></tr>
+              <tr><td>PR Number</td><td><span class="val-mono">7014932415</span> <span class="copy-icon">⎘</span></td></tr>
+              <tr><td>Date Issued</td><td>Friday, February 4, 2026</td></tr>
+              <tr><td>NSN Number</td><td><span class="val-mono">5306-01-XXX-XXXX</span> <span class="copy-icon">⎘</span></td></tr>
+              <tr><td>Part Number</td><td><span class="val-mono">ST2015-020</span></td></tr>
+              <tr><td>Due Date</td><td style="color:var(--amber);font-weight:600">Monday, February 11, 2026</td></tr>
+              <tr><td>Item Description</td><td>BOLT, MACHINE</td></tr>
+              <tr><td>Drawing Information</td><td class="val-faint">Not Available</td></tr>
+              <tr><td>Tech Document</td><td><button class="tbl-btn">Open Tech Doc</button></td></tr>
+              <tr><td>FOB Point (Shipping)</td><td>ORIGIN</td></tr>
+              <tr><td>Anticipated Award Amount</td><td class="val-faint">Unknown</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- 2. MANUFACTURER REQUIRED -->
+        <div class="ps-sec" id="sec-mfr">
+          <div class="ps-sec-hdr" onclick="toggleSec('sec-mfr')">Manufacturer Required <span class="chev">▴</span></div>
+          <div class="ps-sec-body">
+            <table class="info-table">
+              <tr><td>Approved Sources</td><td><span class="val-mono">0UCY9, 526XX</span></td></tr>
+              <tr><td>Restriction Type</td><td>Approved Sources Only</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- 3. PROCUREMENT HISTORY — matches screenshot 2 -->
+        <div class="ps-sec" id="sec-ph">
+          <div class="ps-sec-hdr" onclick="toggleSec('sec-ph')">Procurement History <span class="chev">▴</span></div>
+          <div class="ps-sec-body">
+            <table class="ph-table">
+              <thead>
+                <tr>
+                  <th>Cage Code</th>
+                  <th>Solicitation</th>
+                  <th>Quantity</th>
+                  <th>Unit Price</th>
+                  <th>Date Of Award</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="cage-link">1H5P6</span> <span class="ph-cage-icon">ℹ</span></td>
+                  <td style="font-family:'Source Code Pro',monospace;font-size:12px">SPE5E115V2266</td>
+                  <td>18</td>
+                  <td style="color:var(--green);font-weight:600">$25.10</td>
+                  <td>20150319</td>
+                </tr>
+                <tr>
+                  <td><span class="cage-link">55683</span> <span class="ph-cage-icon">ℹ</span></td>
+                  <td style="font-family:'Source Code Pro',monospace;font-size:12px">SPE5EK15V1206</td>
+                  <td>16</td>
+                  <td style="color:var(--green);font-weight:600">$26.28</td>
+                  <td>20141206</td>
+                </tr>
+                <tr>
+                  <td><span class="cage-link">6LY89</span> <span class="ph-cage-icon">ℹ</span></td>
+                  <td style="font-family:'Source Code Pro',monospace;font-size:12px">SPE5EK14V3307</td>
+                  <td>25</td>
+                  <td style="color:var(--green);font-weight:600">$26.82</td>
+                  <td>20140515</td>
+                </tr>
+                <tr>
+                  <td><span class="cage-link">1A424</span> <span class="ph-cage-icon">ℹ</span></td>
+                  <td style="font-family:'Source Code Pro',monospace;font-size:12px">SPE5EK14V2400</td>
+                  <td>15</td>
+                  <td style="color:var(--amber);font-weight:600">$41.60</td>
+                  <td>20140404</td>
+                </tr>
+                <tr>
+                  <td><span class="cage-link">4M107</span> <span class="ph-cage-icon">ℹ</span></td>
+                  <td style="font-family:'Source Code Pro',monospace;font-size:12px">SP056001M2111</td>
+                  <td>5</td>
+                  <td style="color:var(--red);font-weight:600">$81.50</td>
+                  <td>20001023</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 4. VENDOR REFERENCE TABLE -->
+        <div class="ps-sec" id="sec-vrt">
+          <div class="ps-sec-hdr" onclick="toggleSec('sec-vrt')">Vendor Reference Table <span class="chev">▴</span></div>
+          <div class="ps-sec-body">
+            <div class="vrt-scroll">
+            <table class="vrt-table">
+              <thead>
+                <tr>
+                  <th>VENDOR</th>
+                  <th>TYPE OF VENDOR</th>
+                  <th>PART NUMBER</th>
+                  <th>QUANTITY &amp; UNIT OF ISSUE</th>
+                  <th>LEAD TIME</th>
+                  <th>PRICE</th>
+                  <th>LAST UPDATE</th>
+                  <th>FILE UPLOAD</th>
+                  <th>EDIT</th>
+                  <th>EMAIL</th>
+                </tr>
+              </thead>
+              <tbody id="vrtBody">
+                <tr><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><span class="vrt-na">N/A</span></td><td><button class="vrt-file-btn" title="Upload file"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></button></td><td><button class="vrt-save-btn">Save</button></td><td><button class="vrt-email-btn" title="Email vendor"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg></button></td></tr>
+                <tr><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><span class="vrt-na">N/A</span></td><td><button class="vrt-file-btn" title="Upload file"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></button></td><td><button class="vrt-save-btn">Save</button></td><td><button class="vrt-email-btn" title="Email vendor"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg></button></td></tr>
+                <tr><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><span class="vrt-na">N/A</span></td><td><button class="vrt-file-btn" title="Upload file"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></button></td><td><button class="vrt-save-btn">Save</button></td><td><button class="vrt-email-btn" title="Email vendor"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg></button></td></tr>
+                <tr><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><span class="vrt-na">N/A</span></td><td><button class="vrt-file-btn" title="Upload file"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></button></td><td><button class="vrt-save-btn">Save</button></td><td><button class="vrt-email-btn" title="Email vendor"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg></button></td></tr>
+                <tr><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><span class="vrt-na">N/A</span></td><td><button class="vrt-file-btn" title="Upload file"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></button></td><td><button class="vrt-save-btn">Save</button></td><td><button class="vrt-email-btn" title="Email vendor"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg></button></td></tr>
+                <tr><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><input class="vrt-input"></td><td><span class="vrt-na">N/A</span></td><td><button class="vrt-file-btn" title="Upload file"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></button></td><td><button class="vrt-save-btn">Save</button></td><td><button class="vrt-email-btn" title="Email vendor"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg></button></td></tr>
+              </tbody>
+            </table>
+            </div><!-- /vrt-scroll -->
+            <button class="add-row-btn" onclick="addVrtRow()">+ Add Row</button>
+          </div>
+        </div>
+
+        <!-- 5. CLIN DETAILS — matches screenshot 1 with packaging requirements below each CLIN -->
+        <div class="ps-sec" id="sec-clin">
+          <div class="ps-sec-hdr" onclick="toggleSec('sec-clin')">CLIN Details <span class="chev">▴</span></div>
+          <div class="ps-sec-body">
+
+            <!-- CLIN 1 block -->
+            <div class="clin-block">
+              <div class="clin-hdr" onclick="this.nextElementSibling.classList.toggle('hidden')">
+                CLIN 1
+                <span style="font-size:14px;color:var(--text-faint)">▴</span>
+              </div>
+              <div class="clin-body">
+                <table class="clin-table">
+                  <thead>
+                    <tr>
+                      <th>CLIN Number</th>
+                      <th>Quantity</th>
+                      <th>Unit</th>
+                      <th>Delivery Due</th>
+                      <th>Inspection Point</th>
+                      <th>Government FAT</th>
+                      <th>Contractor FAT</th>
+                      <th>Government PLT</th>
+                      <th>Contractor PLT</th>
+                      <th>Other (See Solicitation's CLIN)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="font-family:'Source Code Pro',monospace;font-weight:600">0001</td>
+                      <td>3.000</td>
+                      <td>EA</td>
+                      <td>0005</td>
+                      <td>ORIGIN</td>
+                      <td>no</td>
+                      <td>no</td>
+                      <td>no</td>
+                      <td>no</td>
+                      <td>no</td>
+                    </tr>
+                    <!-- Packaging Requirements row — spaced out -->
+                    <tr class="pkg-req-row">
+                      <td style="font-weight:700;font-size:12px;color:var(--text-dim);background:var(--surface-2);border-right:1px solid var(--border);white-space:nowrap">Packaging<br>Requirements</td>
+                      <td colspan="9">
+                        <div class="pkg-req-text">
+                          <p>PKGING DATA – QUP:001</p>
+                          <p>If material is considered hazardous IAW FED-STD-313, package in accordance with TQ Requirement IP025.</p>
+                          <p>If the material is not considered hazardous, in accordance with FED-STD-313, the material shall be commercially packaged in accordance with ASTM D3951.</p>
+                          <p>All DLA Master List of Technical and Quality Requirements take precedence over ASTM D3951.</p>
+                          <p>Mark and label all packaging and packing in accordance with MIL-STD-129.</p>
+                          <p>The Unit of Issue (U/I) and Quantity per Unit Pack (QUP) will be as specified in the contract/purchase order.</p>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!-- /CLIN 1 -->
+
+          </div>
+        </div>
+
+      </div><!-- /panel-scroll -->
+
+      <!-- PRICE SHEET — slides in from right within the panel -->
+      <div class="price-sheet" id="priceSheet">
+        <div class="ps-inner">
+          <div class="ps-inner-title">Price Bid Sheet</div>
+          <div class="ps-inner-sub">Calculate your bid — scroll the contract on the left for reference.</div>
+
+          <span class="ps-section-lbl">Inputs</span>
+          <div class="ps-group"><label>Qty Requested</label><input id="psQty" type="number" placeholder="0" oninput="calcBid()"></div>
+          <div class="ps-group"><label>Vendor Cost / Unit of Issue</label><input id="psVendorCost" type="number" placeholder="$0.00" oninput="calcBid()"></div>
+          <div class="ps-group"><label>Ship Cost from Vendor</label><input id="psShipCost" type="number" placeholder="$0.00" oninput="calcBid()"></div>
+          <div class="ps-group"><label>Total Packaging Cost</label><input id="psPkgCost" type="number" placeholder="$0.00" oninput="calcBid()"></div>
+          <div class="ps-group"><label>Misc. Cost (if any)</label><input id="psMisc" type="number" placeholder="$0.00" oninput="calcBid()"></div>
+          <div class="ps-group"><label>FAT Cost (if any)</label><input id="psFAT" type="number" placeholder="$0.00" oninput="calcBid()"></div>
+          <div class="ps-group"><label>PLT Cost (if any)</label><input id="psPLT" type="number" placeholder="$0.00" oninput="calcBid()"></div>
+
+          <hr>
+          <span class="ps-section-lbl">Calculated Results</span>
+          <div class="ps-group"><label>Your Total Cost</label><input id="psTotalCost" class="computed" value="$0.00" readonly></div>
+          <div class="ps-group"><label>Total Vendor Cost</label><input id="psTotalVendor" class="computed" value="$0.00" readonly></div>
+          <div class="ps-group"><label>Break Even Price</label><input id="psBreakEven" class="computed" value="$0.00" readonly></div>
+
+          <hr>
+          <span class="ps-section-lbl">Bid & Award</span>
+          <div class="ps-group">
+            <label style="display:flex;align-items:center;justify-content:space-between;">
+              Your Bid Price (per unit)
+              <span onclick="resetBidToCalc()" style="font-size:9px;font-weight:700;color:var(--accent);cursor:pointer;letter-spacing:0;text-transform:none;">↺ Reset to calculated</span>
+            </label>
+            <input id="psBidPrice" class="val-blue" value="" placeholder="type your price…" oninput="recalcFromBid()">
+          </div>
+          <div class="ps-group"><label>Award Amount (total)</label><input id="psAwardAmt" class="val-green" value="$0.00" readonly></div>
+          <div class="ps-group"><label>Profit Checker</label><input id="psProfit" class="computed" value="$0.00" readonly></div>
+          <div class="ps-group"><label>Margin if Won (%)</label><input id="psMargin" class="computed" value="0.00 %" readonly></div>
+
+          <div class="ps-footer">
+            <button class="ps-cancel" onclick="closePriceSheet()">Cancel</button>
+            <button class="ps-save" onclick="saveBid()">Save &amp; Mark Ready</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /panel-content -->
+  </div><!-- /panel -->
+</div><!-- /panel-overlay -->
+
+<!-- ══════════════════════════════════════════════
+     PRICE BID SHEET MODAL
+══════════════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════════
+     COMPOSE EMAIL MODAL
+══════════════════════════════════════════════ -->
+<div class="email-modal-overlay" id="emailModal">
+  <div class="email-modal">
+    <!-- Header -->
+    <div class="email-modal-hdr">
+      <h3>Compose Email</h3>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="tpl-btn">
+          <span>Templates</span>
+          <button>▾</button>
+        </div>
+        <button class="email-modal-close" onclick="closeEmailModal()">✕</button>
+      </div>
+    </div>
+    <!-- From -->
+    <div class="email-field" style="background:var(--surface-2);">
+      <span class="ef-label" style="color:var(--text-faint);font-size:11px">From</span>
+      <span style="font-size:12.5px;color:var(--text-dim);font-weight:500"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="bcc5d3c9cefcd9d1ddd5d092dfd3d1">[email&#160;protected]</a></span>
+    </div>
+    <!-- To -->
+    <div class="email-field">
+      <span class="ef-label">To</span>
+      <input id="emailTo" type="email" placeholder="vendor@company.com">
+    </div>
+    <!-- Subject -->
+    <div class="email-field">
+      <span class="ef-label">Subject</span>
+      <input id="emailSubject" type="text" placeholder="RFQ Inquiry — SPE4A6-26-Q-0537">
+    </div>
+    <!-- Formatting toolbar -->
+    <div class="email-toolbar">
+      <select class="etb-select" style="width:64px">
+        <option>16px</option><option>12px</option><option>14px</option><option>18px</option><option>20px</option>
+      </select>
+      <select class="etb-select" style="width:100px;margin-left:4px">
+        <option>Default</option><option>Sans Serif</option><option>Monospace</option>
+      </select>
+      <div class="etb-color" title="Text color"></div>
+      <div class="etb-sep"></div>
+      <button class="etb-btn" title="Bold"><b>B</b></button>
+      <button class="etb-btn" title="Italic"><i>I</i></button>
+      <button class="etb-btn" title="Underline"><u>U</u></button>
+      <button class="etb-btn" title="Strikethrough"><s>S</s></button>
+      <div class="etb-sep"></div>
+      <button class="etb-btn" title="Bullet list">☰</button>
+      <button class="etb-btn" title="Numbered list">≡</button>
+      <div class="etb-sep"></div>
+      <button class="etb-btn" title="Align left">⬛</button>
+      <button class="etb-btn" title="Align center">⬛</button>
+      <button class="etb-btn" title="Align right">⬛</button>
+      <button class="etb-btn" title="Justify">⬛</button>
+      <div class="etb-sep"></div>
+      <button class="etb-btn" title="Insert link">🔗</button>
+      <button class="etb-btn" title="Remove link" style="font-size:11px">⛓️</button>
+      <button class="etb-btn" title="Insert image">🖼</button>
+    </div>
+    <!-- Body -->
+    <div class="email-body" contenteditable="true" data-placeholder="Type your message here..."></div>
+    <!-- Signature -->
+    <div class="email-sig">
+      <div>Best,</div>
+      <div class="sig-name">YOUR NAME</div>
+      <div class="sig-title">TITLE</div>
+      <div style="color:var(--text-muted)">(XXX) XXX-XXXX</div>
+      <div><a href="#" class="sig-link"><span class="__cf_email__" data-cfemail="d3aabca6a193b6beb2babffdb0bcbe">[email&#160;protected]</span></a></div>
+      <div style="color:var(--text-muted)">City, State USA</div>
+      <hr class="sig-divider">
+      <div class="sig-legal">This email, including any attachments, is intended only for the recipient(s) and may contain confidential information. If you are not the intended recipient, please contact the sender and destroy all copies and attachments of the original message. The recipient of this email acknowledges and understands that certain information contained in this email or attachment may be subject to export controls and restrictions including, but not limited to, the International Traffic in Arms Regulation (ITAR), the Export Administration Regulations (EAR), or the sections administered by the Office of Foreign Assets Control (OFAC). This email and attachment may not be exported or disclosed to a foreign person, whether in the United States or abroad without prior written authorization from the U.S. Government.</div>
+    </div>
+    <!-- Footer -->
+    <div class="email-modal-ftr">
+      <button class="email-cancel-btn" onclick="closeEmailModal()">Cancel</button>
+      <button class="email-send-btn">
+        Send
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- ─── OVERLAY ─── -->
+<div class="ap-overlay" id="ap-overlay" onclick="closePanel()"></div>
+
+<!-- ─── ACCOUNT PANEL ─── -->
+<div class="ap" id="account-panel">
+
+  <!-- HEADER -->
+  <div class="ap-hdr">
+    <div class="ap-hdr-left">
+      <div class="ap-avatar-wrap" onclick="triggerPhotoUpload()" title="Change photo">
+        <div class="ap-avatar" id="ap-avatar">
+          <img id="ap-avatar-img" alt="">
+          <span id="ap-avatar-initials">JD</span>
+        </div>
+        <div class="ap-avatar-edit">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </div>
+      </div>
+      <div>
+        <div class="ap-name" id="ap-name">John Demo</div>
+        <div class="ap-email" id="ap-email-display"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="650f0a0d0b4b0100080a25060a0b11170406110c0b02060a4b060a08">[email&#160;protected]</a></div>
+      </div>
+    </div>
+    <button class="ap-close" onclick="closePanel()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+
+  <!-- BODY -->
+  <div class="ap-body">
+
+    <!-- ── ACCORDION 1: PROFILE ── -->
+    <div class="acc-item">
+      <button class="acc-trigger open" onclick="toggleAcc(this)">
+        <div class="acc-trigger-left">
+          <div class="acc-ico blue"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div>
+            <div class="acc-label">Profile</div>
+            <div class="acc-sub">Name, email, company, photo</div>
+          </div>
+        </div>
+        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+      </button>
+      <div class="acc-body open">
+
+        <!-- PHOTO -->
+        <div class="photo-upload">
+          <div class="photo-preview" id="photo-preview">
+            <img id="photo-preview-img" alt="">
+            <span id="photo-preview-initials">JD</span>
+          </div>
+          <div>
+            <div class="photo-actions">
+              <button class="btn-upload" onclick="triggerPhotoUpload()">Upload Photo</button>
+              <button class="btn-remove-photo" onclick="removePhoto()">Remove</button>
+            </div>
+            <div class="photo-hint">JPG or PNG, max 5MB. Square crop recommended.</div>
+          </div>
+        </div>
+        <input type="file" id="photo-input" accept="image/*" onchange="handlePhoto(this)">
+
+        <!-- NAME ROW -->
+        <div class="field">
+          <div class="field-row">
+            <div>
+              <label class="field-label">First Name</label>
+              <input class="fi" id="p-first" value="John" placeholder="First name">
+            </div>
+            <div>
+              <label class="field-label">Last Name</label>
+              <input class="fi" id="p-last" value="Demo" placeholder="Last name">
+            </div>
+          </div>
+        </div>
+
+        <!-- EMAIL -->
+        <div class="field">
+          <label class="field-label">Email Address</label>
+          <input class="fi" id="p-email" type="email" value="john.demo@contractingco.com" placeholder="your@email.com">
+          <div style="font-size:11px;color:var(--text-faint);margin-top:5px;line-height:1.5">Changing your email will require verification. A confirmation link will be sent to your new address.</div>
+        </div>
+
+        <!-- COMPANY -->
+        <div class="field">
+          <label class="field-label">Company Name</label>
+          <input class="fi" id="p-company" value="Demo Contracting Co." placeholder="Your company">
+        </div>
+
+        <!-- PHONE -->
+        <div class="field">
+          <label class="field-label">Phone Number</label>
+          <input class="fi" id="p-phone" type="tel" value="(555) 012-3456" placeholder="(555) 000-0000">
+        </div>
+
+        <button class="btn-save" id="save-profile-btn" onclick="saveProfile()">Save Profile</button>
+      </div>
+    </div>
+
+    <!-- ── ACCORDION 2: CHANGE PASSWORD ── -->
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">
+        <div class="acc-trigger-left">
+          <div class="acc-ico green"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+          <div>
+            <div class="acc-label">Change Password</div>
+            <div class="acc-sub">Send a secure reset link</div>
+          </div>
+        </div>
+        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+      </button>
+      <div class="acc-body">
+        <div class="pw-reset-box" id="pw-reset-form">
+          <div class="pw-reset-title">Reset your password</div>
+          <div class="pw-reset-sub">We'll send a secure password reset link to <strong id="pw-email-display"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="305a5f585e1e54555d5f70535f5e4442515344595e57535f1e535f5d">[email&#160;protected]</a></strong>. The link expires in 30 minutes.</div>
+          <button class="btn-send-reset" onclick="sendPasswordReset()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Send Reset Link
+          </button>
+        </div>
+        <div class="pw-sent-state" id="pw-sent-state">
+          <div class="pw-sent-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></div>
+          <div class="pw-sent-title">Reset link sent!</div>
+          <div class="pw-sent-sub">Check <strong id="pw-sent-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="503a3f383e7e34353d3f10333f3e2422313324393e37333f7e333f3d">[email&#160;protected]</a></strong> for the reset link. It expires in 30 minutes.</div>
+          <button style="font-family:'Manrope',sans-serif;font-size:11.5px;font-weight:600;padding:7px 14px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;margin-top:12px" onclick="resetPasswordState()">Send again</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ACCORDION 3: SUBSCRIPTION ── -->
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">
+        <div class="acc-trigger-left">
+          <div class="acc-ico amber"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+          <div>
+            <div class="acc-label">Subscription</div>
+            <div class="acc-sub">Pro plan · renews Mar 14</div>
+          </div>
+        </div>
+        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+      </button>
+      <div class="acc-body">
+        <div class="sub-summary">
+          <div class="sub-plan">GovScraper Pro</div>
+          <div class="sub-price">$149 / month</div>
+          <div class="sub-renews">Next renewal: <strong>March 14, 2026</strong></div>
+        </div>
+        <div class="sub-stats">
+          <div class="sub-stat"><div class="sub-stat-n" style="color:var(--accent)">8</div><div class="sub-stat-l">FSCs Active</div></div>
+          <div class="sub-stat"><div class="sub-stat-n" style="color:var(--green)">47</div><div class="sub-stat-l">Active RFQs</div></div>
+        </div>
+        <button class="btn-manage-sub" onclick="closePanel();window.location.href='account.html'">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Manage Subscription & Billing →
+        </button>
+      </div>
+    </div>
+
+    <!-- ── ACCORDION 4: FSC / CAGE LIST ── -->
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">
+        <div class="acc-trigger-left">
+          <div class="acc-ico purple"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h7"/></svg></div>
+          <div>
+            <div class="acc-label">FSC / CAGE List</div>
+            <div class="acc-sub">8 FSCs · 3 CAGEs tracked</div>
+          </div>
+        </div>
+        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+      </button>
+      <div class="acc-body">
+        <!-- FSCs -->
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--text-faint);margin-bottom:7px">Active FSCs</div>
+        <div class="fsc-chips" style="margin-bottom:14px">
+          <span class="fsc-chip">5305</span>
+          <span class="fsc-chip">5306</span>
+          <span class="fsc-chip">5310</span>
+          <span class="fsc-chip">5320</span>
+          <span class="fsc-chip">5935</span>
+          <span class="fsc-chip">5961</span>
+          <span class="fsc-chip">5315</span>
+          <span class="fsc-chip">5325</span>
+        </div>
+        <!-- CAGEs with names -->
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--text-faint);margin-bottom:7px">Manufacturer CAGEs</div>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px">
+          <div style="display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:7px;padding:8px 11px">
+            <span style="font-family:'Source Code Pro',monospace;font-size:11px;font-weight:700;color:#7C3AED;width:44px;flex-shrink:0">96906</span>
+            <span style="font-size:12px;font-weight:600;color:var(--text-dim)">SPS Technologies, Inc.</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:7px;padding:8px 11px">
+            <span style="font-family:'Source Code Pro',monospace;font-size:11px;font-weight:700;color:#7C3AED;width:44px;flex-shrink:0">99193</span>
+            <span style="font-size:12px;font-weight:600;color:var(--text-dim)">Parker Hannifin</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:7px;padding:8px 11px">
+            <span style="font-family:'Source Code Pro',monospace;font-size:11px;font-weight:700;color:#7C3AED;width:44px;flex-shrink:0">06090</span>
+            <span style="font-size:12px;font-weight:600;color:var(--text-dim)">Moog Inc.</span>
+          </div>
+        </div>
+        <button class="btn-manage-sub" onclick="closePanel();window.location.href='fsc-lookup.html'">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Edit FSC / CAGE List →
+        </button>
+      </div>
+    </div>
+
+    <!-- ── ACCORDION 5: EMAIL INTEGRATION ── -->
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">
+        <div class="acc-trigger-left">
+          <div class="acc-ico blue" style="background:#F0FDF4;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div>
+            <div class="acc-label">Email Integration</div>
+            <div class="acc-sub" id="email-acc-sub">No mailbox connected</div>
+          </div>
+        </div>
+        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+      </button>
+      <div class="acc-body">
+        <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:14px 16px;margin-bottom:12px">
+          <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">Connect your mailbox</div>
+          <div style="font-size:12px;color:var(--text-muted);line-height:1.6">Send emails to vendors directly from GovScraper using your own Gmail or Outlook account.</div>
+        </div>
+        <button class="btn-manage-sub" onclick="closePanel();window.location.href='account.html'">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Manage Email Integration →
+        </button>
+      </div>
+    </div>
+
+    <!-- ── LOGOUT ── -->
+    <div class="acc-item">
+      <button class="btn-logout" onclick="handleLogout()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Log Out
+      </button>
+    </div>
+
+  </div><!-- end ap-body -->
+
+  <div class="ap-footer">
+    <div class="ap-footer-txt">GovScraper · Member since Feb 14, 2025 · <a href="#" style="color:var(--text-faint)">Privacy Policy</a></div>
+  </div>
+
+</div><!-- end account panel -->
+
+<div class="toast" id="toast"><span id="toast-msg"></span></div>
+
+<script>
+
+
+// ── PANEL OPEN / CLOSE ──
+function openPanel() { document.getElementById('rfqPanel').classList.add('open'); }
+function closePanel() {
+  document.getElementById('rfqPanel').classList.remove('open');
+  document.getElementById('panelInner').classList.remove('ps-on');
+}
+
+// ── PRICE SHEET — slide in/out within the panel ──
+function openPriceSheet() {
+  _bidOverridden = false;
+  document.getElementById('panelInner').classList.add('ps-on');
+  calcBid();
+}
+function closePriceSheet() {
+  document.getElementById('panelInner').classList.remove('ps-on');
+}
+function togglePriceSheet() {
+  document.getElementById('panelInner').classList.toggle('ps-on');
+  calcBid();
+}
+
+// Wire the Price Sheet button in panel header
+document.querySelectorAll('.btn[onclick="togglePriceSheet()"], [onclick="togglePriceSheet()"]').forEach(btn => {
+  btn.onclick = togglePriceSheet;
+});
+
+// ── VARIANT SWITCHER ──
+window.switchVariant = function(v, btn) {
+  ['a','b','c'].forEach(x => {
+    const rowA = document.getElementById('sv-row-' + x);
+    if (rowA) rowA.style.display = (x===v) ? '' : 'none';
+  });
+  document.querySelectorAll('.vsw-btn').forEach(b => b.classList.remove('vsw-active'));
+  btn.classList.add('vsw-active');
+};
+
+// ── SET ACTIVE STATUS across all visible variant rows ──
+window.setActiveStatus = function(label) {
+  document.querySelectorAll('.status-row .spill, .sv-b .spill').forEach(p => {
+    p.classList.remove('active','past');
+  });
+  let found = false;
+  // For variants A and C (flat rows)
+  ['sv-row-a','sv-row-c'].forEach(rowId => {
+    const row = document.getElementById(rowId);
+    if (!row) return;
+    const pills = row.querySelectorAll('.spill');
+    let foundInRow = false;
+    pills.forEach(p => {
+      if (foundInRow) return;
+      if (p.textContent.trim() === label) { p.classList.add('active'); foundInRow = true; }
+      else { p.classList.add('past'); }
+    });
+  });
+  // For variant B (nested)
+  const rowB = document.getElementById('sv-row-b');
+  if (rowB) {
+    const pills = rowB.querySelectorAll('.spill');
+    let foundInB = false;
+    pills.forEach(p => {
+      if (foundInB) return;
+      if (p.textContent.trim() === label) { p.classList.add('active'); foundInB = true; }
+      else { p.classList.add('past'); }
+    });
+  }
+};
+
+// ── STATUS PILLS — clickable, switches active state ──
+function wireStatusPills() {
+  document.querySelectorAll('.status-row .spill, .sv-b .spill').forEach(pill => {
+    pill.addEventListener('click', function() {
+      const label = this.textContent.replace(/[✓●]/g,'').trim();
+      setActiveStatus(label);
+      if (label === 'Ready to Bid') openPriceSheet();
+    });
+  });
+}
+wireStatusPills();
+
+// ── BID CALCULATOR ──
+function fmt(n) { return '$' + (isNaN(n) ? '0' : Math.max(0, parseFloat(n)).toFixed(2)); }
+function fmtPct(n) { return (isNaN(n) ? '0' : parseFloat(n).toFixed(2)) + ' %'; }
+
+// tracks whether user has manually overridden bid price
+let _bidOverridden = false;
+
+function calcBid() {
+  const qty    = parseFloat(document.getElementById('psQty').value) || 0;
+  const vendor = parseFloat(document.getElementById('psVendorCost').value) || 0;
+  const ship   = parseFloat(document.getElementById('psShipCost').value) || 0;
+  const pkg    = parseFloat(document.getElementById('psPkgCost').value) || 0;
+  const misc   = parseFloat(document.getElementById('psMisc').value) || 0;
+  const fat    = parseFloat(document.getElementById('psFAT').value) || 0;
+  const plt    = parseFloat(document.getElementById('psPLT').value) || 0;
+
+  const totalVendor = vendor * qty;
+  const totalCost   = totalVendor + ship + pkg + misc + fat + plt;
+  const unitCost    = qty > 0 ? totalCost / qty : 0;
+
+  document.getElementById('psTotalVendor').value = fmt(totalVendor);
+  document.getElementById('psTotalCost').value   = fmt(totalCost);
+  document.getElementById('psBreakEven').value   = fmt(unitCost);
+
+  // Only push break-even to bid price if user hasn't typed their own
+  if (!_bidOverridden) {
+    document.getElementById('psBidPrice').value = fmt(unitCost);
+  }
+  recalcFromBid(false); // recalc award/profit/margin from whatever bid price is set (don't mark as overridden)
+}
+
+function resetBidToCalc() {
+  _bidOverridden = false;
+  const unitCost = parseFmt(document.getElementById('psBreakEven').value);
+  document.getElementById('psBidPrice').value = fmt(unitCost);
+  recalcFromBid(false);
+}
+
+function recalcFromBid(markOverridden) {
+  if (markOverridden !== false) _bidOverridden = true; // user is setting their own price
+  const qty       = parseFloat(document.getElementById('psQty').value) || 0;
+  const totalCost = parseFmt(document.getElementById('psTotalCost').value);
+  const bidRaw    = document.getElementById('psBidPrice').value;
+  const bidPrice  = parseFmt(bidRaw);
+  const awardAmt  = bidPrice * qty;
+  const profit    = awardAmt - totalCost;
+  const margin    = awardAmt > 0 ? (profit / awardAmt) * 100 : 0;
+  document.getElementById('psAwardAmt').value = fmt(awardAmt);
+  document.getElementById('psProfit').value   = fmt(profit);
+  document.getElementById('psMargin').value   = fmtPct(margin);
+
+  // Live color feedback on margin
+  const el = document.getElementById('psMargin');
+  if (margin < 0) { el.style.color='var(--red)'; el.style.borderColor='var(--red-border)'; }
+  else if (margin < 10) { el.style.color='var(--amber)'; el.style.borderColor='var(--amber-border)'; }
+  else { el.style.color='var(--green)'; el.style.borderColor='var(--green-border)'; }
+}
+
+function parseFmt(s) {
+  // parse "$1,234.56" or "1234.56" to float
+  if (!s) return 0;
+  return parseFloat(String(s).replace(/[^0-9.\-]/g,'')) || 0;
+}
+
+function saveBid() {
+  // Push bid price to the meta-row
+  const bidPrice = parseFmt(document.getElementById('psBidPrice').value);
+  const delivDays = document.getElementById('metaDelivDays').value;
+  const metaBid = document.getElementById('metaBidPrice');
+  const displayBid = document.getElementById('displayBidPrice');
+  if (bidPrice > 0) {
+    const formatted = fmt(bidPrice);
+    metaBid.value = formatted;
+    metaBid.classList.add('meta-saved');
+    setTimeout(()=> metaBid.classList.remove('meta-saved'), 1600);
+    // Update the visible display span
+    displayBid.textContent = formatted;
+    displayBid.dataset.raw = formatted;
+    displayBid.classList.add('has-value');
+    // Flash green to confirm save
+    displayBid.style.transition = 'color .2s';
+    displayBid.style.color = 'var(--green)';
+    setTimeout(() => { displayBid.style.color = ''; }, 1200);
+  }
+  // Also flash a toast
+  if (typeof showToast === 'function') showToast('Bid price saved — status set to Ready to Bid.');
+  // Auto-mark status as Ready to Bid
+  setActiveStatus('Ready to Bid');
+  closePriceSheet();
+  _bidOverridden = false; // reset for next open
+}
+
+// ── SECTION TOGGLE ──
+function toggleSec(id) {
+  const sec  = document.getElementById(id);
+  const body = sec.querySelector('.ps-sec-body');
+  const chev = sec.querySelector('.chev');
+  if (body.classList.contains('hidden')) {
+    body.classList.remove('hidden');
+    chev.textContent = '▴';
+  } else {
+    body.classList.add('hidden');
+    chev.textContent = '▾';
+  }
+}
+
+// ── ADD VRT ROW ──
+function addVrtRow() {
+  const tbody = document.getElementById('vrtBody');
+  const row = document.createElement('tr');
+  row.innerHTML = `
+    <td><input class="vrt-input"></td>
+    <td><input class="vrt-input"></td>
+    <td><input class="vrt-input"></td>
+    <td><input class="vrt-input"></td>
+    <td><input class="vrt-input"></td>
+    <td><input class="vrt-input"></td>
+    <td><span class="vrt-na">N/A</span></td>
+    <td><button class="vrt-file-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></button></td>
+    <td><button class="vrt-save-btn">Save</button></td>
+    <td><button class="vrt-email-btn" onclick="openEmailModal()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg></button></td>`;
+  tbody.appendChild(row);
+}
+
+// Wire existing email buttons
+document.querySelectorAll('.vrt-email-btn').forEach(btn => {
+  btn.addEventListener('click', openEmailModal);
+});
+
+// ── EMAIL MODAL ──
+function openEmailModal() {
+
+  document.getElementById('emailModal').style.display = 'flex';
+}
+function closeEmailModal() {
+  document.getElementById('emailModal').style.display = 'none';
+}
+
+
+function editMetaField(field) {
+  const display = document.getElementById('display' + field);
+  const input   = document.getElementById('meta'    + field);
+  const btn     = document.getElementById('editBtn' + field);
+  display.style.display = 'none';
+  btn.style.display     = 'none';
+  input.style.display   = '';
+  input.value = display.dataset.raw || '';
+  input.focus();
+  input.select();
+}
+function commitMetaField(field) {
+  const display = document.getElementById('display' + field);
+  const input   = document.getElementById('meta'    + field);
+  const btn     = document.getElementById('editBtn' + field);
+  const val = input.value.trim();
+  display.dataset.raw = val;
+  if (val) {
+    display.textContent = field === 'BidPrice'
+      ? (val.startsWith('$') ? val : '$' + val)
+      : val + ' days';
+    display.classList.add('has-value');
+  } else {
+    display.textContent = '—';
+    display.classList.remove('has-value');
+  }
+  input.style.display   = 'none';
+  display.style.display = '';
+  btn.style.display     = '';
+  // flash saved
+  display.style.transition = 'color .2s';
+  display.style.color = 'var(--green)';
+  setTimeout(() => { display.style.color = ''; }, 900);
+}
+function cancelMetaField(field) {
+  const display = document.getElementById('display' + field);
+  const input   = document.getElementById('meta'    + field);
+  const btn     = document.getElementById('editBtn' + field);
+  input.style.display   = 'none';
+  display.style.display = '';
+  btn.style.display     = '';
+}
+
+</script>
+<script>
+
+document.addEventListener('DOMContentLoaded', function(){
+
+// ─── STATE ───────────────────────────────────────────────────────────────
+let panelOpen = false;
+
+// ─── PANEL OPEN / CLOSE ──────────────────────────────────────────────────
+function togglePanel(){ panelOpen ? closePanel() : openPanel(); }
+function openPanel(){
+  panelOpen = true;
+  document.getElementById('account-panel').classList.add('open');
+  document.getElementById('ap-overlay').classList.add('open');
+  document.getElementById('avatar-btn').classList.add('panel-open');
+}
+function closePanel(){
+  panelOpen = false;
+  document.getElementById('account-panel').classList.remove('open');
+  document.getElementById('ap-overlay').classList.remove('open');
+  document.getElementById('avatar-btn').classList.remove('panel-open');
+}
+
+// Wire avatar button via addEventListener (not onclick attr)
+document.getElementById('avatar-btn').addEventListener('click', togglePanel);
+document.getElementById('ap-overlay').addEventListener('click', closePanel);
+document.querySelectorAll('.ap-close').forEach(b => b.addEventListener('click', closePanel));
+document.addEventListener('keydown', e => { if(e.key==='Escape') closePanel(); });
+
+// ─── ACCORDION ───────────────────────────────────────────────────────────
+window.toggleAcc = function(trigger){
+  const body = trigger.nextElementSibling;
+  const isOpen = trigger.classList.contains('open');
+  trigger.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+};
+
+// ─── PHOTO UPLOAD ────────────────────────────────────────────────────────
+window.triggerPhotoUpload = function(){
+  document.getElementById('photo-input').click();
+};
+window.handlePhoto = function(input){
+  if(!input.files || !input.files[0]) return;
+  const file = input.files[0];
+  if(file.size > 5*1024*1024){ showToast('Photo must be under 5MB.'); return; }
+  const reader = new FileReader();
+  reader.onload = e => setPhoto(e.target.result);
+  reader.readAsDataURL(file);
+};
+function setPhoto(src){
+  // topbar button — use background image
+  const btn = document.getElementById('avatar-btn');
+  btn.style.backgroundImage = `url(${src})`;
+  btn.style.backgroundSize = 'cover';
+  document.getElementById('avatar-initials').style.display = 'none';
+  // panel header avatar
+  const apIco = document.getElementById('ap-avatar');
+  apIco.style.backgroundImage = `url(${src})`;
+  apIco.style.backgroundSize = 'cover';
+  document.getElementById('ap-avatar-initials').style.display = 'none';
+  // photo preview
+  const pp = document.getElementById('photo-preview');
+  pp.style.backgroundImage = `url(${src})`;
+  pp.style.backgroundSize = 'cover';
+  document.getElementById('photo-preview-initials').style.display = 'none';
+}
+window.removePhoto = function(){
+  [document.getElementById('avatar-btn'), document.getElementById('ap-avatar'), document.getElementById('photo-preview')]
+    .forEach(el => { el.style.backgroundImage=''; el.style.backgroundSize=''; });
+  ['avatar-initials','ap-avatar-initials','photo-preview-initials']
+    .forEach(id => document.getElementById(id).style.display = '');
+};
+
+// ─── SAVE PROFILE ────────────────────────────────────────────────────────
+window.saveProfile = function(){
+  const first   = document.getElementById('p-first').value.trim();
+  const last    = document.getElementById('p-last').value.trim();
+  const email   = document.getElementById('p-email').value.trim();
+  if(!first || !last){ showToast('Please enter your first and last name.'); return; }
+  if(!email || !email.includes('@')){ showToast('Please enter a valid email.'); return; }
+  const initials = (first[0]||'').toUpperCase() + (last[0]||'').toUpperCase();
+  ['avatar-initials','ap-avatar-initials','photo-preview-initials'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = initials;
+  });
+  document.getElementById('ap-name').textContent = first + ' ' + last;
+  document.getElementById('ap-email-display').textContent = email;
+  document.getElementById('pw-email-display').textContent = email;
+  document.getElementById('pw-sent-email').textContent = email;
+  const btn = document.getElementById('save-profile-btn');
+  btn.textContent = 'Saved ✓'; btn.className = 'btn-save success';
+  setTimeout(()=>{ btn.textContent='Save Profile'; btn.className='btn-save'; }, 2500);
+  showToast('Profile updated successfully.');
+};
+
+// ─── PASSWORD RESET ───────────────────────────────────────────────────────
+window.sendPasswordReset = function(){
+  document.getElementById('pw-reset-form').style.display = 'none';
+  document.getElementById('pw-sent-state').classList.add('show');
+};
+window.resetPasswordState = function(){
+  document.getElementById('pw-reset-form').style.display = 'block';
+  document.getElementById('pw-sent-state').classList.remove('show');
+};
+
+// ─── LOGOUT ──────────────────────────────────────────────────────────────
+window.handleLogout = function(){
+  if(confirm('Log out of GovScraper?')) showToast('Logging out…');
+};
+
+// ─── NAVIGATION FROM PANEL ───────────────────────────────────────────────
+window.panelNav = function(url){
+  closePanel();
+  window.location.href = url;
+};
+
+// ─── TOAST ───────────────────────────────────────────────────────────────
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ADE80" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg><span>${msg}</span>`;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3000);
+}
+window.showToast = showToast;
+
+}); // end DOMContentLoaded
+
+
+
+function setMode(mode) {
+  if (mode === 'supplier') {
+    window.location.href = 'dashboard.html?mode=supplier';
+  }
+  // member = already here
+}
+
+</script>
+
+<!-- UPGRADE MODAL -->
+<div id="upgrade-backdrop" class="upgrade-backdrop" onclick="if(event.target===this)closeUpgrade()">
+  <div class="upgrade-box">
+    <div class="upgrade-box-hdr">
+      <div><h3 id="up-title">Upgrade Required</h3><p id="up-desc">This feature is available on a higher plan.</p></div>
+      <button class="upgrade-box-close" onclick="closeUpgrade()">&#x2715;</button>
+    </div>
+    <div class="upgrade-features"><ul id="up-features"></ul></div>
+    <div class="upgrade-box-footer">
+      <button class="upgrade-cta" id="up-cta-btn" onclick="window.location.href='account.html'">View Plans</button>
+      <button class="upgrade-cancel" onclick="closeUpgrade()">Not now</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+const UPGRADE_DATA = {
+  gold: {
+    title: 'Upgrade to GOLD',
+    desc: 'Add NSN Watch List and RFQ Alerts to your PRO workflow.',
+    ctaClass: 'gold', cta: 'Upgrade to GOLD — $149/mo',
+    features: [
+      'NSN Watch List — track up to 500 NSNs',
+      'RFQ Alerts feed — get notified when watched NSNs go live',
+      'Everything included in PRO',
+    ]
+  },
+  maxx: {
+    title: 'Upgrade to MAXX',
+    desc: 'Unlock the full Supplier Portal — inventory matching, RFQ alerts, and more.',
+    ctaClass: 'maxx', cta: 'Upgrade to MAXX — $225/mo',
+    features: [
+      'Supplier Inventory upload & NSN matching',
+      'Supplier RFQ Alerts — get notified when contractors need your parts',
+      'Full CAGE page management & GovScraper Verified badge',
+      'Everything included in GOLD',
+    ]
+  }
+};
+function showUpgrade(tier) {
+  const d = UPGRADE_DATA[tier];
+  document.getElementById('up-title').textContent = d.title;
+  document.getElementById('up-desc').textContent = d.desc;
+  const btn = document.getElementById('up-cta-btn');
+  btn.textContent = d.cta; btn.className = 'upgrade-cta ' + d.ctaClass;
+  document.getElementById('up-features').innerHTML = d.features.map(f =>
+    `<li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>${f}</li>`
+  ).join('');
+  document.getElementById('upgrade-backdrop').classList.add('open');
+}
+function closeUpgrade() { document.getElementById('upgrade-backdrop').classList.remove('open'); }
+document.addEventListener('keydown', e => { if(e.key==='Escape' && document.getElementById('upgrade-backdrop').classList.contains('open')) closeUpgrade(); });
+</script>
+
+
+<script>
+/* ── FSC AUTOCOMPLETE ─────────────────────────────────────── */
+const FSC_LIST = [
+  {code:'2590',desc:'Vehicular Components'},
+  {code:'2915',desc:'Fuel System Accessories'},
+  {code:'3010',desc:'Torque Converters & Speed Changers'},
+  {code:'3020',desc:'Gears, Pulleys, Sprockets & Transmission Chain'},
+  {code:'3040',desc:'Miscellaneous Power Transmission Equipment'},
+  {code:'3120',desc:'Bearings, Plain'},
+  {code:'3130',desc:'Bearings, Antifriction'},
+  {code:'3510',desc:'Laundry & Dry Cleaning Equipment'},
+  {code:'3999',desc:'Miscellaneous Manufacturing'},
+  {code:'4710',desc:'Pipe & Tube'},
+  {code:'4720',desc:'Hose & Flexible Tubing'},
+  {code:'4730',desc:'Fittings & Specialties: Hose, Pipe & Tube'},
+  {code:'4810',desc:'Valves, Nonpowered'},
+  {code:'4820',desc:'Valves, Powered'},
+  {code:'5120',desc:'Hand Tools, Nonedged, Nonpowered'},
+  {code:'5130',desc:'Hand Tools, Power Driven'},
+  {code:'5180',desc:'Sets, Kits & Outfits of Hand Tools'},
+  {code:'5305',desc:'Screws'},
+  {code:'5306',desc:'Bolts'},
+  {code:'5307',desc:'Studs'},
+  {code:'5310',desc:'Nuts & Washers'},
+  {code:'5315',desc:'Nails, Keys & Pins'},
+  {code:'5320',desc:'Rivets'},
+  {code:'5325',desc:'Fastening Devices'},
+  {code:'5330',desc:'Packing & Gaskets'},
+  {code:'5340',desc:'Hardware, Commercial'},
+  {code:'5365',desc:'Rings, Shims & Spacers'},
+  {code:'5905',desc:'Resistors'},
+  {code:'5910',desc:'Capacitors'},
+  {code:'5920',desc:'Fuses, Arrestors, Absorbers & Protectors'},
+  {code:'5930',desc:'Switches'},
+  {code:'5935',desc:'Connectors, Electrical'},
+  {code:'5940',desc:'Lugs, Terminals & Terminal Strips'},
+  {code:'5945',desc:'Relays & Solenoids'},
+  {code:'5950',desc:'Coils & Transformers'},
+  {code:'5960',desc:'Electron Tubes & Associated Hdwr'},
+  {code:'5961',desc:'Semiconductor Devices & Associated Hdwr'},
+  {code:'5962',desc:'Microcircuits, Electronic'},
+  {code:'5985',desc:'Antennas, Waveguides & Related Equipment'},
+  {code:'5999',desc:'Electrical & Electronic Components'},
+  {code:'6130',desc:'Power Distribution Equipment'},
+  {code:'6145',desc:'Wire & Cable, Electrical'},
+  {code:'6150',desc:'Miscellaneous Electric Power & Distribution'},
+  {code:'6350',desc:'Alarm & Signal Systems'},
+];
+
+function fscFilter(val) {
+  const drop = document.getElementById('fscDrop');
+  const q = val.trim().toLowerCase();
+  if (!q) { drop.classList.remove('open'); return; }
+  const matches = FSC_LIST.filter(f =>
+    f.code.startsWith(q) || f.desc.toLowerCase().includes(q)
+  ).slice(0, 8);
+  if (!matches.length) { drop.classList.remove('open'); return; }
+  drop.innerHTML = matches.map(f => {
+    const hi = (s) => s.replace(new RegExp('('+q+')', 'gi'), '<b>$1</b>');
+    return `<div class="fsc-opt" onmousedown="selectFsc('${f.code}')">
+      <span>${hi(f.code)}</span>
+      <span class="fsc-opt-desc">${f.desc}</span>
+    </div>`;
+  }).join('');
+  drop.classList.add('open');
+}
+function selectFsc(code) {
+  document.getElementById('fscInput').value = code;
+  hideFscDrop();
+}
+function hideFscDrop() {
+  document.getElementById('fscDrop').classList.remove('open');
+}
+
+/* ── ARCHIVE MODE ─────────────────────────────────────────── */
+let archiveMode = false;
+function toggleArchiveMode() {
+  if (!archiveMode) {
+    // Enter mode — show checkboxes
+    archiveMode = true;
+    document.body.classList.add('archive-mode');
+    document.getElementById('archiveBtn').style.borderColor = '';
+  } else {
+    // Confirm — archive checked rows
+    const checked = document.querySelectorAll('.row-cb:checked');
+    if (checked.length === 0) {
+      // Nothing selected — just exit mode
+      exitArchiveMode();
+      return;
+    }
+    checked.forEach(cb => {
+      const row = cb.closest('tr');
+      row.classList.add('row-archiving');
+      setTimeout(() => row.remove(), 420);
+    });
+    // Update count badge
+    setTimeout(() => {
+      const remaining = document.querySelectorAll('tbody tr').length - checked.length;
+      showArchiveToast(checked.length);
+      exitArchiveMode();
+    }, 430);
+  }
+}
+function exitArchiveMode() {
+  archiveMode = false;
+  document.body.classList.remove('archive-mode');
+  // Uncheck all
+  document.querySelectorAll('.row-cb').forEach(cb => cb.checked = false);
+  const sa = document.getElementById('selectAll');
+  if (sa) sa.checked = false;
+}
+function toggleSelectAll(cb) {
+  document.querySelectorAll('.row-cb').forEach(r => r.checked = cb.checked);
+}
+function showArchiveToast(n) {
+  if (typeof showToast === 'function') {
+    showToast(n + ' RFQ' + (n>1?'s':'') + ' archived successfully.');
+  }
+}
+// Escape exits archive mode
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && archiveMode) exitArchiveMode();
+});
+
+/* ── STAR / NSN WATCH LIST (PRO → GOLD upgrade) ──────────── */
+function handleStar(btn) {
+  // PRO users: clicking star opens GOLD upgrade modal
+  showUpgrade('gold');
+}
+</script>
+
+</body>
+</html>

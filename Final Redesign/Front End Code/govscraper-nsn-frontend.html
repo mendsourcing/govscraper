@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NSN Search — GovScraper</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#F8FAFC; --surface:#FFFFFF; --surface-2:#F1F5F9; --surface-3:#E8EEF6;
+  --border:#E2E8F0; --border-strong:#CBD5E1;
+  --text:#1E293B; --text-dim:#475569; --text-muted:#6B7280; --text-faint:#94A3B8;
+  --accent:#2563EB; --accent-bg:#EFF6FF; --accent-border:#BFDBFE; --accent-hover:#1D4ED8;
+  --green:#16A34A; --green-bg:#F0FDF4; --green-border:#BBF7D0;
+  --amber:#D97706; --amber-bg:#FFF7ED; --amber-border:#FDE68A;
+  --red:#DC2626; --red-bg:#FEF2F2; --red-border:#FECACA;
+  --purple:#7C3AED; --purple-bg:#F5F3FF; --purple-border:#DDD6FE;
+  --cyan:#0891B2; --cyan-bg:#ECFEFF; --cyan-border:#A5F3FC;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);font-size:13px;}
+a{color:var(--accent);text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+/* ── TOPBAR ── */
+.topbar{height:56px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
+.topbar-left{display:flex;align-items:center;gap:16px;}
+.topbar-logo{height:30px;width:auto;}
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-muted);}
+.breadcrumb a{color:var(--text-muted);font-weight:500;}
+.breadcrumb a:hover{color:var(--accent);text-decoration:none;}
+.breadcrumb .sep{color:var(--border-strong);}
+.breadcrumb .cur{color:var(--text-dim);font-weight:600;font-family:'Source Code Pro',monospace;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.topbar-icon-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-muted);transition:all .15s;}
+.topbar-icon-btn:hover{background:var(--surface-2);color:var(--text);}
+.topbar-icon-btn.notif{background:var(--red-bg);border-color:var(--red-border);}
+.avatar{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#1D4ED8);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;letter-spacing:0.5px;}
+
+/* ── SIDEBAR ── */
+.sidebar{width:224px;position:fixed;top:56px;left:0;bottom:0;background:var(--surface);border-right:1px solid var(--border);padding:14px 0;overflow-y:auto;z-index:90;}
+.sidebar-label{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-faint);padding:12px 20px 4px;}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:8px 20px;font-size:12.5px;font-weight:500;color:var(--text-dim);text-decoration:none;border-left:3px solid transparent;transition:all .15s;}
+.sidebar-item:hover{background:var(--accent-bg);color:var(--accent);text-decoration:none;}
+.sidebar-item.active{color:var(--accent);font-weight:700;border-left-color:var(--accent);background:var(--accent-bg);}
+.sidebar-item svg{width:16px;height:16px;flex-shrink:0;opacity:0.8;}
+.sidebar-item.active svg{opacity:1;}
+.sidebar-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:10px;}
+
+/* ── MAIN ── */
+.main{margin-left:224px;padding:24px 28px;min-height:calc(100vh - 56px);}
+
+/* ── SEARCH BAR ── */
+.search-wrap{margin-bottom:20px;}
+.search-bar{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 16px;box-shadow:0 1px 3px rgba(0,0,0,0.04);transition:border-color .15s,box-shadow .15s;}
+.search-bar:focus-within{border-color:var(--accent-border);box-shadow:0 0 0 3px rgba(37,99,235,0.08);}
+.search-bar svg{width:18px;height:18px;color:var(--text-faint);flex-shrink:0;}
+.search-bar input{flex:1;border:none;background:transparent;font-family:'Manrope',sans-serif;font-size:14px;color:var(--text);outline:none;}
+.search-bar input::placeholder{color:var(--text-faint);}
+.search-bar .search-btn{font-family:'Manrope',sans-serif;font-size:11.5px;font-weight:700;padding:6px 16px;border-radius:6px;border:none;background:var(--accent);color:#fff;cursor:pointer;transition:background .15s;white-space:nowrap;}
+.search-bar .search-btn:hover{background:var(--accent-hover);}
+
+/* ── NSN HERO ── */
+.nsn-hero{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,0.04);display:flex;align-items:flex-start;justify-content:space-between;gap:20px;}
+.nsn-hero-left{}
+.nsn-number{font-family:'Source Code Pro',monospace;font-size:26px;font-weight:700;letter-spacing:1.5px;color:var(--text);margin-bottom:4px;}
+.nsn-title{font-size:16px;font-weight:700;color:var(--text-dim);margin-bottom:10px;}
+.nsn-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.tag{display:inline-flex;align-items:center;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:5px;letter-spacing:0.2px;}
+.tag-blue{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-border);}
+.tag-gray{background:var(--surface-2);color:var(--text-dim);border:1px solid var(--border);}
+.tag-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border);}
+.tag-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);}
+.tag-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);}
+.tag-purple{background:var(--purple-bg);color:var(--purple);border:1px solid var(--purple-border);}
+
+/* Hero stat strip */
+.hero-stats{display:flex;align-items:center;gap:0;padding-top:12px;border-top:1px solid var(--border);}
+.hero-stat{display:flex;flex-direction:column;gap:2px;padding:0 20px;border-right:1px solid var(--border);}
+.hero-stat:first-child{padding-left:0;}
+.hero-stat:last-child{border-right:none;}
+.hero-stat .hs-label{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.6px;color:var(--text-faint);}
+.hero-stat .hs-val{font-size:14px;font-weight:700;font-family:'Source Code Pro',monospace;color:var(--text);}
+.hero-stat .hs-val.green{color:var(--green);}
+.hero-stat .hs-val.amber{color:var(--amber);}
+.hero-stat .hs-val.blue{color:var(--accent);}
+
+/* Bid worthiness score */
+.nsn-hero-right{display:flex;flex-direction:column;align-items:center;gap:10px;flex-shrink:0;}
+.score-ring{position:relative;width:84px;height:84px;}
+.score-ring svg{width:84px;height:84px;transform:rotate(-90deg);}
+.score-ring .ring-bg{fill:none;stroke:var(--surface-2);stroke-width:7;}
+.score-ring .ring-fill{fill:none;stroke:var(--accent);stroke-width:7;stroke-linecap:round;stroke-dasharray:226;stroke-dashoffset:63;transition:stroke-dashoffset .6s ease;}
+.score-ring .ring-fill.high{stroke:var(--green);}
+.score-ring .ring-fill.med{stroke:var(--amber);}
+.score-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.score-num{font-family:'Source Code Pro',monospace;font-size:22px;font-weight:700;color:var(--accent);line-height:1;}
+.score-lbl{font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:0.4px;color:var(--text-faint);}
+.watchlist-btn{font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;padding:7px 14px;border-radius:7px;border:1px solid var(--amber-border);background:var(--amber-bg);color:var(--amber);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px;}
+.watchlist-btn:hover{background:var(--amber);color:#fff;}
+
+/* ── CARDS ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
+.card-hdr{padding:11px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface-2);}
+.card-hdr h3{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-dim);}
+.card-hdr .src-tag{font-family:'Source Code Pro',monospace;font-size:10px;color:var(--text-faint);}
+.card-hdr .hdr-right{display:flex;align-items:center;gap:8px;}
+.card-body{padding:18px 20px;}
+
+/* ── KV GRIDS ── */
+.kv-grid{display:grid;gap:16px;}
+.kv-grid.c2{grid-template-columns:1fr 1fr;}
+.kv-grid.c3{grid-template-columns:1fr 1fr 1fr;}
+.kv-grid.c4{grid-template-columns:1fr 1fr 1fr 1fr;}
+.kv-grid.c5{grid-template-columns:1fr 1fr 1fr 1fr 1fr;}
+.kv label{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-faint);display:block;margin-bottom:4px;}
+.kv .val{font-size:13px;font-weight:600;color:var(--text-dim);}
+.kv .val.mono{font-family:'Source Code Pro',monospace;}
+.kv .val.price{color:var(--green);font-family:'Source Code Pro',monospace;}
+.kv .val.big{font-size:20px;font-weight:700;font-family:'Source Code Pro',monospace;}
+.kv .val.red{color:var(--red);}
+.kv .val.amber{color:var(--amber);}
+.kv .val.green{color:var(--green);}
+.kv .val.blue{color:var(--accent);}
+
+/* ── QUOTE BLOCK ── */
+.quote-block{background:var(--surface-2);border-radius:7px;padding:12px 16px;margin-bottom:14px;font-size:12.5px;color:var(--text-dim);line-height:1.8;border-left:3px solid var(--accent);}
+
+/* ── TABLES ── */
+.data-table{width:100%;border-collapse:collapse;font-size:12px;}
+.data-table thead th{font-size:9.5px;text-transform:uppercase;letter-spacing:0.4px;font-weight:800;color:var(--text-faint);padding:9px 14px;border-bottom:2px solid var(--border);text-align:left;background:var(--surface-2);white-space:nowrap;}
+.data-table tbody td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);}
+.data-table tbody tr:last-child td{border-bottom:none;}
+.data-table tbody tr:hover{background:var(--accent-bg);}
+.data-table .mono{font-family:'Source Code Pro',monospace;}
+.data-table a{color:var(--accent);font-weight:600;}
+
+/* ── PRICE CHART ── */
+.chart-wrap{padding:4px 0 8px;}
+.chart-svg{width:100%;height:160px;}
+.chart-grid{stroke:var(--border);stroke-width:0.5;}
+.chart-line{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-linejoin:round;}
+.chart-area{fill:var(--accent-bg);}
+.chart-dot{fill:var(--accent);stroke:var(--surface);stroke-width:2.5;}
+.chart-label{font-family:'Source Code Pro',monospace;font-size:9px;fill:var(--text-faint);}
+.chart-price{font-family:'Source Code Pro',monospace;font-size:10px;fill:var(--text-dim);font-weight:600;}
+
+/* ── STARS ── */
+.stars{display:inline-flex;gap:1px;margin-bottom:3px;}
+.star{color:var(--border-strong);font-size:16px;line-height:1;}
+.star.filled{color:var(--amber);}
+
+/* ── BID WORTHINESS CARD ── */
+.bw-card{border-left:3px solid var(--accent);}
+.bw-score-badge{font-family:'Source Code Pro',monospace;font-size:13px;font-weight:700;color:var(--accent);}
+
+/* ── ANALYSIS BOX ── */
+.analysis-box{background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:8px;padding:14px 16px;font-size:12.5px;color:var(--text-dim);line-height:1.75;margin-top:14px;}
+.analysis-box b{color:var(--text);font-weight:700;}
+
+/* ── SUPPLEMENTAL BOX ── */
+.suppl-box{background:var(--surface-2);border-radius:7px;padding:12px 16px;margin-top:14px;border-top:1px solid var(--border);}
+.suppl-label{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-faint);margin-bottom:5px;}
+.suppl-text{font-size:12px;color:var(--text-dim);line-height:1.7;}
+
+/* ── RELATED NSN CHIPS ── */
+.nsn-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+.nsn-chip{display:inline-flex;flex-direction:column;gap:1px;background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:6px;padding:5px 10px;cursor:pointer;transition:all .15s;}
+.nsn-chip:hover{background:var(--accent);border-color:var(--accent);}
+.nsn-chip:hover .nc-nsn,.nsn-chip:hover .nc-pn{color:#fff;}
+.nc-nsn{font-family:'Source Code Pro',monospace;font-size:11px;font-weight:700;color:var(--accent);}
+.nc-pn{font-size:9.5px;color:var(--text-muted);}
+
+/* ── LINK BTN ── */
+.link-btn{display:inline-flex;align-items:center;gap:5px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;padding:5px 12px;border-radius:6px;border:1px solid var(--accent-border);background:var(--accent-bg);color:var(--accent);cursor:pointer;transition:all .15s;}
+.link-btn:hover{background:var(--accent);color:#fff;text-decoration:none;}
+
+/* ── TREND ARROW ── */
+.trend-up{color:var(--green);font-weight:700;}
+.trend-dn{color:var(--red);font-weight:700;}
+
+/* ── DIVIDER ── */
+.sec-divider{border:none;border-top:1px solid var(--border);margin:14px 0;}
+
+@media(max-width:900px){
+  .sidebar{display:none;}
+  .main{margin-left:0;padding:16px;}
+  .kv-grid.c4,.kv-grid.c5{grid-template-columns:1fr 1fr;}
+  .kv-grid.c3{grid-template-columns:1fr 1fr;}
+  .nsn-hero{flex-direction:column;}
+  .hero-stats{flex-wrap:wrap;gap:12px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── TOPBAR ── -->
+<header class="topbar">
+  <div class="topbar-left">
+    <a href="govscraper-dashboard.html">
+      <img src="https://govscraper.com/assets/BigLogo-7gv5uAxF.png" alt="GovScraper" class="topbar-logo">
+    </a>
+    <div class="breadcrumb">
+      <a href="govscraper-dashboard.html">Dashboard</a>
+      <span class="sep">›</span>
+      <a href="#">NSN Search</a>
+      <span class="sep">›</span>
+      <span class="cur">5306-00-203-3858</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <button class="topbar-icon-btn notif" title="Notifications">
+      <!-- Bullseye -->
+      <svg width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#DC2626"/><circle cx="12" cy="12" r="7" fill="#fff"/><circle cx="12" cy="12" r="4.5" fill="#DC2626"/><circle cx="12" cy="12" r="2" fill="#fff"/><circle cx="12" cy="12" r="0.8" fill="#DC2626"/></svg>
+    </button>
+    <button class="topbar-icon-btn" title="Settings">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    </button>
+    <div class="avatar">JD</div>
+  </div>
+</header>
+
+<!-- ── SIDEBAR ── -->
+<nav class="sidebar">
+  <div class="sidebar-label">MAIN</div>
+  <a class="sidebar-item" href="govscraper-dashboard.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> Dashboard</a>
+  <a class="sidebar-item" href="govscraper-rfq-list.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg> My RFQs <span class="sidebar-badge">47</span></a>
+  <div class="sidebar-label">INTELLIGENCE</div>
+  <a class="sidebar-item active" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> NSN Search</a>
+  <a class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg> CAGE Search</a>
+  <a class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> FSC Lookup</a>
+  <div class="sidebar-label">RESULTS</div>
+  <a class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg> Awarded Contracts</a>
+  <div class="sidebar-label">TOOLS</div>
+  <a class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg> GovPacking</a>
+  <div style="flex:1;min-height:40px"></div>
+  <a class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg> Settings</a>
+</nav>
+
+<!-- ── MAIN ── -->
+<main class="main">
+
+  <!-- SEARCH BAR -->
+  <div class="search-wrap">
+    <div class="search-bar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input placeholder="Search NSNs, part numbers, or item names…" value="5306-00-203-3858">
+      <button class="search-btn">Search</button>
+    </div>
+  </div>
+
+  <!-- NSN HERO -->
+  <div class="nsn-hero">
+    <div class="nsn-hero-left" style="flex:1">
+      <div class="nsn-number">5306-00-203-3858</div>
+      <div class="nsn-title">BOLT, MACHINE, HEXAGON HEAD</div>
+      <div class="nsn-tags">
+        <span class="tag tag-blue">FSC 5306 — BOLTS</span>
+        <span class="tag tag-gray">NON-HAZARDOUS</span>
+        <span class="tag tag-gray">NON-CRITICAL</span>
+        <span class="tag tag-amber">MIL-SPEC PKG MANDATORY</span>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="hs-label">12-Month Qty</span>
+          <span class="hs-val blue">45,600 EA</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hs-label">Last Solicitation</span>
+          <span class="hs-val">18-Jan-2026</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hs-label">Avg Award Price</span>
+          <span class="hs-val green">$3.82 / EA</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hs-label">Price Trend (12mo)</span>
+          <span class="hs-val trend-up">▲ 8.2%</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hs-label">DLA Unit Price</span>
+          <span class="hs-val green">$4.27</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hs-label">Active Suppliers</span>
+          <span class="hs-val">4</span>
+        </div>
+      </div>
+    </div>
+    <div class="nsn-hero-right">
+      <div style="font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.6px;color:var(--text-faint);margin-bottom:4px;">Bid Worthiness</div>
+      <div class="score-ring">
+        <svg viewBox="0 0 84 84">
+          <circle class="ring-bg" cx="42" cy="42" r="36"/>
+          <circle class="ring-fill" cx="42" cy="42" r="36" style="stroke-dashoffset:81"/>
+        </svg>
+        <div class="score-inner">
+          <span class="score-num">72</span>
+          <span class="score-lbl">/ 100</span>
+        </div>
+      </div>
+      <button class="watchlist-btn">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Watchlist
+      </button>
+    </div>
+  </div>
+
+  <!-- ITEM DESCRIPTION -->
+  <div class="card">
+    <div class="card-hdr">
+      <h3>Item Description</h3>
+      <span class="src-tag">V_H6_NAME_INC + V_CHARACTERISTICS</span>
+    </div>
+    <div class="card-body">
+      <div class="quote-block">A headed, externally threaded bolt with a hexagonal shaped head designed to be driven by a socket or wrench. It is generally used with a nut or in a tapped hole. The head is not slotted or recessed for a screwdriver.</div>
+      <div class="kv-grid c4" style="margin-top:4px">
+        <div class="kv"><label>Material</label><div class="val">Alloy Steel, Grade 8</div></div>
+        <div class="kv"><label>Surface Treatment</label><div class="val">Zinc Plated, Yellow Chromate</div></div>
+        <div class="kv"><label>Thread Size</label><div class="val mono">5/16-18 UNC-2A</div></div>
+        <div class="kv"><label>Overall Length</label><div class="val mono">2.500 in</div></div>
+        <div class="kv"><label>Head Height</label><div class="val mono">0.211 in</div></div>
+        <div class="kv"><label>Tensile Strength</label><div class="val mono">150,000 PSI min</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MANAGEMENT & PHYSICAL — side by side -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+
+    <div class="card" style="margin-bottom:0">
+      <div class="card-hdr">
+        <h3>Management &amp; Pricing</h3>
+        <span class="src-tag">V_FLIS_MANAGEMENT</span>
+      </div>
+      <div class="card-body">
+        <div class="kv-grid c2">
+          <div class="kv"><label>DLA Unit Price</label><div class="val price big">$4.27</div></div>
+          <div class="kv"><label>Unit of Issue</label><div class="val">EA (Each)</div></div>
+          <div class="kv"><label>ESD/EMI Sensitivity</label><div class="val">A — Not Sensitive</div></div>
+          <div class="kv"><label>Shelf Life</label><div class="val">0 — Non-deteriorative</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:0">
+      <div class="card-hdr">
+        <h3>Physical Specifications</h3>
+        <span class="src-tag">V_DSS_WEIGHT_AND_CUBE</span>
+      </div>
+      <div class="card-body">
+        <div class="kv-grid c2">
+          <div class="kv"><label>Item Weight</label><div class="val mono">0.18 lbs</div></div>
+          <div class="kv"><label>Item Cube</label><div class="val mono">0.0012 cu ft</div></div>
+          <div class="kv"><label>Unpackaged Weight</label><div class="val mono">0.15 lbs</div></div>
+          <div class="kv"><label>Unpackaged Dims</label><div class="val mono">2.50 × 0.50 × 0.50 in</div></div>
+          <div class="kv"><label>Packed Weight</label><div class="val mono">22.5 lbs</div></div>
+          <div class="kv"><label>Packed Dimensions</label><div class="val mono">12 × 8 × 6 in</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MIL-SPEC PACKAGING -->
+  <div class="card">
+    <div class="card-hdr">
+      <h3>MIL-SPEC Packaging Requirements</h3>
+      <div class="hdr-right">
+        <span class="src-tag">V_FLIS_PACKAGING_1/2/3</span>
+        <a href="https://www.govpacking.com" class="link-btn" target="_blank">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          GovPacking
+        </a>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="kv-grid c5">
+        <div class="kv"><label>QUP</label><div class="val mono">100</div></div>
+        <div class="kv"><label>Pres Method</label><div class="val">10 — Physical Protection</div></div>
+        <div class="kv"><label>Clns / Dry</label><div class="val">1 — Clean and Dry</div></div>
+        <div class="kv"><label>Presv Material</label><div class="val">00 — None Required</div></div>
+        <div class="kv"><label>Wrap Material</label><div class="val">JA — Polyethylene Bag</div></div>
+        <div class="kv"><label>Cush / Dunn Mat</label><div class="val">00 — None</div></div>
+        <div class="kv"><label>Thickness</label><div class="val">—</div></div>
+        <div class="kv"><label>Unit Container</label><div class="val">D3 — Fiberboard, WR</div></div>
+        <div class="kv"><label>QPI</label><div class="val red">M — Mandatory</div></div>
+        <div class="kv"><label>Intrmdte Cont</label><div class="val">00 — None</div></div>
+        <div class="kv"><label>Intrmdte Qty</label><div class="val">—</div></div>
+        <div class="kv"><label>Special Marking</label><div class="val">00 — None</div></div>
+      </div>
+      <div class="suppl-box">
+        <div class="suppl-label">Supplemental Instructions</div>
+        <div class="suppl-text">IMPC = 3B — NONSTOCKED ITEM. Special packaging instructions per SPI F004546662 Rev D. Package weight not to exceed 50 lbs per unit pack.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PART NUMBERS & SUPPLIERS -->
+  <div class="card">
+    <div class="card-hdr">
+      <h3>Part Numbers &amp; Suppliers</h3>
+      <span class="src-tag">6 references</span>
+    </div>
+    <div class="card-body" style="padding:0">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Role</th><th>CAGE</th><th>Company</th><th>Part Number</th>
+            <th>Status</th><th>SAM Status</th><th>Data</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag tag-blue">MFG</span></td>
+            <td class="mono"><a href="#">96906</a></td>
+            <td>SPS TECHNOLOGIES INC</td>
+            <td class="mono">NAS6203-14</td>
+            <td style="color:var(--green);font-weight:600">● Active</td>
+            <td><span class="tag tag-green">ACTIVE</span></td>
+            <td>Complete</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-blue">MFG</span></td>
+            <td class="mono"><a href="#">71488</a></td>
+            <td>STANDARD PRESSED STEEL</td>
+            <td class="mono">SPS-3826-14</td>
+            <td style="color:var(--green);font-weight:600">● Active</td>
+            <td><span class="tag tag-green">ACTIVE</span></td>
+            <td>Limited</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-red">DIST</span></td>
+            <td class="mono"><a href="#">66324</a></td>
+            <td>FASTENAL COMPANY</td>
+            <td class="mono">FAS-HX516250-G8</td>
+            <td style="color:var(--green);font-weight:600">● Active</td>
+            <td><span class="tag tag-green">ACTIVE</span></td>
+            <td>No Data</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-red">DIST</span></td>
+            <td class="mono"><a href="#">0BTK8</a></td>
+            <td>MCMASTER-CARR SUPPLY</td>
+            <td class="mono">912574594</td>
+            <td style="color:var(--green);font-weight:600">● Active</td>
+            <td><span class="tag tag-green">ACTIVE</span></td>
+            <td>No Data</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-purple">SPEC</span></td>
+            <td class="mono"><a href="#">80064</a></td>
+            <td>DEFENSE LOGISTICS AGENCY</td>
+            <td class="mono">MIL-B-7838</td>
+            <td style="color:var(--text-muted)">Ref Only</td>
+            <td><span class="tag tag-gray">ACTIVE</span></td>
+            <td>Govt Unlimited</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-red">DIST</span></td>
+            <td class="mono"><a href="#">39428</a></td>
+            <td>INDUSTRIAL BOLT &amp; SUPPLY</td>
+            <td class="mono">IBS-6203-142</td>
+            <td style="color:var(--text-faint);font-style:italic">Obsolete</td>
+            <td><span class="tag tag-red">DEFUNCT</span></td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PROCUREMENT HISTORY -->
+  <div class="card">
+    <div class="card-hdr">
+      <h3>Procurement History</h3>
+      <span class="src-tag">Last 5 Awards</span>
+    </div>
+    <div class="card-body">
+
+      <!-- Inline price chart -->
+      <div class="chart-wrap">
+        <svg class="chart-svg" viewBox="0 0 620 160" preserveAspectRatio="xMidYMid meet">
+          <!-- Grid -->
+          <line x1="60" y1="16" x2="600" y2="16" class="chart-grid"/>
+          <line x1="60" y1="46" x2="600" y2="46" class="chart-grid"/>
+          <line x1="60" y1="76" x2="600" y2="76" class="chart-grid"/>
+          <line x1="60" y1="106" x2="600" y2="106" class="chart-grid"/>
+          <line x1="60" y1="136" x2="600" y2="136" class="chart-grid"/>
+          <!-- Y labels -->
+          <text x="54" y="20" class="chart-label" text-anchor="end">$4.20</text>
+          <text x="54" y="50" class="chart-label" text-anchor="end">$4.00</text>
+          <text x="54" y="80" class="chart-label" text-anchor="end">$3.80</text>
+          <text x="54" y="110" class="chart-label" text-anchor="end">$3.60</text>
+          <text x="54" y="140" class="chart-label" text-anchor="end">$3.40</text>
+          <!-- X labels -->
+          <text x="120" y="154" class="chart-label" text-anchor="middle">Jan-25</text>
+          <text x="250" y="154" class="chart-label" text-anchor="middle">Apr-25</text>
+          <text x="380" y="154" class="chart-label" text-anchor="middle">Jul-25</text>
+          <text x="510" y="154" class="chart-label" text-anchor="middle">Oct-25</text>
+          <text x="580" y="154" class="chart-label" text-anchor="middle">Jan-26</text>
+          <!-- Area -->
+          <polygon class="chart-area" points="120,118 250,96 380,58 510,78 580,8 580,136 120,136" opacity="0.4"/>
+          <!-- Line -->
+          <polyline class="chart-line" points="120,118 250,96 380,58 510,78 580,8"/>
+          <!-- Dots + labels -->
+          <circle cx="120" cy="118" r="5" class="chart-dot"/>
+          <text x="120" y="112" class="chart-price" text-anchor="middle">$3.65</text>
+          <circle cx="250" cy="96" r="5" class="chart-dot"/>
+          <text x="250" y="90" class="chart-price" text-anchor="middle">$3.61</text>
+          <circle cx="380" cy="58" r="5" class="chart-dot"/>
+          <text x="380" y="52" class="chart-price" text-anchor="middle">$3.74</text>
+          <circle cx="510" cy="78" r="5" class="chart-dot"/>
+          <text x="510" y="72" class="chart-price" text-anchor="middle">$3.98</text>
+          <circle cx="580" cy="8" r="5" class="chart-dot"/>
+          <text x="580" y="28" class="chart-price" text-anchor="middle">$4.12</text>
+        </svg>
+      </div>
+
+      <!-- Award table -->
+      <table class="data-table" style="margin-top:4px">
+        <thead>
+          <tr>
+            <th>Award Date</th><th>Solicitation</th><th>Winner CAGE</th>
+            <th>Winner</th><th>Qty</th><th>Unit Price</th><th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>12-Jan-2026</td>
+            <td class="mono">SPE7M8-26-Q-0142</td>
+            <td class="mono"><a href="#">66324</a></td>
+            <td>FASTENAL</td><td>18,000</td>
+            <td class="mono" style="color:var(--green);font-weight:600">$4.12</td>
+            <td class="mono">$74,160</td>
+          </tr>
+          <tr>
+            <td>28-Oct-2025</td>
+            <td class="mono">SPE7M8-25-Q-0891</td>
+            <td class="mono"><a href="#">96906</a></td>
+            <td>SPS TECHNOLOGIES</td><td>8,000</td>
+            <td class="mono" style="color:var(--green);font-weight:600">$3.98</td>
+            <td class="mono">$31,840</td>
+          </tr>
+          <tr>
+            <td>15-Jul-2025</td>
+            <td class="mono">SPE7M8-25-Q-0503</td>
+            <td class="mono"><a href="#">66324</a></td>
+            <td>FASTENAL</td><td>12,000</td>
+            <td class="mono" style="color:var(--green);font-weight:600">$3.74</td>
+            <td class="mono">$44,880</td>
+          </tr>
+          <tr>
+            <td>02-Apr-2025</td>
+            <td class="mono">SPE7M8-25-Q-0217</td>
+            <td class="mono"><a href="#">0BTK8</a></td>
+            <td>MCMASTER-CARR</td><td>8,000</td>
+            <td class="mono" style="color:var(--green);font-weight:600">$3.61</td>
+            <td class="mono">$28,880</td>
+          </tr>
+          <tr>
+            <td>10-Jan-2025</td>
+            <td class="mono">SPE7M8-25-Q-0038</td>
+            <td class="mono"><a href="#">96906</a></td>
+            <td>SPS TECHNOLOGIES</td><td>7,600</td>
+            <td class="mono" style="color:var(--green);font-weight:600">$3.65</td>
+            <td class="mono">$27,740</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- RELATED ITEMS -->
+  <div class="card">
+    <div class="card-hdr">
+      <h3>Related Items &amp; Cross-References</h3>
+      <span class="src-tag">V_H6_RELATED + V_COLLOQUIAL_NAME</span>
+    </div>
+    <div class="card-body">
+      <div class="kv-grid c2" style="margin-bottom:14px">
+        <div class="kv">
+          <label>Superseded NSNs</label>
+          <div class="val">None — this NSN is current</div>
+        </div>
+        <div class="kv">
+          <label>Colloquial Names</label>
+          <div class="val">Hex Bolt, Hex Head Cap Screw, Machine Bolt</div>
+        </div>
+      </div>
+      <div class="kv">
+        <label>Related NSNs (Same INC)</label>
+        <div class="nsn-chips">
+          <div class="nsn-chip">
+            <span class="nc-nsn">5306-00-203-3859</span>
+            <span class="nc-pn">NAS6203-16</span>
+          </div>
+          <div class="nsn-chip">
+            <span class="nc-nsn">5306-00-418-7224</span>
+            <span class="nc-pn">NAS6203-20</span>
+          </div>
+          <div class="nsn-chip">
+            <span class="nc-nsn">5306-00-203-3860</span>
+            <span class="nc-pn">NAS6203-18</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BID WORTHINESS -->
+  <div class="card bw-card">
+    <div class="card-hdr">
+      <h3>Bid Worthiness &amp; Analysis</h3>
+      <div class="hdr-right">
+        <span class="bw-score-badge">Score: 72 / 100</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="kv-grid c4" style="margin-bottom:16px">
+        <div class="kv">
+          <label>Demand Consistency</label>
+          <div class="stars">
+            <span class="star filled">★</span><span class="star filled">★</span>
+            <span class="star filled">★</span><span class="star filled">★</span>
+            <span class="star">★</span>
+          </div>
+          <div class="val" style="font-size:11px;color:var(--text-muted);margin-top:2px">High — 6 solicitations / 12 mo</div>
+        </div>
+        <div class="kv">
+          <label>Pricing Stability</label>
+          <div class="stars">
+            <span class="star filled">★</span><span class="star filled">★</span>
+            <span class="star filled">★</span><span class="star">★</span>
+            <span class="star">★</span>
+          </div>
+          <div class="val" style="font-size:11px;color:var(--text-muted);margin-top:2px">Moderate — 8.2% variance</div>
+        </div>
+        <div class="kv">
+          <label>Competition Density</label>
+          <div class="stars">
+            <span class="star filled">★</span><span class="star filled">★</span>
+            <span class="star filled">★</span><span class="star">★</span>
+            <span class="star">★</span>
+          </div>
+          <div class="val" style="font-size:11px;color:var(--text-muted);margin-top:2px">4 active suppliers</div>
+        </div>
+        <div class="kv">
+          <label>Member Fit</label>
+          <div class="stars">
+            <span class="star filled">★</span><span class="star filled">★</span>
+            <span class="star filled">★</span><span class="star filled">★</span>
+            <span class="star filled">★</span>
+          </div>
+          <div class="val" style="font-size:11px;color:var(--text-muted);margin-top:2px">Strong — FSC 5306 in focus</div>
+        </div>
+      </div>
+      <div class="kv-grid c2" style="margin-bottom:4px">
+        <div class="kv">
+          <label>Award Size</label>
+          <div class="stars">
+            <span class="star filled">★</span><span class="star filled">★</span>
+            <span class="star filled">★</span><span class="star filled">★</span>
+            <span class="star">★</span>
+          </div>
+          <div class="val" style="font-size:11px;color:var(--text-muted);margin-top:2px">$28K–$45K typical</div>
+        </div>
+        <div class="kv">
+          <label>Packaging Complexity</label>
+          <div class="stars">
+            <span class="star filled">★</span><span class="star filled">★</span>
+            <span class="star">★</span><span class="star">★</span>
+            <span class="star">★</span>
+          </div>
+          <div class="val amber" style="font-size:11px;margin-top:2px">Mandatory MIL-SPEC — SPI required</div>
+        </div>
+      </div>
+      <div class="analysis-box">
+        <b>Analysis:</b> This NSN shows consistent DLA demand with 6 solicitations over 12 months. Pricing has trended upward 8.2% year-over-year, suggesting growing demand or supply tightening. Competition is moderate with 4 active suppliers, two of which (FASTENAL and SPS TECHNOLOGIES) have won the last 5 awards between them. The main cost complexity is mandatory MIL-SPEC packaging per SPI F004546662 Rev D — factor this into your bid price. Your FSC 5306 specialization aligns well with this opportunity.
+      </div>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

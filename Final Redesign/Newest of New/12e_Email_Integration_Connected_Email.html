@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Email Integration — GovScraper</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F8FAFC;--surface:#fff;--surface-2:#F1F5F9;--border:#E2E8F0;--border-strong:#CBD5E1;--text:#1E293B;--text-dim:#475569;--text-muted:#6B7280;--text-faint:#94A3B8;--accent:#2563EB;--accent-bg:#EFF6FF;--accent-border:#BFDBFE;--accent-hover:#1D4ED8;--green:#16A34A;--green-bg:#F0FDF4;--green-border:#BBF7D0;--amber:#D97706;--amber-bg:#FFF7ED;--amber-border:#FDE68A;--red:#DC2626;--red-bg:#FEF2F2;--red-border:#FECACA}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);font-size:13px}a{color:var(--accent);text-decoration:none}
+.topbar{height:56px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.topbar-left{display:flex;align-items:center;gap:16px}.topbar-logo{height:30px}
+.bc{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-muted)}.bc a{color:var(--text-muted);font-weight:500;text-decoration:none}.bc a:hover{color:var(--accent)}.bc .sep{color:var(--border-strong)}.bc .cur{color:var(--text-dim);font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.avatar-btn{width:36px;height:36px;border-radius:9px;border:2px solid var(--border);background:linear-gradient(135deg,var(--accent),#1D4ED8);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;cursor:pointer;padding:0}
+.nav-sb{width:224px;position:fixed;top:56px;left:0;bottom:0;background:var(--surface);border-right:1px solid var(--border);padding:14px 0;overflow-y:auto;z-index:90}
+.sb-lbl{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--text-faint);padding:12px 20px 4px}
+.sb-a{display:flex;align-items:center;gap:10px;padding:8px 20px;font-size:12.5px;font-weight:500;color:var(--text-dim);text-decoration:none;border-left:3px solid transparent;transition:all .15s}.sb-a:hover{background:var(--accent-bg);color:var(--accent)}.sb-a.active{color:var(--accent);font-weight:700;border-left-color:var(--accent);background:var(--accent-bg)}.sb-a svg{width:16px;height:16px;flex-shrink:0;opacity:.8}
+.sb-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:10px}
+.sb-divider{height:1px;background:var(--border);margin:10px 20px}
+.sb-logout{display:flex;align-items:center;gap:10px;padding:8px 20px;font-size:12.5px;font-weight:500;color:var(--red);border:none;border-left:3px solid transparent;cursor:pointer;transition:all .15s;background:none;width:100%;font-family:'Manrope',sans-serif}.sb-logout:hover{background:var(--red-bg)}.sb-logout svg{width:16px;height:16px;flex-shrink:0}
+.main{margin-left:224px;padding:28px 32px;min-height:calc(100vh - 56px)}
+.page-title{font-size:20px;font-weight:800;color:var(--text);margin-bottom:4px}
+.page-intro{font-size:13px;color:var(--text-muted);line-height:1.7;max-width:660px;margin-bottom:24px}
+.tabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:24px}
+.tab{font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;padding:10px 20px;border:none;background:transparent;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s}.tab:hover{color:var(--text-dim)}.tab.active{color:var(--accent);font-weight:700;border-bottom-color:var(--accent)}
+.tab-panel{display:none}.tab-panel.active{display:block}
+.connect-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;max-width:640px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.connect-card-title{font-size:15px;font-weight:800;color:var(--text);margin-bottom:6px}
+.connect-card-sub{font-size:12.5px;color:var(--text-muted);line-height:1.6;margin-bottom:22px}
+.provider-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border:1.5px solid var(--border);border-radius:10px;margin-bottom:10px;background:var(--surface);transition:border-color .15s}.provider-row:hover{border-color:var(--border-strong)}.provider-row:last-child{margin-bottom:0}
+.prov-left{display:flex;align-items:center;gap:12px}
+.prov-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.prov-name{font-size:13px;font-weight:600;color:var(--text)}.prov-name span{font-weight:400;color:var(--text-muted)}
+.prov-desc{font-size:11.5px;color:var(--text-faint);margin-top:2px}
+.btn-google{display:flex;align-items:center;gap:8px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:9px 16px;border-radius:8px;border:1.5px solid var(--border);background:var(--surface);color:var(--text-dim);cursor:pointer;transition:all .15s;white-space:nowrap}.btn-google:hover{border-color:#4285F4;background:#F8FBFF;color:#1a73e8}
+.btn-microsoft{display:flex;align-items:center;gap:8px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:9px 16px;border-radius:8px;border:1.5px solid var(--border);background:var(--surface);color:var(--text-dim);cursor:pointer;transition:all .15s;white-space:nowrap}.btn-microsoft:hover{border-color:#00a1f1;background:#F0F8FF;color:#00a1f1}
+.connected-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;max-width:700px;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:20px}
+.connected-title{font-size:15px;font-weight:800;color:var(--text);margin-bottom:4px}
+.connected-sub{font-size:12.5px;color:var(--text-muted);margin-bottom:20px;line-height:1.6}
+.mailbox-row{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border:1.5px solid var(--green-border);border-radius:10px;background:var(--green-bg);gap:12px;flex-wrap:wrap}
+.mailbox-left{display:flex;align-items:center;gap:10px}
+.mailbox-email{font-size:13px;font-weight:700;color:var(--text)}
+.mailbox-type{font-size:11px;color:var(--text-muted);margin-top:1px;display:flex;align-items:center;gap:5px}
+.mailbox-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.btn-sig{font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;padding:7px 14px;border-radius:7px;border:1.5px solid var(--accent-border);background:var(--accent-bg);color:var(--accent);cursor:pointer;transition:all .15s}.btn-sig:hover{background:var(--accent);color:#fff}
+.btn-disconnect{font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;padding:7px 14px;border-radius:7px;border:1.5px solid var(--red-border);background:transparent;color:var(--red);cursor:pointer;transition:all .15s}.btn-disconnect:hover{background:var(--red);color:#fff}
+
+/* ═══ SIGNATURE EDITOR ═══ */
+.sig-section{margin-top:22px;border-top:1px solid var(--border);padding-top:22px}
+.sig-section-hdr{margin-bottom:14px}
+.sig-section-title{font-size:14px;font-weight:800;color:var(--text);margin-bottom:3px}
+.sig-section-sub{font-size:12px;color:var(--text-muted);line-height:1.6}
+.paste-notice{display:flex;align-items:flex-start;gap:10px;background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:8px;padding:11px 14px;margin-bottom:16px}
+.paste-notice-text{font-size:12px;color:var(--accent);line-height:1.6}.paste-notice-text strong{font-weight:700}
+.editor-shell{border:1.5px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .18s}
+.editor-shell.focused{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.09)}
+.toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:1px;padding:7px 10px;background:var(--surface-2);border-bottom:1px solid var(--border);min-height:46px}
+.tb-sep{width:1px;height:20px;background:var(--border-strong);margin:0 4px;flex-shrink:0}
+.tb-btn{width:28px;height:28px;border:none;background:transparent;border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-dim);transition:all .12s;padding:0;flex-shrink:0}
+.tb-btn:hover{background:var(--border);color:var(--text)}.tb-btn.on{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-border)}.tb-btn svg{pointer-events:none;display:block}
+.tb-label{height:28px;padding:0 9px;border:none;background:transparent;border-radius:5px;cursor:pointer;font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;color:var(--text-dim);transition:all .12s;white-space:nowrap;display:flex;align-items:center}
+.tb-label:hover{background:var(--border);color:var(--text)}.tb-label.on{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-border)}
+.tb-select{font-family:'Manrope',sans-serif;font-size:11.5px;height:28px;padding:0 6px;border:1px solid var(--border);border-radius:5px;background:var(--surface);color:var(--text-dim);cursor:pointer;outline:none}.tb-select:focus{border-color:var(--accent)}
+.tb-color{position:relative;width:28px;height:28px;flex-shrink:0}
+.tb-color input[type=color]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;border:none;padding:0}
+.tb-color-face{width:28px;height:28px;border-radius:5px;border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;pointer-events:none;flex-direction:column;gap:2px}
+.tb-swatch{width:14px;height:4px;border-radius:2px;border:1px solid rgba(0,0,0,.12)}
+.editor-body{min-height:160px;max-height:360px;overflow-y:auto;padding:16px 18px;outline:none;font-size:13px;line-height:1.75;color:var(--text);word-break:break-word;background:var(--surface)}
+.editor-body:empty::before{content:attr(data-ph);color:var(--text-faint);pointer-events:none;display:block;font-style:italic}
+.editor-body img{max-width:220px;height:auto;border-radius:5px;display:inline-block;vertical-align:middle;cursor:pointer;outline:2px solid transparent;transition:outline-color .15s}
+.editor-body img:hover,.editor-body img.sel{outline:2.5px solid var(--accent)}
+.editor-body a{color:var(--accent);text-decoration:underline}
+.editor-body hr{border:none;border-top:1px solid var(--border);margin:8px 0}
+.editor-footer{display:flex;align-items:center;justify-content:space-between;padding:7px 12px;background:var(--surface-2);border-top:1px solid var(--border)}
+.editor-footer-left{font-size:10.5px;color:var(--text-faint);font-family:'Source Code Pro',monospace}
+.editor-footer-btns{display:flex;gap:3px}
+.sig-preview{margin-top:18px}
+.preview-lbl{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--text-faint);display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.preview-mock{border:1px solid var(--border);border-radius:9px;overflow:hidden;background:var(--surface)}
+.pm-hdr{background:var(--surface-2);padding:9px 16px;border-bottom:1px solid var(--border);font-size:11px;color:var(--text-faint);display:flex;flex-wrap:wrap;gap:10px}
+.pm-hdr strong{color:var(--text-dim)}
+.pm-body{padding:16px 18px;font-size:13px;line-height:1.75;color:var(--text-dim)}
+.pm-divider{border:none;border-top:1px solid var(--border);margin:14px 0}
+.pm-sig{font-size:12.5px}
+.sig-actions{display:flex;gap:10px;margin-top:18px}
+.btn-save-sig{font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:10px 24px;border-radius:8px;border:none;background:var(--accent);color:#fff;cursor:pointer;transition:background .15s;flex:1}.btn-save-sig:hover{background:var(--accent-hover)}
+.btn-clear-sig{font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;padding:10px 16px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;transition:all .15s}.btn-clear-sig:hover{background:var(--red-bg);color:var(--red);border-color:var(--red-border)}
+input.hidden-input{display:none}
+
+/* FAQ */
+.faq-card{background:linear-gradient(to bottom,#E8F4FD,#D4EBFB);border:1px solid #B3D9F5;border-radius:12px;padding:24px;max-width:700px}
+.faq-title{font-size:14px;font-weight:800;color:#1a4a6b;margin-bottom:16px}
+.faq-item{margin-bottom:16px}.faq-item:last-child{margin-bottom:0}
+.faq-q{font-size:12.5px;font-weight:700;color:#1a4a6b;margin-bottom:4px}
+.faq-a{font-size:12px;color:#2d6a9f;line-height:1.65}
+
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;padding:20px}
+.overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--surface);border-radius:14px;width:100%;max-width:400px;padding:28px;box-shadow:0 24px 80px rgba(0,0,0,.2);transform:translateY(14px);transition:transform .22s;text-align:center}
+.overlay.open .modal{transform:translateY(0)}
+.modal-ico{width:52px;height:52px;border-radius:14px;background:var(--red-bg);border:1px solid var(--red-border);display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.modal-title{font-size:17px;font-weight:800;color:var(--text);margin-bottom:8px}
+.modal-sub{font-size:12.5px;color:var(--text-muted);line-height:1.6;margin-bottom:22px}
+.modal-actions{display:flex;gap:10px}
+.btn-mc{font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;padding:10px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;flex:1}.btn-mc:hover{background:var(--surface-2)}
+.btn-mx{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:10px;border-radius:8px;border:none;background:var(--red);color:#fff;cursor:pointer;flex:2}.btn-mx:hover{background:#B91C1C}
+.toast{position:fixed;bottom:24px;right:24px;background:#1E293B;color:#fff;font-size:12.5px;font-weight:600;padding:12px 18px;border-radius:10px;display:flex;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(0,0,0,.2);opacity:0;transition:opacity .2s;pointer-events:none;z-index:600}.toast.show{opacity:1}
+
+/* ── Standard GovScraper GOLD sidebar ── */
+.sidebar{width:224px;position:fixed;top:56px;left:0;bottom:0;background:var(--surface);border-right:1px solid var(--border);padding:14px 0;overflow-y:auto;z-index:90;display:flex;flex-direction:column}
+.sidebar-label{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--text-faint);padding:12px 20px 4px}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:8px 20px;font-size:12.5px;font-weight:500;color:var(--text-dim);text-decoration:none;border-left:3px solid transparent;transition:all .15s;cursor:pointer;background:none;border-top:none;border-right:none;border-bottom:none;width:100%;text-align:left;font-family:'Manrope',sans-serif}
+.sidebar-item:hover{background:var(--accent-bg);color:var(--accent)}
+.sidebar-item.active{color:var(--accent);font-weight:700;border-left-color:var(--accent);background:var(--accent-bg)}
+.sidebar-item svg{width:16px;height:16px;flex-shrink:0;opacity:.8}
+.sidebar-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:10px}
+.sidebar-spacer{flex:1;min-height:20px}
+.sb-tour-btn{width:100%;font-family:'Manrope',sans-serif;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;border:1.5px solid #E2E8F0;background:#F8FAFC;cursor:pointer;transition:all .15s;text-align:left}
+.sb-tour-btn:hover{background:#fff;border-color:#CBD5E1;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.sb-tour-ico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-tour-ico svg{width:15px;height:15px}
+.sb-tour-label{font-size:12px;font-weight:800;color:#334155}
+.sb-tour-sub{font-size:10.5px;color:#94A3B8;margin-top:1px}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-left">
+    <a href="#"><img src="https://govscraper.com/assets/BigLogo-7gv5uAxF.png" alt="GovScraper" class="topbar-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><span style="display:none;font-size:16px;font-weight:800;color:var(--accent)">GovScraper</span></a>
+    <div class="bc"><a href="#">Dashboard</a><span class="sep">&#8250;</span><span class="cur">Email Integration</span></div>
+  </div>
+  <div class="topbar-right"><button class="avatar-btn" title="My Account">JD</button></div>
+</header>
+
+<nav class="sidebar">
+
+  <div class="sidebar-label">Main</div>
+  <a class="sidebar-item" href="govscraper-dashboard.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    Dashboard
+  </a>
+  <a class="sidebar-item" href="govscraper-rfq-list.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+    My RFQs <span class="sidebar-badge">47</span>
+  </a>
+  <a class="sidebar-item" href="govscraper-rfq-list.html" style="padding-left:32px;font-size:12px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+    Private List of RFQs
+  </a>
+  <a class="sidebar-item" href="govscraper-public-rfq-list.html" style="padding-left:32px;font-size:12px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+    Public List of RFQs
+  </a>
+
+  <div class="sidebar-label">Intelligence</div>
+  <a class="sidebar-item" href="govscraper-nsn-page.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    NSN Search
+  </a>
+  <a class="sidebar-item" href="govscraper-cage-page.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+    CAGE Search
+  </a>
+  <a class="sidebar-item" href="govscraper-fsc-lookup.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+    FSC Lookup
+  </a>
+  <a class="sidebar-item" href="govscraper-nsn-watchlist.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    NSN Watch List
+  </a>
+
+  <div class="sidebar-label">Results</div>
+  <a class="sidebar-item" href="govscraper-awarded-contracts.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+    Awarded Contracts
+  </a>
+  <a class="sidebar-item" href="govscraper-archived-rfqs.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+    Archived RFQs
+  </a>
+
+  <div class="sidebar-label">Alerts</div>
+  <a class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+    RFQ Alerts <span class="sidebar-badge">3</span>
+  </a>
+
+  <div class="sidebar-label">Community</div>
+  <a class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+    Community
+  </a>
+
+  <div class="sidebar-label">Tools</div>
+  <a class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+    GovPacking
+  </a>
+
+  <div class="sidebar-spacer"></div>
+  <div style="height:1px;background:var(--border);margin:4px 14px 2px;"></div>
+
+  <a class="sidebar-item active" href="govscraper-account.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    Settings &amp; Account
+  </a>
+
+  <div style="padding:0 12px 12px;">
+    <div style="height:1px;background:var(--border);margin-bottom:10px;"></div>
+    <button class="sb-tour-btn" style="border-color:#B4530940;background:#B4530908;">
+      <div class="sb-tour-ico" style="background:#B4530915;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2"><polygon points="5,3 19,12 5,21 5,3"/></svg>
+      </div>
+      <div>
+        <div class="sb-tour-label" style="color:#B45309;">Replay GOLD Tour</div>
+        <div class="sb-tour-sub">Replay the walkthrough</div>
+      </div>
+    </button>
+  </div>
+
+</nav>
+
+<main class="main">
+  <div class="page-title">Email Integration</div>
+  <div class="page-intro">GovScraper lets you send emails directly to vendors from within the platform. Connect your Gmail or Outlook account below — all outbound emails go through your own provider, ensuring proper delivery and compliance.</div>
+
+  <div class="tabs">
+    <button class="tab" id="tab-connect" onclick="switchTab('connect')">Connect Email</button>
+    <button class="tab active" id="tab-connected" onclick="switchTab('connected')">Connected Email</button>
+  </div>
+
+  <!-- CONNECT TAB -->
+  <div class="tab-panel" id="panel-connect">
+    <div class="connect-card">
+      <div class="connect-card-title">Connect a personal mailbox</div>
+      <div class="connect-card-sub">Adding your personal email lets you send messages directly to GovScraper vendors. Your connection is unique to you and cannot be shared.</div>
+      <div class="provider-row">
+        <div class="prov-left">
+          <div class="prov-icon"><svg width="28" height="22" viewBox="0 0 48 36"><path d="M0 0h48L24 21 0 0z" fill="#EA4335"/><path d="M0 0v36h8V12L0 0z" fill="#C5221F"/><path d="M48 0v36h-8V12L48 0z" fill="#1A73E8"/><path d="M8 12v24h32V12L24 27 8 12z" fill="#FBBC05"/></svg></div>
+          <div><div class="prov-name">Send using your <span>Google Workspace or Gmail</span> account</div><div class="prov-desc">Connects via secure OAuth &#8212; no password required</div></div>
+        </div>
+        <button class="btn-google" onclick="simulateConnect('google')">
+          <svg width="15" height="15" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          Sign in with Google
+        </button>
+      </div>
+      <div class="provider-row">
+        <div class="prov-left">
+          <div class="prov-icon"><svg width="26" height="26" viewBox="0 0 21 21"><rect x="1" y="1" width="9" height="9" fill="#F25022"/><rect x="11" y="1" width="9" height="9" fill="#7FBA00"/><rect x="1" y="11" width="9" height="9" fill="#00A4EF"/><rect x="11" y="11" width="9" height="9" fill="#FFB900"/></svg></div>
+          <div><div class="prov-name">Send using your <span>Microsoft 365 or Outlook</span> account</div><div class="prov-desc">Connects via secure OAuth &#8212; no password required</div></div>
+        </div>
+        <button class="btn-microsoft" onclick="simulateConnect('microsoft')">
+          <svg width="15" height="15" viewBox="0 0 21 21"><rect x="1" y="1" width="9" height="9" fill="#F25022"/><rect x="11" y="1" width="9" height="9" fill="#7FBA00"/><rect x="1" y="11" width="9" height="9" fill="#00A4EF"/><rect x="11" y="11" width="9" height="9" fill="#FFB900"/></svg>
+          Sign in with Microsoft
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONNECTED TAB -->
+  <div class="tab-panel active" id="panel-connected">
+    <div class="connected-card">
+      <div class="connected-title">Your connected mailbox</div>
+      <div class="connected-sub">Vendor emails will be sent from this address on your behalf.</div>
+
+      <div class="mailbox-row">
+        <div class="mailbox-left">
+          <svg id="connected-icon" width="24" height="20" viewBox="0 0 48 36"><path d="M0 0h48L24 21 0 0z" fill="#EA4335"/><path d="M0 0v36h8V12L0 0z" fill="#C5221F"/><path d="M48 0v36h-8V12L48 0z" fill="#1A73E8"/><path d="M8 12v24h32V12L24 27 8 12z" fill="#FBBC05"/></svg>
+          <div>
+            <div class="mailbox-email" id="connected-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c2a8adaaaceca6a7afad82a5afa3abaeeca1adaf">[email&#160;protected]</a></div>
+            <div class="mailbox-type" id="connected-type"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>Connected via Google &#183; Active</div>
+          </div>
+        </div>
+        <div class="mailbox-actions">
+          <button class="btn-sig" id="btn-sig" onclick="toggleSig()">Hide Signature</button>
+          <button class="btn-disconnect" onclick="openDisc()">Disconnect</button>
+        </div>
+      </div>
+
+      <!-- ═══ RICH SIGNATURE EDITOR ═══ -->
+      <div class="sig-section" id="sig-section">
+
+        <div class="sig-section-hdr">
+          <div class="sig-section-title">Email Signature</div>
+          <div class="sig-section-sub">Appended to every vendor email you send from GovScraper.</div>
+        </div>
+
+        <div class="paste-notice">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
+          <div class="paste-notice-text"><strong>Paste-friendly:</strong> Copy your signature directly from Gmail, Outlook, Apple Mail, or any email client and paste it below. Formatting, fonts, colors, tables, and images are all preserved exactly as they appear in your email client.</div>
+        </div>
+
+        <div class="editor-shell" id="editor-shell">
+
+          <div class="toolbar">
+
+            <select class="tb-select" style="max-width:108px" title="Font family" onchange="fmt('fontName',this.value)">
+              <option value="Arial">Arial</option>
+              <option value="Georgia">Georgia</option>
+              <option value="Manrope,sans-serif" selected>Manrope</option>
+              <option value="'Times New Roman',serif">Times New Roman</option>
+              <option value="'Courier New',monospace">Courier New</option>
+              <option value="Verdana,sans-serif">Verdana</option>
+              <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
+            </select>
+
+            <select class="tb-select" style="max-width:68px;margin-left:4px" title="Font size" onchange="fmt('fontSize',this.value)">
+              <option value="1">10px</option>
+              <option value="2">12px</option>
+              <option value="3" selected>14px</option>
+              <option value="4">16px</option>
+              <option value="5">18px</option>
+              <option value="6">22px</option>
+              <option value="7">28px</option>
+            </select>
+
+            <div class="tb-sep"></div>
+
+            <button class="tb-label" id="fB" onclick="toggle('bold')" title="Bold"><b>B</b></button>
+            <button class="tb-label" id="fI" onclick="toggle('italic')" title="Italic"><i>I</i></button>
+            <button class="tb-label" id="fU" onclick="toggle('underline')" title="Underline" style="text-decoration:underline">U</button>
+            <button class="tb-label" id="fS" onclick="toggle('strikeThrough')" title="Strikethrough" style="text-decoration:line-through">S</button>
+
+            <div class="tb-sep"></div>
+
+            <div class="tb-color" title="Text color">
+              <input type="color" id="fgc" value="#1E293B" oninput="applyColor('foreColor',this.value,'fgs')">
+              <div class="tb-color-face">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><polyline points="4,7 4,4 20,4 20,7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+                <div class="tb-swatch" id="fgs" style="background:#1E293B"></div>
+              </div>
+            </div>
+
+            <div class="tb-color" title="Highlight / background color" style="margin-left:2px">
+              <input type="color" id="bgc" value="#FFFF00" oninput="applyColor('hiliteColor',this.value,'bgs')">
+              <div class="tb-color-face">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                <div class="tb-swatch" id="bgs" style="background:#FFFF00"></div>
+              </div>
+            </div>
+
+            <div class="tb-sep"></div>
+
+            <button class="tb-btn" onclick="fmt('justifyLeft')" title="Align left"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="10" x2="15" y2="10"/><line x1="3" y1="14" x2="21" y2="14"/><line x1="3" y1="18" x2="15" y2="18"/></svg></button>
+            <button class="tb-btn" onclick="fmt('justifyCenter')" title="Center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="10" x2="18" y2="10"/><line x1="3" y1="14" x2="21" y2="14"/><line x1="6" y1="18" x2="18" y2="18"/></svg></button>
+            <button class="tb-btn" onclick="fmt('justifyRight')" title="Align right"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="9" y1="10" x2="21" y2="10"/><line x1="3" y1="14" x2="21" y2="14"/><line x1="9" y1="18" x2="21" y2="18"/></svg></button>
+
+            <div class="tb-sep"></div>
+
+            <button class="tb-btn" onclick="fmt('insertUnorderedList')" title="Bullet list"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/><circle cx="4" cy="6" r="1.5" fill="currentColor" stroke="none"/><circle cx="4" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="4" cy="18" r="1.5" fill="currentColor" stroke="none"/></svg></button>
+            <button class="tb-btn" onclick="fmt('insertOrderedList')" title="Numbered list"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M3.5 5.5h2M4.5 5.5v4M3.5 12h2l-2 2.5h2M3.5 17.5c.5-.5 1.5-.5 1.5.5s-1.5 1-1.5 2h2" stroke-linecap="round"/></svg></button>
+
+            <div class="tb-sep"></div>
+
+            <button class="tb-btn" onclick="doLink()" title="Insert link"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></button>
+            <button class="tb-btn" onclick="fmt('unlink')" title="Remove link"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/><line x1="2" y1="2" x2="22" y2="22"/></svg></button>
+
+            <div class="tb-sep"></div>
+
+            <button class="tb-btn" onclick="document.getElementById('img-upload').click()" title="Insert image from file"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg></button>
+            <input id="img-upload" type="file" class="hidden-input" accept="image/*" onchange="insertImgFile(this)">
+
+            <button class="tb-btn" onclick="doImgUrl()" title="Insert image from URL"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg></button>
+
+            <div class="tb-sep"></div>
+
+            <button class="tb-btn" onclick="fmt('insertHorizontalRule')" title="Divider line"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="12" x2="22" y2="12"/></svg></button>
+            <button class="tb-btn" onclick="fmt('removeFormat')" title="Clear formatting"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 3H7l-4 9 4 9h15"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg></button>
+
+          </div>
+
+          <div class="editor-body" id="sig-editor" contenteditable="true"
+               data-ph="Type your signature here, or paste directly from Gmail, Outlook, or Apple Mail. Formatting, colors, and images are preserved..."
+               spellcheck="true"
+               oninput="syncPreview();syncCount()"
+               onkeyup="syncState()" onmouseup="syncState()"
+               onfocus="document.getElementById('editor-shell').classList.add('focused')"
+               onblur="document.getElementById('editor-shell').classList.remove('focused')">
+          </div>
+
+          <div class="editor-footer">
+            <span class="editor-footer-left" id="char-count">0 chars</span>
+            <div class="editor-footer-btns">
+              <button class="tb-btn" onclick="document.execCommand('undo')" title="Undo" style="width:auto;padding:0 9px;gap:5px;font-size:11px;font-weight:600;color:var(--text-dim)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>Undo</button>
+              <button class="tb-btn" onclick="document.execCommand('redo')" title="Redo" style="width:auto;padding:0 9px;gap:5px;font-size:11px;font-weight:600;color:var(--text-dim)">Redo<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23,4 23,10 17,10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg></button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="sig-preview">
+          <div class="preview-lbl"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Live preview &#8212; how recipients see your signature</div>
+          <div class="preview-mock">
+            <div class="pm-hdr"><span><strong>To:</strong> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7503101b111a073506000505191c1007161a5b161a18">[email&#160;protected]</a></span><span><strong>Subject:</strong> Quote Request &#8212; NSN 5306-00-203-3858</span></div>
+            <div class="pm-body">
+              <div>Hello,</div>
+              <div style="margin-top:8px">I'm reaching out to request a quote for the item below. Please reply with your best pricing and estimated lead time...</div>
+              <hr class="pm-divider">
+              <div class="pm-sig" id="sig-preview"><span style="color:var(--text-faint);font-style:italic">Your signature will appear here...</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sig-actions">
+          <button class="btn-clear-sig" onclick="clearSig()">Clear</button>
+          <button class="btn-save-sig" id="save-sig-btn" onclick="saveSig()">Save Signature</button>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="faq-card">
+      <div class="faq-title">GovScraper Mailbox Connections FAQ</div>
+      <div class="faq-item"><div class="faq-q">1. How many individual mailboxes can I connect?</div><div class="faq-a">Each GovScraper user can connect one individual mailbox to send emails directly from inside GovScraper using their own email address (Gmail, Outlook). We are currently working on ways to have multiple users on one GovScraper account.</div></div>
+      <div class="faq-item"><div class="faq-q">2. Will emails sent be stored in GovScraper?</div><div class="faq-a">Yes. Emails sent from GovScraper are logged in your account activity feed so you can track vendor communication. They will also appear in your connected email provider's "Sent" folder, just like a normal email.</div></div>
+      <div class="faq-item"><div class="faq-q">3. Does GovScraper read or synchronize my inbox?</div><div class="faq-a">No. GovScraper never reads or imports emails from your inbox. The connection is only used to send emails on your behalf and log them into GovScraper for tracking purposes.</div></div>
+      <div class="faq-item"><div class="faq-q">4. Will GovScraper ever send emails without my knowledge?</div><div class="faq-a">No. Emails are only sent when you manually use the "Send Email" option. GovScraper will never send anything automatically without your action.</div></div>
+      <div class="faq-item"><div class="faq-q">5. Can I tag or track emails sent from GovScraper?</div><div class="faq-a">Yes. Emails sent from GovScraper can be linked by looking at the RFQ itself and seeing the vendor and "Email Sent" checkbox marked. You can review the email in your provider's Sent folder.</div></div>
+      <div class="faq-item"><div class="faq-q">6. What if my email provider blocks the connection?</div><div class="faq-a">Some providers may require enabling SMTP access or creating an "App Password" for third-party connections. If you encounter issues, check your provider's security settings or reach out to us for step-by-step instructions.</div></div>
+    </div>
+  </div>
+
+</main>
+
+<div class="overlay" id="disc-overlay" onclick="if(event.target===this)closeDisc()">
+  <div class="modal">
+    <div class="modal-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+    <div class="modal-title">Disconnect mailbox?</div>
+    <div class="modal-sub">You'll no longer be able to send vendor emails until you reconnect. Your sent history is preserved.</div>
+    <div class="modal-actions">
+      <button class="btn-mc" onclick="closeDisc()">Cancel</button>
+      <button class="btn-mx" onclick="confirmDisc()">Yes, Disconnect</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+document.addEventListener('DOMContentLoaded', function(){
+
+function switchTab(t){
+  ['connect','connected'].forEach(function(id){
+    document.getElementById('tab-'+id).classList.toggle('active',id===t);
+    document.getElementById('panel-'+id).classList.toggle('active',id===t);
+  });
+}
+window.switchTab = switchTab;
+
+// ── EDITOR COMMANDS ─────────────────────────────────────────────────────
+window.fmt = function(cmd,val){
+  document.getElementById('sig-editor').focus();
+  document.execCommand(cmd,false,val||null);
+  syncPreview(); syncState();
+};
+window.toggle = function(cmd){
+  document.getElementById('sig-editor').focus();
+  document.execCommand(cmd,false,null);
+  syncState(); syncPreview();
+};
+window.applyColor = function(cmd,val,swatchId){
+  document.getElementById('sig-editor').focus();
+  document.execCommand(cmd,false,val);
+  var sw=document.getElementById(swatchId); if(sw) sw.style.background=val;
+  syncPreview();
+};
+
+// ── TOOLBAR STATE ───────────────────────────────────────────────────────
+window.syncState = function(){
+  [['bold','fB'],['italic','fI'],['underline','fU'],['strikeThrough','fS']].forEach(function(pair){
+    var b=document.getElementById(pair[1]);
+    if(b) b.classList.toggle('on', document.queryCommandState(pair[0]));
+  });
+};
+
+// ── CHAR COUNT ──────────────────────────────────────────────────────────
+window.syncCount = function(){
+  var t=(document.getElementById('sig-editor').innerText||'').trim();
+  document.getElementById('char-count').textContent = t.length+' chars';
+};
+
+// ── LIVE PREVIEW ────────────────────────────────────────────────────────
+window.syncPreview = function(){
+  var html=document.getElementById('sig-editor').innerHTML.trim();
+  var p=document.getElementById('sig-preview');
+  p.innerHTML=html||'<span style="color:var(--text-faint);font-style:italic">Your signature will appear here...</span>';
+};
+
+// ── LINK ────────────────────────────────────────────────────────────────
+window.doLink = function(){
+  var url=prompt('Enter link URL:','https://');
+  if(url&&url.trim()&&url!=='https://'){
+    document.getElementById('sig-editor').focus();
+    document.execCommand('createLink',false,url.trim());
+    document.querySelectorAll('#sig-editor a').forEach(function(a){a.target='_blank';});
+    syncPreview();
+  }
+};
+
+// ── IMAGE FROM FILE ─────────────────────────────────────────────────────
+window.insertImgFile = function(input){
+  if(!input.files||!input.files[0]) return;
+  var file=input.files[0];
+  if(file.size>3*1024*1024){showToast('Image must be under 3MB.');return;}
+  var reader=new FileReader();
+  reader.onload=function(e){
+    document.getElementById('sig-editor').focus();
+    document.execCommand('insertHTML',false,'<img src="'+e.target.result+'" style="max-width:200px;height:auto;border-radius:4px;display:inline-block;vertical-align:middle" alt="">');
+    syncPreview();
+  };
+  reader.readAsDataURL(file);
+  input.value='';
+};
+
+// ── IMAGE FROM URL ──────────────────────────────────────────────────────
+window.doImgUrl = function(){
+  var url=prompt('Enter image URL:','https://');
+  if(url&&url.trim()&&url!=='https://'){
+    document.getElementById('sig-editor').focus();
+    document.execCommand('insertHTML',false,'<img src="'+url.trim()+'" style="max-width:200px;height:auto;border-radius:4px;display:inline-block;vertical-align:middle" alt="">');
+    syncPreview();
+  }
+};
+
+// ── PASTE HANDLER — strip scripts, keep rich formatting ─────────────────
+document.getElementById('sig-editor').addEventListener('paste',function(){
+  setTimeout(function(){
+    var ed=document.getElementById('sig-editor');
+    ed.querySelectorAll('script,style,meta,link').forEach(function(el){el.remove();});
+    ed.querySelectorAll('*').forEach(function(el){
+      Array.from(el.attributes).forEach(function(attr){
+        if(attr.name.startsWith('on')) el.removeAttribute(attr.name);
+      });
+    });
+    syncPreview(); syncCount();
+  },0);
+});
+
+// ── SAVE / CLEAR ────────────────────────────────────────────────────────
+window.saveSig = function(){
+  var html=document.getElementById('sig-editor').innerHTML.trim();
+  var btn=document.getElementById('save-sig-btn');
+  btn.textContent='Saved \u2713'; btn.style.background='var(--green)';
+  setTimeout(function(){btn.textContent='Save Signature';btn.style.background='';},2600);
+  showToast(html?'Signature saved.':'Signature cleared.');
+};
+window.clearSig = function(){
+  if(!confirm('Clear your entire signature?')) return;
+  document.getElementById('sig-editor').innerHTML='';
+  syncPreview(); syncCount();
+};
+
+// ── TOGGLE VISIBILITY ───────────────────────────────────────────────────
+window.toggleSig = function(){
+  var sec=document.getElementById('sig-section');
+  var btn=document.getElementById('btn-sig');
+  var visible=sec.style.display!=='none';
+  sec.style.display=visible?'none':'block';
+  btn.textContent=visible?'Edit Signature':'Hide Signature';
+};
+
+// ── DISCONNECT ──────────────────────────────────────────────────────────
+window.openDisc=function(){document.getElementById('disc-overlay').classList.add('open');};
+window.closeDisc=function(){document.getElementById('disc-overlay').classList.remove('open');};
+window.confirmDisc=function(){closeDisc();switchTab('connect');showToast('Mailbox disconnected.');};
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeDisc();});
+
+// ── TOAST ───────────────────────────────────────────────────────────────
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ADE80" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg><span>'+msg+'</span>';
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},3200);
+}
+
+// ── SIMULATE OAUTH CONNECT ───────────────────────────────────────────────
+window.simulateConnect = function(provider) {
+  var btn = document.querySelector('.btn-' + provider);
+  var origHTML = btn.innerHTML;
+  btn.disabled = true;
+  btn.style.opacity = '0.65';
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg> &nbsp;Connecting…';
+
+  setTimeout(function() {
+    // Update email display
+    var emailEl = document.getElementById('connected-email');
+    if (emailEl) emailEl.textContent = 'john.demo@contractingco.com';
+
+    // Update type/status line
+    var typeEl = document.getElementById('connected-type');
+    if (typeEl) typeEl.innerHTML = provider === 'google'
+      ? '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg> Connected via Google · Active'
+      : '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg> Connected via Microsoft · Active';
+
+    // Swap provider icon in the connected panel
+    var iconEl = document.getElementById('connected-icon');
+    if (iconEl) {
+      if (provider === 'google') {
+        iconEl.outerHTML = '<svg id="connected-icon" width="24" height="20" viewBox="0 0 48 36"><path d="M0 0h48L24 21 0 0z" fill="#EA4335"/><path d="M0 0v36h8V12L0 0z" fill="#C5221F"/><path d="M48 0v36h-8V12L48 0z" fill="#1A73E8"/><path d="M8 12v24h32V12L24 27 8 12z" fill="#FBBC05"/></svg>';
+      } else {
+        iconEl.outerHTML = '<svg id="connected-icon" width="24" height="24" viewBox="0 0 21 21"><rect x="1" y="1" width="9" height="9" fill="#F25022"/><rect x="11" y="1" width="9" height="9" fill="#7FBA00"/><rect x="1" y="11" width="9" height="9" fill="#00A4EF"/><rect x="11" y="11" width="9" height="9" fill="#FFB900"/></svg>';
+      }
+    }
+
+    // Switch to Connected tab
+    switchTab('connected');
+    showToast('✓ Mailbox connected successfully.');
+
+    // Re-enable button
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.innerHTML = origHTML;
+  }, 1200);
+};
+
+window.showToast=showToast;
+
+// ── INIT: pre-load sample signature ────────────────────────────────────
+document.getElementById('sig-editor').innerHTML = '<div><strong>John Demo</stron

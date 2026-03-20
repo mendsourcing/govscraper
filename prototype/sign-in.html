@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sign In — GovScraper</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Source+Code+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F8FAFC;--surface:#fff;--surface-2:#F1F5F9;
+  --border:#E2E8F0;--border-strong:#CBD5E1;
+  --text:#0F172A;--text-dim:#334155;--text-muted:#64748B;--text-faint:#94A3B8;
+  --accent:#1B6CA8;--accent-bg:#EFF6FF;--accent-border:#BFDBFE;--accent-hover:#155a8a;
+  --green:#16A34A;--green-bg:#F0FDF4;
+  --red:#DC2626;--red-bg:#FEF2F2;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ── TOPBAR ── */
+.topbar{
+  height:56px;background:var(--surface);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;position:sticky;top:0;z-index:100;
+  box-shadow:0 1px 3px rgba(0,0,0,.04);
+}
+.logo img{height:28px}
+.logo-fallback{font-size:18px;font-weight:900;color:var(--text);letter-spacing:-.5px}
+.logo-fallback span{color:var(--accent)}
+.topbar-right{font-size:13px;color:var(--text-muted)}
+.topbar-right a{color:var(--accent);font-weight:700}
+
+/* ── MAIN ── */
+.main{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px}
+
+/* ── CARD ── */
+.signin-card{
+  width:100%;max-width:420px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:40px 36px;
+  box-shadow:0 4px 24px rgba(0,0,0,.07);
+  animation:fadeUp .4s ease both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.card-eyebrow{
+  display:flex;align-items:center;gap:8px;
+  margin-bottom:8px;
+}
+.card-eyebrow img{height:26px}
+.card-eyebrow .logo-fallback{font-size:16px}
+
+h1{font-size:22px;font-weight:800;color:var(--text);margin-bottom:4px;letter-spacing:-.02em}
+.card-sub{font-size:13px;color:var(--text-muted);margin-bottom:28px;line-height:1.5}
+
+/* ── FIELDS ── */
+.field{margin-bottom:16px}
+.field:last-of-type{margin-bottom:0}
+.field-label{
+  display:block;font-size:11.5px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.5px;
+  color:var(--text-dim);margin-bottom:6px;
+}
+.field-input{
+  width:100%;font-family:'Manrope',sans-serif;
+  font-size:13.5px;padding:11px 14px;
+  border:1.5px solid var(--border);border-radius:8px;
+  background:var(--surface);color:var(--text);
+  outline:none;transition:all .15s;
+}
+.field-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(27,108,168,.08)}
+.field-input.error{border-color:var(--red);box-shadow:0 0 0 3px rgba(220,38,38,.08)}
+.field-input::placeholder{color:var(--text-faint)}
+
+/* Password wrapper */
+.pw-wrap{position:relative}
+.pw-toggle{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;color:var(--text-faint);
+  padding:2px;line-height:0;
+}
+.pw-toggle:hover{color:var(--text-dim)}
+
+/* Forgot */
+.forgot-row{display:flex;justify-content:flex-end;margin-top:6px}
+.forgot-row a{font-size:12px;font-weight:600;color:var(--text-muted)}
+.forgot-row a:hover{color:var(--accent)}
+
+/* Error message */
+.field-err{font-size:11.5px;color:var(--red);margin-top:5px;font-weight:600;display:none}
+.field-err.show{display:block}
+
+/* Global error */
+.global-err{
+  background:var(--red-bg);border:1px solid #FECACA;border-radius:8px;
+  padding:10px 14px;font-size:12.5px;color:var(--red);font-weight:600;
+  margin-bottom:18px;display:none;
+}
+.global-err.show{display:flex;align-items:center;gap:8px}
+
+/* ── SUBMIT ── */
+.btn-submit{
+  width:100%;font-family:'Manrope',sans-serif;
+  font-size:14px;font-weight:800;padding:13px;
+  border-radius:9px;border:none;
+  background:var(--accent);color:#fff;
+  cursor:pointer;transition:all .2s;
+  margin-top:22px;
+  box-shadow:0 3px 12px rgba(27,108,168,.2);
+  letter-spacing:-.01em;
+}
+.btn-submit:hover{background:var(--accent-hover);transform:translateY(-1px);box-shadow:0 5px 18px rgba(27,108,168,.28)}
+.btn-submit:active{transform:translateY(0)}
+.btn-submit.loading{opacity:.7;cursor:not-allowed}
+
+/* ── DIVIDER ── */
+.divider{display:flex;align-items:center;gap:12px;margin:22px 0}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.divider span{font-size:11.5px;color:var(--text-faint);font-weight:600;white-space:nowrap}
+
+/* ── FOOTER LINKS ── */
+.card-footer{text-align:center;margin-top:20px;font-size:12.5px;color:var(--text-muted)}
+.card-footer a{color:var(--accent);font-weight:700}
+
+/* ── SECURITY NOTE ── */
+.security-note{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  margin-top:28px;font-size:11px;color:var(--text-faint);font-weight:600;
+}
+.security-note svg{width:12px;height:12px;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <a href="#" class="logo">
+    <img src="https://govscraper.com/assets/BigLogo-7gv5uAxF.png" alt="GovScraper"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+    <span class="logo-fallback" style="display:none">Gov<span>Scraper</span></span>
+  </a>
+  <div class="topbar-right">
+    Don't have an account? <a href="#">Start free trial</a>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="signin-card">
+
+    <div class="card-eyebrow">
+      <img src="https://govscraper.com/assets/BigLogo-7gv5uAxF.png" alt="GovScraper"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <span class="logo-fallback" style="display:none">Gov<span>Scraper</span></span>
+    </div>
+
+    <h1>Welcome back</h1>
+    <p class="card-sub">Sign in to your GovScraper account to access your RFQ dashboard.</p>
+
+    <!-- Global error -->
+    <div class="global-err" id="globalErr">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span id="globalErrMsg">Invalid email or password. Please try again.</span>
+    </div>
+
+    <!-- Email -->
+    <div class="field">
+      <label class="field-label" for="email">Email Address</label>
+      <input class="field-input" id="email" type="email" placeholder="you@company.com" autocomplete="email" onkeydown="if(event.key==='Enter')signIn()">
+      <div class="field-err" id="emailErr">Please enter a valid email address.</div>
+    </div>
+
+    <!-- Password -->
+    <div class="field">
+      <label class="field-label" for="password">Password</label>
+      <div class="pw-wrap">
+        <input class="field-input" id="password" type="password" placeholder="Your password" autocomplete="current-password" style="padding-right:44px" onkeydown="if(event.key==='Enter')signIn()">
+        <button class="pw-toggle" onclick="togglePw()" type="button" title="Show/hide password">
+          <svg id="eyeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+      <div class="forgot-row"><a href="#">Forgot password?</a></div>
+      <div class="field-err" id="pwErr">Please enter your password.</div>
+    </div>
+
+    <button class="btn-submit" id="submitBtn" onclick="signIn()">Sign In →</button>
+
+    <div class="divider"><span>or</span></div>
+
+    <div class="card-footer">
+      New to GovScraper? <a href="#">Start your free trial</a>
+    </div>
+
+    <div class="security-note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Secured with 256-bit SSL encryption
+    </div>
+
+  </div>
+</main>
+
+<script>
+function togglePw() {
+  const inp = document.getElementById('password');
+  const icon = document.getElementById('eyeIcon');
+  const showing = inp.type === 'text';
+  inp.type = showing ? 'password' : 'text';
+  icon.innerHTML = showing
+    ? '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>'
+    : '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>';
+}
+
+function signIn() {
+  const email = document.getElementById('email').value.trim();
+  const pw = document.getElementById('password').value;
+  let valid = true;
+
+  document.getElementById('emailErr').classList.remove('show');
+  document.getElementById('pwErr').classList.remove('show');
+  document.getElementById('globalErr').classList.remove('show');
+  document.getElementById('email').classList.remove('error');
+  document.getElementById('password').classList.remove('error');
+
+  if (!email || !/\S+@\S+\.\S+/.test(email)) {
+    document.getElementById('emailErr').classList.add('show');
+    document.getElementById('email').classList.add('error');
+    valid = false;
+  }
+  if (!pw) {
+    document.getElementById('pwErr').classList.add('show');
+    document.getElementById('password').classList.add('error');
+    valid = false;
+  }
+  if (!valid) return;
+
+  // Simulate loading
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = 'Signing in\u2026';
+  btn.classList.add('loading');
+
+  setTimeout(() => {
+    window.location.href = 'dashboard.html';
+  }, 900);
+}
+</script>
+</body>
+</html>

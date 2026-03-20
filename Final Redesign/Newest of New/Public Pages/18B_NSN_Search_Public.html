@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NSN Search — GovScraper</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#F8FAFC; --surface:#FFFFFF; --surface-2:#F1F5F9; --surface-3:#E8EFF7;
+  --border:#E2E8F0; --border-strong:#CBD5E1;
+  --text:#0F172A; --text-dim:#334155; --text-muted:#64748B; --text-faint:#94A3B8;
+  --accent:#2563EB; --accent-hover:#1D4ED8; --accent-bg:#EFF6FF; --accent-border:#BFDBFE;
+  --green:#16A34A; --green-bg:#F0FDF4; --green-border:#BBF7D0;
+  --amber:#D97706; --amber-bg:#FFFBEB; --amber-border:#FDE68A;
+  --red:#DC2626; --red-bg:#FEF2F2; --red-border:#FECACA;
+  --brand-navy:#1B2A4A;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);font-size:13px}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* TOPBAR */
+.topbar{height:56px;background:#fff;border-bottom:2px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:200;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.topbar-left{display:flex;align-items:center;gap:16px}
+.topbar-logo{height:30px}
+.topbar-divider{width:1px;height:24px;background:var(--border)}
+.topbar-nav{display:flex;align-items:center;gap:4px}
+.tn-btn{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:6px 14px;border-radius:7px;border:none;background:transparent;color:var(--text-muted);cursor:pointer;transition:all .15s}
+.tn-btn:hover{color:var(--text);background:var(--surface-2)}
+.tn-btn.active{color:var(--accent);background:var(--accent-bg)}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.tb-btn{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:7px 16px;border-radius:7px;border:1.5px solid var(--border);background:var(--surface);color:var(--text-dim);cursor:pointer;transition:all .15s;white-space:nowrap}
+.tb-btn:hover{border-color:var(--accent-border);color:var(--accent);background:var(--accent-bg)}
+.tb-btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tb-btn-primary:hover{background:var(--accent-hover);color:#fff}
+
+/* MAIN */
+.main{max-width:1100px;margin:0 auto;padding:28px 24px 60px}
+
+/* PAGE HEADER */
+.page-hdr{margin-bottom:22px}
+.page-hdr h1{font-size:22px;font-weight:800;color:var(--text);margin-bottom:5px}
+.page-hdr p{font-size:13px;color:var(--text-muted);line-height:1.6;max-width:560px}
+
+/* SEARCH BAR */
+.search-row{display:flex;gap:10px;margin-bottom:10px}
+.search-wrap{flex:1;background:var(--surface);border:2px solid var(--border);border-radius:12px;padding:10px 16px;box-shadow:0 1px 4px rgba(0,0,0,.05);display:flex;align-items:center;gap:10px;transition:all .15s}
+.search-wrap:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.search-wrap svg{width:18px;height:18px;color:var(--text-faint);flex-shrink:0}
+.search-wrap input{flex:1;border:none;background:transparent;font-family:'Manrope',sans-serif;font-size:15px;color:var(--text);outline:none;font-weight:500}
+.search-wrap input::placeholder{color:var(--text-faint);font-weight:400}
+.search-clear{width:22px;height:22px;border:none;background:var(--surface-2);border-radius:5px;cursor:pointer;color:var(--text-faint);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.search-clear:hover{background:var(--border);color:var(--text-dim)}
+.search-btn{font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:0 28px;height:52px;border-radius:10px;border:none;background:var(--accent);color:#fff;cursor:pointer;transition:background .15s;white-space:nowrap}
+.search-btn:hover{background:var(--accent-hover)}
+.search-hint{font-size:11.5px;color:var(--text-faint);margin-bottom:20px;display:flex;align-items:center;gap:16px}
+.hint-item{display:flex;align-items:center;gap:5px}
+.hint-item kbd{font-family:'Source Code Pro',monospace;font-size:10px;background:var(--surface-2);border:1px solid var(--border);border-radius:4px;padding:1px 5px;color:var(--text-dim)}
+
+/* INLINE UPSELL CARD */
+.upsell-card{background:linear-gradient(135deg,var(--accent-bg),#E0EAFF);border:1.5px solid var(--accent-border);border-radius:12px;padding:16px 20px;margin-bottom:14px;display:flex;align-items:center;gap:16px}
+.uc-icon{width:38px;height:38px;background:var(--accent);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.uc-icon svg{color:#fff}
+.uc-text{flex:1;min-width:0}
+.uc-title{font-size:13px;font-weight:800;color:var(--accent);margin-bottom:2px}
+.uc-sub{font-size:11.5px;color:var(--text-muted);line-height:1.5}
+.uc-btn{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:8px 18px;border-radius:7px;border:none;background:var(--accent);color:#fff;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .15s}
+.uc-btn:hover{background:var(--accent-hover)}
+
+/* PRE-SEARCH STATE */
+.pre-search{text-align:center;padding:40px 24px 60px}
+.ps-icon{width:64px;height:64px;background:var(--accent-bg);border:2px solid var(--accent-border);border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 18px}
+.ps-icon svg{color:var(--accent)}
+.ps-title{font-size:18px;font-weight:800;color:var(--text);margin-bottom:8px}
+.ps-sub{font-size:13px;color:var(--text-muted);line-height:1.7;max-width:440px;margin:0 auto 28px}
+.ps-examples{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
+.ps-ex{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--surface);color:var(--text-muted);cursor:pointer;transition:all .15s}
+.ps-ex:hover{border-color:var(--accent-border);color:var(--accent);background:var(--accent-bg)}
+.ps-ex kbd{font-family:'Source Code Pro',monospace}
+.wyg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:680px;margin:0 auto;text-align:left}
+.wyg-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.wyg-ico{font-size:20px;margin-bottom:8px}
+.wyg-title{font-size:12px;font-weight:800;color:var(--text-dim);margin-bottom:3px}
+.wyg-sub{font-size:11px;color:var(--text-faint);line-height:1.5}
+
+/* RESULTS HEADER */
+.results-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.results-count{font-size:13px;color:var(--text-muted);font-weight:600}
+.results-count strong{color:var(--text-dim);font-weight:700}
+.sort-wrap{display:flex;align-items:center;gap:7px}
+.sort-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-faint)}
+.sort-sel{font-family:'Manrope',sans-serif;font-size:11.5px;font-weight:600;padding:5px 10px;border:1.5px solid var(--border);border-radius:7px;background:var(--surface);color:var(--text-dim);outline:none;cursor:pointer;transition:all .15s}
+.sort-sel:hover{border-color:var(--accent-border);color:var(--accent)}
+
+/* NSN RESULT CARD */
+.result-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:0;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04);display:flex;overflow:hidden;transition:box-shadow .15s,border-color .15s;cursor:pointer;text-decoration:none;color:inherit}
+.result-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.09);border-color:var(--accent-border);text-decoration:none;color:inherit}
+.rc-accent{width:5px;flex-shrink:0}
+.rc-accent.has-rfqs{background:linear-gradient(to bottom,var(--green),#22c55e)}
+.rc-accent.no-rfqs{background:var(--border)}
+.rc-body{flex:1;padding:14px 18px;display:flex;align-items:center;gap:20px;min-width:0}
+
+/* NSN + title block */
+.rc-nsn-block{flex-shrink:0;min-width:170px}
+.rc-nsn{font-family:'Source Code Pro',monospace;font-size:14px;font-weight:700;letter-spacing:.5px;color:var(--accent);margin-bottom:3px}
+.rc-fsc{display:flex;align-items:center;gap:5px}
+
+/* Main info */
+.rc-main{flex:1;min-width:0}
+.rc-title{font-size:13.5px;font-weight:800;color:var(--text);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rc-sub{font-size:11.5px;color:var(--text-muted);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+
+/* Stats */
+.rc-stats{display:flex;gap:10px;flex-shrink:0}
+.rc-divider{width:1px;height:36px;background:var(--border);flex-shrink:0;align-self:center}
+.rc-stat{display:flex;flex-direction:column;align-items:flex-end;gap:1px;min-width:76px;text-align:right}
+.rc-stat-n{font-family:'Source Code Pro',monospace;font-size:13px;font-weight:700;color:var(--text-dim)}
+.rc-stat-l{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--text-faint)}
+
+/* Locked stat */
+.rc-stat-locked{display:flex;flex-direction:column;align-items:flex-end;gap:1px;min-width:76px;text-align:right;cursor:pointer}
+.rc-stat-locked:hover .locked-val{opacity:.7}
+.rc-stat-locked .rc-stat-l{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--text-faint)}
+.locked-val{display:flex;align-items:center;justify-content:flex-end;gap:4px}
+.locked-blur{font-family:'Source Code Pro',monospace;font-size:13px;font-weight:700;color:var(--text-dim);filter:blur(4px);user-select:none;pointer-events:none;opacity:.55}
+
+/* Tags */
+.tag{display:inline-flex;align-items:center;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:.2px;white-space:nowrap}
+.tag-blue{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-border)}
+.tag-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.tag-gray{background:var(--surface-2);color:var(--text-dim);border:1px solid var(--border)}
+.tag-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+
+/* Action column */
+.rc-action{flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:6px;padding:14px 16px 14px 0}
+.rc-view-btn{font-family:'Manrope',sans-serif;font-size:11.5px;font-weight:700;padding:7px 14px;border-radius:7px;border:1.5px solid var(--border);background:var(--surface);color:var(--text-dim);cursor:pointer;transition:all .15s;white-space:nowrap}
+.rc-view-btn:hover{border-color:var(--accent-border);color:var(--accent);background:var(--accent-bg)}
+
+/* No results */
+.no-results{text-align:center;padding:40px 24px}
+.nr-icon{width:56px;height:56px;background:var(--surface-2);border:1.5px solid var(--border);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.nr-icon svg{color:var(--text-muted)}
+.nr-title{font-size:16px;font-weight:800;color:var(--text-dim);margin-bottom:6px}
+.nr-sub{font-size:12.5px;color:var(--text-muted);line-height:1.7;max-width:360px;margin:0 auto}
+
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--surface);border-radius:18px;width:440px;max-width:calc(100vw - 32px);box-shadow:0 24px 80px rgba(0,0,0,.22);transform:translateY(16px);transition:transform .22s;overflow:hidden}
+.overlay.open .modal{transform:translateY(0)}
+.modal-hdr{padding:24px 28px 18px}
+.modal-hdr-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+.modal-ico{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--accent-bg);border:1px solid var(--accent-border)}
+.modal-ico svg{color:var(--accent)}
+.modal-close{width:30px;height:30px;border:none;background:var(--surface-2);border-radius:7px;cursor:pointer;color:var(--text-muted);display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:var(--border)}
+.modal-title{font-size:20px;font-weight:800;color:var(--text);margin-bottom:6px}
+.modal-sub{font-size:12.5px;color:var(--text-muted);line-height:1.7}
+.modal-body{padding:0 28px 6px}
+.modal-footer{padding:16px 28px 22px;border-top:1px solid var(--border);display:flex;gap:10px;background:var(--surface-2)}
+.m-submit{flex:1;font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:12px;border-radius:9px;border:none;background:var(--accent);color:#fff;cursor:pointer}
+.m-submit:hover{background:var(--accent-hover)}
+.m-cancel{font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;padding:12px 20px;border-radius:9px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer}
+.m-cancel:hover{background:var(--surface-2)}
+.signup-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.signup-opt{border:1.5px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:all .15s;text-align:center}
+.signup-opt:hover{border-color:var(--accent-border);background:var(--accent-bg)}
+.so-ico{font-size:24px;margin-bottom:6px}
+.so-title{font-size:13px;font-weight:800;color:var(--text);margin-bottom:3px}
+.so-sub{font-size:11px;color:var(--text-muted);line-height:1.5}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <!-- Logo -->
+  <a href="#" style="display:flex;align-items:center;flex-shrink:0;text-decoration:none;">
+    <img src="https://govscraper.com/assets/BigLogo-7gv5uAxF.png" alt="GovScraper" class="topbar-logo" onerror="this.outerHTML='<span style=&quot;font-family:Manrope,sans-serif;font-size:18px;font-weight:800;color:var(--text);&quot;>GovScraper</span>'">
+  </a>
+
+  <!-- Nav links -->
+  <nav style="display:flex;align-items:center;gap:28px;margin:0 40px;">
+    <a href="#" style="font-size:13px;font-weight:600;color:var(--text-dim);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">Guided Tour</a>
+    <a href="#" style="font-size:13px;font-weight:600;color:var(--text-dim);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">Pricing</a>
+    <a href="#" style="font-size:13px;font-weight:600;color:var(--text-dim);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">Services</a>
+    <a href="CAGE_Search_Public.html" style="font-size:13px;font-weight:600;color:var(--text-dim);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">Cage Search</a>
+    <a href="#" style="font-size:13px;font-weight:700;color:var(--accent);text-decoration:none;">NSN Search</a>
+    <a href="#" style="font-size:13px;font-weight:600;color:var(--text-dim);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">Blog</a>
+  </nav>
+
+  <!-- Auth buttons -->
+  <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+    <button class="tb-btn" onclick="openModal()">Login</button>
+    <button class="tb-btn tb-btn-primary" onclick="openModal()">Free Trial</button>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- PAGE HEADER -->
+  <div class="page-hdr">
+    <h1>NSN Search</h1>
+    <p>Look up any National Stock Number to see demand patterns, active suppliers, packaging requirements, and more. Sign in for full pricing and bid intelligence.</p>
+  </div>
+
+  <!-- SEARCH BAR -->
+  <div class="search-row">
+    <div class="search-wrap" id="searchWrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" placeholder="Search by NSN, part number, or item name…" oninput="handleInput(this.value)" onkeydown="handleKey(event)" autocomplete="off" autocorrect="off" spellcheck="false" value="5306">
+      <button class="search-clear" id="clearBtn" style="display:none" onclick="clearSearch()" title="Clear">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <button class="search-btn" onclick="runSearch()">Search</button>
+  </div>
+  <div class="search-hint">
+    <span class="hint-item">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Use dashes or plain digits: <kbd>5306-00-203-3858</kbd> or <kbd>5306002033858</kbd>
+    </span>
+    <span class="hint-item">Press <kbd>Enter</kbd> to search</span>
+    <span class="hint-item">or search by part no: <kbd>NAS6203</kbd> &nbsp;<kbd>MS21250</kbd></span>
+  </div>
+
+  <!-- UPSELL CARD — shown with results -->
+  <div id="staticUpsell">
+    <div class="upsell-card">
+      <div class="uc-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+      <div class="uc-text">
+        <div class="uc-title">Members see the full NSN picture</div>
+        <div class="uc-sub">Avg award prices, bid worthiness scores, and complete procurement history are hidden. GovScraper members unlock all pricing and intelligence data.</div>
+      </div>
+      <button class="uc-btn" onclick="openModal()">Start Free Trial →</button>
+    </div>
+  </div>
+
+  <div id="resultsCount" style="font-size:12px;color:var(--text-muted);margin-bottom:14px;"><strong id="resultsCountText"></strong></div>
+
+  <!-- PRE-SEARCH STATE -->
+  <div id="preSearch" style="display:none">
+    <div class="pre-search">
+      <div class="ps-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+      <div class="ps-title">Search the DLA NSN Database</div>
+      <div class="ps-sub">Over 1.5 million National Stock Numbers in the DLA database. Look up any part to see demand trends, active suppliers, and packaging requirements.</div>
+      <div class="ps-examples">
+        <button class="ps-ex" onclick="fillAndSearch('5306-00-203-3858')"><kbd>5306-00-203-3858</kbd></button>
+        <button class="ps-ex" onclick="fillAndSearch('NAS6203')"><kbd>NAS6203</kbd> — Part number</button>
+        <button class="ps-ex" onclick="fillAndSearch('530600203')">5306-00-203-XXXX range</button>
+        <button class="ps-ex" onclick="fillAndSearch('MS21250')"><kbd>MS21250</kbd></button>
+        <button class="ps-ex" onclick="fillAndSearch('BOLT HEXAGON')">Bolt, Hexagon Head</button>
+        <button class="ps-ex" onclick="fillAndSearch('5310-00-071-8061')"><kbd>5310-00-071-8061</kbd></button>
+      </div>
+      <div class="wyg-grid">
+        <div class="wyg-card">
+          <div class="wyg-ico">📦</div>
+          <div class="wyg-title">NSN &amp; Part Data</div>
+          <div class="wyg-sub">Item name, FSC class, packaging standard, active suppliers, and 12-month demand — free to browse.</div>
+        </div>
+        <div class="wyg-card">
+          <div class="wyg-ico">🔒</div>
+          <div class="wyg-title">Pricing Intelligence</div>
+          <div class="wyg-sub">Avg award prices, price trends, DLA unit prices, and procurement history — members only.</div>
+        </div>
+        <div class="wyg-card">
+          <div class="wyg-ico">🎯</div>
+          <div class="wyg-title">Bid Worthiness Score</div>
+          <div class="wyg-sub">Proprietary score combining demand, pricing stability, competition, and FSC fit — members only.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="resultsArea">
+    <div class="results-hdr">
+      <div id="resultsCount2" class="results-count"></div>
+      <div class="sort-wrap">
+        <span class="sort-lbl">Sort:</span>
+        <select class="sort-sel" id="sortSel" onchange="renderResults()">
+          <option value="demand">12-Mo Demand</option>
+          <option value="nsn">NSN (A–Z)</option>
+          <option value="suppliers">Suppliers</option>
+        </select>
+      </div>
+    </div>
+    <div id="resultsList"></div>
+  </div>
+
+</main>
+
+<!-- SIGNUP MODAL -->
+<div class="overlay" id="signupOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div class="modal-hdr-top">
+        <div class="modal-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <button class="modal-close" onclick="closeModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="modal-title" id="modal-title">Unlock Full NSN Intelligence</div>
+      <div class="modal-sub" id="modal-sub">GovScraper members get complete access to pricing history, bid worthiness scores, item descriptions, and procurement data for every NSN in the DLA database.</div>
+    </div>
+    <div class="modal-body" style="padding-bottom:22px">
+      <div class="signup-options">
+        <div class="signup-opt" onclick="closeModal()">
+          <div class="so-ico">🚀</div>
+          <div class="so-title">Start Free Trial</div>
+          <div class="so-sub">7 days free, no credit card. Full PRO access from day one.</div>
+        </div>
+        <div class="signup-opt" onclick="closeModal()">
+          <div class="so-ico">🔑</div>
+          <div class="so-title">Sign In</div>
+          <div class="so-sub">Already a member? Access the full database instantly.</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--text-faint);text-align:center;line-height:1.6">No contracts. Cancel anytime. Trusted by DLA contractors nationwide.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── NSN DATA ── */
+const NSN_DATA = [
+  { nsn:'5306-00-203-3858', name:'BOLT, MACHINE, HEXAGON HEAD',       pn:'NAS6203-14',    fsc:'5306', fscName:'Bolts',          pkg:'MIL-SPEC', qty:45600, price:3.82, trend:'+8.2%', suppliers:4, score:72, rfqs:3 },
+  { nsn:'5305-00-269-5518', name:'SCREW, CAP, SOCKET HEAD',           pn:'SPS-2505-14',   fsc:'5305', fscName:'Screws',         pkg:'MIL-SPEC', qty:38900, price:1.24, trend:'+5.6%', suppliers:3, score:68, rfqs:2 },
+  { nsn:'5310-00-225-8698', name:'NUT, SELF-LOCKING, HEXAGON',        pn:'MS21044N4',     fsc:'5310', fscName:'Nuts & Washers', pkg:'Standard', qty:29400, price:0.44, trend:'+2.9%', suppliers:5, score:64, rfqs:2 },
+  { nsn:'5307-01-426-1889', name:'STUD, PLAIN',                       pn:'SPS-B-0250-20', fsc:'5307', fscName:'Studs',          pkg:'MIL-SPEC', qty:14200, price:2.18, trend:'+1.4%', suppliers:2, score:55, rfqs:1 },
+  { nsn:'5306-01-588-3972', name:'BOLT, MACHINE, INTERNAL WRENCHING', pn:'MS21250-06016', fsc:'5306', fscName:'Bolts',          pkg:'MIL-SPEC', qty:9800,  price:6.45, trend:'+6.1%', suppliers:3, score:61, rfqs:1 },
+];
+
+const FULL_PAT = /^\d{4}-\d{2}-\d{3}-\d{4}$/;
+function norm(s){ return s.replace(/[^0-9a-zA-Z]/g,'').toLowerCase(); }
+
+function match(d, q){
+  return norm(d.nsn).includes(q) || norm(d.name).includes(q) || norm(d.pn).includes(q) || norm(d.fscName).includes(q);
+}
+
+function handleInput(val){
+  const cb = document.getElementById('clearBtn');
+  cb.style.display = val ? 'flex' : 'none';
+}
+
+function handleKey(e){
+  if(e.key === 'Enter') runSearch();
+}
+
+function clearSearch(){
+  document.getElementById('searchInput').value = '';
+  document.getElementById('clearBtn').style.display = 'none';
+  document.getElementById('preSearch').style.display = 'block';
+  document.getElementById('resultsArea').style.display = 'none';
+  document.getElementById('staticUpsell').style.display = 'none';
+  document.getElementById('resultsCount').style.display = 'none';
+  document.getElementById('searchInput').focus();
+}
+
+function fillAndSearch(val){
+  document.getElementById('searchInput').value = val;
+  document.getElementById('clearBtn').style.display = 'flex';
+  runSearch();
+}
+
+function runSearch(){
+  const raw = document.getElementById('searchInput').value.trim();
+  const q = norm(raw);
+  
+  document.getElementById('preSearch').style.display = 'none';
+  document.getElementById('resultsArea').style.display = 'block';
+  document.getElementById('staticUpsell').style.display = 'block';
+  document.getElementById('resultsCount').style.display = 'block';
+
+  renderResults();
+}
+
+function renderResults(){
+  const raw = document.getElementById('searchInput').value.trim();
+  const q = norm(raw);
+  const sortVal = document.getElementById('sortSel').value;
+
+  let results = q.length >= 2 ? NSN_DATA.filter(d => match(d, q)) : NSN_DATA;
+
+  results = [...results].sort((a, b) => {
+    if(sortVal === 'nsn')       return a.nsn.localeCompare(b.nsn);
+    if(sortVal === 'suppliers') return b.suppliers - a.suppliers;
+    return b.qty - a.qty;
+  });
+
+  const n = results.length;
+  const countHtml = n === 0
+    ? 'No results found'
+    : `<strong>${n} NSN record${n!==1?'s':''} found</strong>${raw ? ' for "' + raw + '"' : ''}`;
+  document.getElementById('resultsCountText').innerHTML = countHtml;
+  document.getElementById('resultsCount2').innerHTML = countHtml;
+
+  if(!n){
+    document.getElementById('resultsList').innerHTML = `
+      <div class="no-results">
+        <div class="nr-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <div class="nr-title">No NSNs found</div>
+        <div class="nr-sub">Try searching with just the numeric portion of the NSN, a part number prefix like <strong>NAS6203</strong>, or an item type like <strong>Bolt</strong>.</div>
+      </div>`;
+    return;
+  }
+
+  document.getElementById('resultsList').innerHTML = results.map(r => renderCard(r)).join('');
+}
+
+function renderCard(r){
+  const accentClass = r.rfqs > 0 ? 'has-rfqs' : 'no-rfqs';
+  const pkgTag = r.pkg === 'MIL-SPEC'
+    ? '<span class="tag tag-amber">MIL-SPEC PKG</span>'
+    : '<span class="tag tag-gray">Std Pkg</span>';
+  const rfqTag = r.rfqs > 0
+    ? `<span class="tag tag-green">${r.rfqs} Active RFQ${r.rfqs!==1?'s':''}</span>`
+    : '';
+
+  return `<div class="result-card" onclick="window.location.href='NSN_Page_Public.html'">
+    <div class="rc-accent ${accentClass}"></div>
+    <div class="rc-body">
+      <div class="rc-nsn-block">
+        <div class="rc-nsn">${r.nsn}</div>
+        <div class="rc-fsc">
+          <span class="tag tag-blue" style="font-family:'Source Code Pro',monospace">FSC ${r.fsc}</span>
+        </div>
+      </div>
+      <div class="rc-main">
+        <div class="rc-title">${r.name}</div>
+        <div class="rc-sub">
+          <span style="font-family:'Source Code Pro',monospace;font-weight:700;color:var(--text-dim)">${r.pn}</span>
+          <span style="color:var(--border-strong)">·</span>
+          <span>${r.suppliers} active supplier${r.suppliers!==1?'s':''}</span>
+          <span style="color:var(--border-strong)">·</span>
+          ${pkgTag}
+          ${rfqTag}
+        </div>
+      </div>
+      <div class="rc-divider"></div>
+      <div class="rc-stats">
+        <div class="rc-stat">
+          <div class="rc-stat-n">${r.qty.toLocaleString()} <span style="font-size:10px;font-weight:600;color:var(--text-faint)">EA</span></div>
+          <div class="rc-stat-l">12-mo demand</div>
+        </div>
+        <div class="rc-divider"></div>
+        <div class="rc-stat-locked" onclick="event.stopPropagation();openModal('pricing')" title="Members only — sign in to view">
+          <div class="rc-stat-l">Avg Award</div>
+          <div class="locked-val">
+            <span class="locked-blur">$${r.price.toFixed(2)}</span>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--text-faint)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          </div>
+        </div>
+        <div class="rc-divider"></div>
+        <div class="rc-stat-locked" onclick="event.stopPropagation();openModal('score')" title="Members only — sign in to view">
+          <div class="rc-stat-l">Bid Score</div>
+          <div class="locked-val">
+            <span class="locked-blur">${r.score}</span>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--text-faint)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="rc-action">
+      <button class="rc-view-btn" onclick="event.stopPropagation();window.location.href='NSN_Page_Public.html'">View NSN →</button>
+    </div>
+  </div>`;
+}
+
+/* ── MODAL ── */
+var MODAL_COPY = {
+  default: {
+    title: 'Unlock Full NSN Intelligence',
+    sub: 'GovScraper members get complete access to pricing history, bid worthiness scores, item descriptions, and procurement data for every NSN in the DLA database.'
+  },
+  pricing: {
+    title: 'Unlock Pricing Intelligence',
+    sub: 'Members see average award prices, price trend data, and DLA unit prices — giving you the confidence to bid accurately and win more contracts.'
+  },
+  score: {
+    title: 'Unlock the Bid Worthiness Score',
+    sub: 'Our proprietary score combines demand consistency, pricing stability, competition density, and your FSC fit to tell you exactly which NSNs to pursue.'
+  }
+};
+
+/* ── AUTO-RUN on load ── */
+window.addEventListener('DOMContentLoaded', function(){
+  document.getElementById('clearBtn').style.display = 'flex';
+  renderResults();
+  var cnt = '5 NSN records found for "5306"';
+  document.getElementById('resultsCountText').innerHTML = '<strong>5 NSN records found</strong> matching your search';
+  document.getElementById('resultsCount2').innerHTML = '<strong>5 NSN records found</strong>';
+});
+
+function openModal(ctx){
+  const copy = MODAL_COPY[ctx] || MODAL_COPY.default;
+  document.getElementById('modal-title').textContent = copy.title;
+  document.getElementById('modal-sub').textContent = copy.sub;
+  document.getElementById('signupOverlay').classList.add('open');
+}
+function closeModal(){
+  document.getElementById('signupOverlay').classList.remove('open');
+}
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>

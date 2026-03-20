@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FSC / CAGE Code List — GovScraper</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F8FAFC;--surface:#fff;--surface-2:#F1F5F9;--border:#E2E8F0;--border-strong:#CBD5E1;--text:#1E293B;--text-dim:#475569;--text-muted:#6B7280;--text-faint:#94A3B8;--accent:#2563EB;--accent-bg:#EFF6FF;--accent-border:#BFDBFE;--accent-hover:#1D4ED8;--green:#16A34A;--green-bg:#F0FDF4;--green-border:#BBF7D0;--amber:#D97706;--amber-bg:#FFF7ED;--amber-border:#FDE68A;--red:#DC2626;--red-bg:#FEF2F2;--red-border:#FECACA}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);font-size:13px}a{color:var(--accent);text-decoration:none}
+.topbar{height:56px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:200;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.topbar-left{display:flex;align-items:center;gap:16px}.topbar-logo{height:30px}
+.bc{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-muted)}.bc a{color:var(--text-muted);font-weight:500}.bc a:hover{color:var(--accent);text-decoration:none}.bc .sep{color:var(--border-strong)}.bc .cur{color:var(--text-dim);font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:10px}.avatar{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#1D4ED8);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800}
+.nav-sb{width:224px;position:fixed;top:56px;left:0;bottom:0;background:var(--surface);border-right:1px solid var(--border);padding:14px 0;overflow-y:auto;z-index:90}
+.sb-lbl{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--text-faint);padding:12px 20px 4px}
+.sb-a{display:flex;align-items:center;gap:10px;padding:8px 20px;font-size:12.5px;font-weight:500;color:var(--text-dim);text-decoration:none;border-left:3px solid transparent;transition:all .15s}.sb-a:hover{background:var(--accent-bg);color:var(--accent);text-decoration:none}.sb-a.active{color:var(--accent);font-weight:700;border-left-color:var(--accent);background:var(--accent-bg)}.sb-a svg{width:16px;height:16px;flex-shrink:0;opacity:.8}.sb-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:10px}
+.main{margin-left:224px;padding:28px 28px 80px}
+.page-title{font-size:20px;font-weight:800;color:var(--text);margin-bottom:4px}
+.page-sub{font-size:12.5px;color:var(--text-muted);line-height:1.6;margin-bottom:20px}
+.info-bar{background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:8px;padding:11px 16px;display:flex;align-items:center;gap:10px;margin-bottom:24px;font-size:12px;color:var(--accent);font-weight:600;line-height:1.5}
+.info-bar svg{flex-shrink:0}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.ch{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface-2)}
+.ch h3{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--text-dim)}
+.ch-count{font-family:'Source Code Pro',monospace;font-size:11px;font-weight:700;color:var(--text-faint);background:var(--surface);border:1px solid var(--border);padding:2px 9px;border-radius:10px}
+.cb{padding:16px 18px}
+
+/* ADD TRIGGER BUTTON */
+.add-trigger-btn{display:flex;align-items:center;gap:7px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:9px 16px;border-radius:8px;border:1.5px dashed var(--accent-border);background:var(--accent-bg);color:var(--accent);cursor:pointer;width:100%;margin-bottom:14px;transition:all .15s;justify-content:center}
+.add-trigger-btn:hover{background:var(--accent);color:#fff;border-style:solid}
+
+/* SEARCH BAR */
+.search-row{display:flex;gap:8px;margin-bottom:12px}
+.search-wrap{flex:1;position:relative}
+.search-input{width:100%;font-family:'Manrope',sans-serif;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;transition:all .15s}
+.search-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.08)}
+.search-input::placeholder{color:var(--text-faint)}
+.suggest-drop{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--surface);border:1.5px solid var(--accent-border);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:100;max-height:200px;overflow-y:auto;display:none}
+.suggest-drop.open{display:block}
+.suggest-item{padding:9px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);transition:background .12s}
+.suggest-item:last-child{border-bottom:none}.suggest-item:hover{background:var(--accent-bg)}
+.si-code{font-family:'Source Code Pro',monospace;font-size:11.5px;font-weight:700;color:var(--accent);width:36px;flex-shrink:0}
+.si-name{font-size:12px;color:var(--text-dim)}
+
+/* FSC ROWS */
+.fsc-item{border-bottom:1px solid var(--border)}.fsc-item:last-child{border-bottom:none}
+.fsc-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;transition:background .12s}
+.fsc-row:hover{background:var(--surface-2)}
+.fi-left{display:flex;align-items:center;gap:10px;min-width:0}
+.fi-code{font-family:'Source Code Pro',monospace;font-size:12px;font-weight:700;color:var(--accent);width:36px;flex-shrink:0}
+.fi-info{min-width:0}
+.fi-name{font-size:12.5px;font-weight:600;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fi-setasides{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.sa-pill{font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:4px;background:var(--accent-bg);border:1px solid var(--accent-border);color:var(--accent);white-space:nowrap}
+.sa-pill.warn{background:var(--amber-bg);border-color:var(--amber-border);color:var(--amber)}
+.fi-right{display:flex;align-items:center;gap:6px;flex-shrink:0;margin-left:8px}
+.fi-count{font-size:10.5px;font-weight:700;color:var(--text-faint);font-family:'Source Code Pro',monospace;white-space:nowrap}
+
+/* TOGGLE */
+.tog{width:36px;height:20px;border-radius:10px;background:var(--border-strong);cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;border:none;padding:0}
+.tog.on{background:var(--green)}.tog::after{content:'';position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}.tog.on::after{transform:translateX(16px)}
+
+/* ICON BUTTONS */
+.icon-btn{width:26px;height:26px;border:none;background:none;cursor:pointer;color:var(--text-faint);display:flex;align-items:center;justify-content:center;border-radius:5px;transition:all .15s;flex-shrink:0}
+.icon-btn:hover{background:var(--accent-bg);color:var(--accent)}
+.icon-btn.del:hover{background:var(--red-bg);color:var(--red)}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:32px 20px;color:var(--text-faint)}
+.empty-state svg{margin-bottom:10px;opacity:.4}
+.empty-title{font-size:13px;font-weight:700;color:var(--text-muted);margin-bottom:4px}
+.empty-sub{font-size:11.5px;line-height:1.6}
+
+/* SAVE BAR */
+.save-bar{position:fixed;bottom:0;left:224px;right:0;background:var(--surface);border-top:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 -2px 8px rgba(0,0,0,.06);z-index:100}
+.save-note{font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:7px}
+.save-note svg{color:var(--amber);flex-shrink:0}
+.save-actions{display:flex;gap:10px}
+.btn-ghost{font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;padding:9px 20px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer}.btn-ghost:hover{background:var(--surface-2)}
+.btn-primary{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:9px 24px;border-radius:8px;border:none;background:var(--accent);color:#fff;cursor:pointer;transition:background .15s}.btn-primary:hover{background:var(--accent-hover)}
+
+/* ===== ADD/EDIT MODAL ===== */
+.overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;padding:20px}
+.overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--surface);border-radius:14px;width:100%;max-width:480px;box-shadow:0 24px 80px rgba(0,0,0,.2);transform:translateY(14px);transition:transform .22s;max-height:90vh;overflow-y:auto}
+.overlay.open .modal{transform:translateY(0)}
+.m-hdr{padding:22px 24px 0;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.m-hdr-txt .m-eyebrow{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--text-faint);margin-bottom:3px}
+.m-hdr-txt .m-title{font-size:17px;font-weight:800;color:var(--text)}
+.m-hdr-txt .m-sub{font-size:12px;color:var(--text-muted);margin-top:4px;line-height:1.5}
+.m-close{width:28px;height:28px;border:none;background:var(--surface-2);border-radius:6px;cursor:pointer;color:var(--text-muted);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.m-body{padding:20px 24px 24px}
+
+/* SET-ASIDE GRID IN MODAL */
+.sa-section-title{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--text-faint);margin-bottom:10px}
+.sa-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
+.sa-tile{border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;cursor:pointer;transition:all .15s;display:flex;align-items:flex-start;gap:8px;background:var(--surface)}
+.sa-tile:hover{border-color:var(--accent-border);background:var(--accent-bg)}
+.sa-tile.sel{border-color:var(--accent);background:var(--accent-bg)}
+.sa-tile input[type=checkbox]{width:15px;height:15px;accent-color:var(--accent);cursor:pointer;flex-shrink:0;margin-top:1px}
+.sa-tile-label{font-size:12px;font-weight:600;color:var(--text-dim);line-height:1.3}
+.sa-tile-desc{font-size:10.5px;color:var(--text-faint);margin-top:2px;line-height:1.3}
+.sa-tile.sel .sa-tile-label{color:var(--accent)}
+
+/* WARN */
+.sa-warn{background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:7px;padding:9px 13px;font-size:11.5px;color:var(--amber);font-weight:600;display:flex;align-items:center;gap:8px;margin-bottom:16px;display:none}
+.sa-warn.show{display:flex}
+
+/* FSC context in modal */
+.fsc-context{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:18px;display:flex;align-items:center;gap:12px}
+.fc-code{font-family:'Source Code Pro',monospace;font-size:18px;font-weight:700;color:var(--accent)}
+.fc-name{font-size:13px;font-weight:600;color:var(--text-dim)}
+.fc-rfqs{font-size:11px;color:var(--text-faint);margin-top:2px}
+
+.m-actions{display:flex;gap:10px;margin-top:20px}
+.btn-cancel-m{font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;padding:10px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;flex:1}.btn-cancel-m:hover{background:var(--surface-2)}
+.btn-add-m{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:10px 18px;border-radius:8px;border:none;background:var(--accent);color:#fff;cursor:pointer;flex:2;transition:background .15s}.btn-add-m:hover{background:var(--accent-hover)}
+
+/* TOAST */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1E293B;color:#fff;font-size:12.5px;font-weight:600;padding:12px 20px;border-radius:10px;display:flex;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(0,0,0,.2);opacity:0;transition:opacity .2s;pointer-events:none;z-index:600}
+.toast.show{opacity:1}
+
+/* ── Standard GovScraper GOLD sidebar ── */
+.sidebar{width:224px;position:fixed;top:56px;left:0;bottom:0;background:var(--surface);border-right:1px solid var(--border);padding:14px 0;overflow-y:auto;z-index:90;display:flex;flex-direction:column}
+.sidebar-label{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--text-faint);padding:12px 20px 4px}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:8px 20px;font-size:12.5px;font-weight:500;color:var(--text-dim);text-decoration:none;border-left:3px solid transparent;transition:all .15s;cursor:pointer;background:none;border-top:none;border-right:none;border-bottom:none;width:100%;text-align:left;font-family:'Manrope',sans-serif}
+.sidebar-item:hover{background:var(--accent-bg);color:var(--accent)}
+.sidebar-item.active{color:var(--accent);font-weight:700;border-left-color:var(--accent);background:var(--accent-bg)}
+.sidebar-item svg{width:16px;height:16px;flex-shrink:0;opacity:.8}
+.sidebar-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:10px}
+.sidebar-spacer{flex:1;min-height:20px}
+.sb-tour-btn{width:100%;font-family:'Manrope',sans-serif;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;border:1.5px solid #E2E8F0;background:#F8FAFC;cursor:pointer;transition:all .15s;text-align:left}
+.sb-tour-btn:hover{background:#fff;border-color:#CBD5E1;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.sb-tour-ico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-tour-ico svg{width:15px;height:15px}
+.sb-tour-label{font-size:12px;font-weight:800;color:#334155}
+.sb-tour-sub{font-size:10.5px;color:#94A3B8;margin-top:1px}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-left">
+    <a href="#"><img src="https://govscraper.com/assets/BigLogo-7gv5uAxF.png" alt="GovScraper" class="topbar-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><span style="display:none;font-size:16px;font-weight:800;color:var(--accent)">GovScraper</span></a>
+    <div class="bc"><a href="#">Dashboard</a><span class="sep">›</span><span class="cur">FSC / CAGE Code List</span></div>
+  </div>
+  <div class="topbar-right"><div class="avatar">JD</div></div>
+</header>
+
+<nav class="sidebar">
+
+  <div class="sidebar-label">Main</div>
+  <a class="sidebar-item" href="govscraper-dashboard.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    Dashboard
+  </a>
+  <a class="sidebar-item" href="govscraper-rfq-list.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+    My RFQs <span class="sidebar-badge">47</span>
+  </a>
+  <a class="sidebar-item" href="govscraper-rfq-list.html" style="padding-left:32px;font-size:12px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+    Private List of RFQs
+  </a>
+  <a class="sidebar-item" href="govscraper-public-rfq-list.html" style="padding-left:32px;font-size:12px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+    Public List of RFQs
+  </a>
+
+  <div class="sidebar-label">Intelligence</div>
+  <a class="sidebar-item" href="govscraper-nsn-page.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    NSN Search
+  </a>
+  <a class="sidebar-item" href="govscraper-cage-page.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+    CAGE Search
+  </a>
+  <a class="sidebar-item" href="govscraper-fsc-lookup.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+    FSC Lookup
+  </a>
+  <a class="sidebar-item" href="govscraper-nsn-watchlist.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    NSN Watch List
+  </a>
+
+  <div class="sidebar-label">Results</div>
+  <a class="sidebar-item" href="govscraper-awarded-contracts.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+    Awarded Contracts
+  </a>
+  <a class="sidebar-item" href="govscraper-archived-rfqs.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+    Archived RFQs
+  </a>
+
+  <div class="sidebar-label">Alerts</div>
+  <a class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+    RFQ Alerts <span class="sidebar-badge">3</span>
+  </a>
+
+  <div class="sidebar-label">Community</div>
+  <a class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+    Community
+  </a>
+
+  <div class="sidebar-label">Tools</div>
+  <a class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+    GovPacking
+  </a>
+
+  <div class="sidebar-spacer"></div>
+  <div style="height:1px;background:var(--border);margin:4px 14px 2px;"></div>
+
+  <a class="sidebar-item active" href="govscraper-account.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    Settings &amp; Account
+  </a>
+
+  <div style="padding:0 12px 12px;">
+    <div style="height:1px;background:var(--border);margin-bottom:10px;"></div>
+    <button class="sb-tour-btn" style="border-color:#B4530940;background:#B4530908;">
+      <div class="sb-tour-ico" style="background:#B4530915;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2"><polygon points="5,3 19,12 5,21 5,3"/></svg>
+      </div>
+      <div>
+        <div class="sb-tour-label" style="color:#B45309;">Replay GOLD Tour</div>
+        <div class="sb-tour-sub">Replay the walkthrough</div>
+      </div>
+    </button>
+  </div>
+
+</nav>
+
+<main class="main">
+  <div class="page-title">FSC / CAGE Code List</div>
+  <div class="page-sub">Control which RFQs appear in your My RFQs feed. Each FSC and CAGE has its own set-aside configuration — RFQs are only pulled when they match both the code and at least one of your selected set-asides for that code.</div>
+
+  <div class="info-bar">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    Changes take effect immediately on next page load. Nightly DIBBS scrapes will continue pulling matching RFQs going forward.
+  </div>
+
+  <div class="cols">
+
+    <!-- ===== FSC PANEL ===== -->
+    <div class="card">
+      <div class="ch">
+        <h3>Federal Supply Classes (FSC)</h3>
+        <span class="ch-count" id="fsc-count">0 FSCs</span>
+      </div>
+      <div class="cb">
+        <button class="add-trigger-btn" onclick="openSearchModal('fsc')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add FSC
+        </button>
+        <div id="fsc-list"></div>
+      </div>
+    </div>
+
+    <!-- ===== CAGE PANEL ===== -->
+    <div class="card">
+      <div class="ch">
+        <h3>Required Manufacturer CAGEs</h3>
+        <span class="ch-count" id="cage-count">0 CAGEs</span>
+      </div>
+      <div class="cb">
+        <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:7px;padding:10px 13px;font-size:11.5px;color:var(--text-muted);line-height:1.6;margin-bottom:12px">
+          <strong style="color:var(--text-dim)">How CAGE filtering works:</strong> RFQs where this CAGE appears in the <em>Manufacturer Requirements</em> section are added to your feed — for the set-asides you select per CAGE.
+        </div>
+        <button class="add-trigger-btn" onclick="openSearchModal('cage')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add CAGE
+        </button>
+        <div id="cage-list"></div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- SAVE BAR -->
+<div class="save-bar">
+  <div class="save-note">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    Unsaved changes won't affect your RFQ feed until saved.
+  </div>
+  <div class="save-actions">
+    <button class="btn-ghost" onclick="resetAll()">Discard Changes</button>
+    <button class="btn-primary" onclick="saveAll()">Save Changes</button>
+  </div>
+</div>
+
+
+<!-- ===== SEARCH + ADD MODAL (2 steps) ===== -->
+<div class="overlay" id="addOverlay" onclick="closeIfBg(event,'addOverlay')">
+  <div class="modal">
+
+    <!-- STEP 1: SEARCH -->
+    <div id="step1">
+      <div class="m-hdr">
+        <div class="m-hdr-txt">
+          <div class="m-eyebrow" id="m-eyebrow">ADD FSC</div>
+          <div class="m-title" id="m-title-step1">Search & Select</div>
+          <div class="m-sub" id="m-sub-step1">Type an FSC number or name to find it, then select it to continue.</div>
+        </div>
+        <button class="m-close" onclick="closeModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="m-body">
+        <div class="search-wrap" style="margin-bottom:8px">
+          <div style="position:relative;display:flex;align-items:center">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute;left:12px;color:var(--text-faint)"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="search-input" id="modal-search" placeholder="" oninput="modalSearch(this.value)" autocomplete="off" style="padding-left:36px;font-size:13px">
+          </div>
+          <div class="suggest-drop" id="modal-suggestions" style="position:relative;top:4px;display:block;max-height:280px;border:1.5px solid var(--border);box-shadow:none" id="modal-results"></div>
+        </div>
+        <div style="margin-top:12px">
+          <div class="m-actions">
+            <button class="btn-cancel-m" onclick="closeModal()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2: SET-ASIDES -->
+    <div id="step2" style="display:none">
+      <div class="m-hdr">
+        <div class="m-hdr-txt">
+          <div class="m-eyebrow" id="m-eyebrow2">ADD FSC</div>
+          <div class="m-title">Choose Set-Asides</div>
+          <div class="m-sub">Select which set-aside types to pull RFQs for. At least one is recommended.</div>
+        </div>
+        <button class="m-close" onclick="closeModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="m-body">
+        <div class="fsc-context" id="m-context">
+          <div class="fc-code" id="m-code">5306</div>
+          <div>
+            <div class="fc-name" id="m-name">Bolts</div>
+            <div class="fc-rfqs" id="m-rfqs">187 active RFQs</div>
+          </div>
+        </div>
+        <div class="sa-warn" id="sa-warn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          No set-asides selected — no RFQs will be pulled for this code until you add at least one.
+        </div>
+        <div class="sa-section-title">Select Set-Aside Types</div>
+        <div class="sa-grid" id="sa-grid"></div>
+        <div class="m-actions">
+          <button class="btn-cancel-m" onclick="goStep(1)">← Back</button>
+          <button class="btn-add-m" id="m-confirm-btn" onclick="confirmAdd()">Add to My List</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ADE80" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+  <span id="toast-msg">Changes saved.</span>
+</div>
+
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────
+const SET_ASIDES = [
+  {id:'unrestricted', label:'Unrestricted', desc:'Open competition — no restrictions'},
+  {id:'sb',           label:'Small Business', desc:'SB set-aside only'},
+  {id:'hubzone',      label:'HUBZone',       desc:'Historically underutilized business zones'},
+  {id:'wosb',         label:'WOSB',          desc:'Women-owned small business'},
+  {id:'sdvosb',       label:'SDVOSB',        desc:'Service-disabled veteran-owned SB'},
+  {id:'aidc',         label:'AIDC',          desc:'American Indian & domestic concerns'},
+  {id:'edwosb',       label:'EDWOSB',        desc:'Economically disadvantaged WOSB'},
+];
+
+const ALL_FSCS = [
+  {code:'5305',name:'Screws',rfqs:124},{code:'5306',name:'Bolts',rfqs:187},{code:'5307',name:'Studs',rfqs:40},
+  {code:'5310',name:'Nuts and Washers',rfqs:96},{code:'5315',name:'Nails, Keys, and Pins',rfqs:31},
+  {code:'5320',name:'Rivets',rfqs:18},{code:'5325',name:'Fastening Devices',rfqs:55},
+  {code:'5330',name:'Packing and Gasket Materials',rfqs:29},{code:'5331',name:'O-Rings',rfqs:44},
+  {code:'5340',name:'Miscellaneous Hardware',rfqs:88},{code:'5360',name:'Coil and Wire Springs',rfqs:22},
+  {code:'5365',name:'Bushings, Rings, Shims',rfqs:37},{code:'5905',name:'Resistors',rfqs:61},
+  {code:'5910',name:'Capacitors',rfqs:74},{code:'5930',name:'Switches',rfqs:115},
+  {code:'5935',name:'Connectors, Electrical',rfqs:203},{code:'5945',name:'Relays and Solenoids',rfqs:58},
+  {code:'5961',name:'Semiconductor Devices',rfqs:77},{code:'5962',name:'Microcircuits, Electronic',rfqs:49},
+  {code:'3110',name:'Bearings, Antifriction',rfqs:93},{code:'3120',name:'Bearings, Plain',rfqs:41},
+  {code:'4720',name:'Hose and Flexible Tubing',rfqs:36},{code:'4730',name:'Fittings, Hose/Pipe/Tube',rfqs:52},
+  {code:'2510',name:'Vehicular Cab, Body, Frame',rfqs:19},{code:'2530',name:'Vehicular Brake Components',rfqs:28},
+  {code:'6110',name:'Electrical Control Equipment',rfqs:66},{code:'6130',name:'Power Conversion Equipment',rfqs:33},
+  {code:'6135',name:'Batteries, Primary',rfqs:24},{code:'6140',name:'Batteries, Storage',rfqs:17},
+];
+
+const ALL_CAGES = [
+  {code:'96906',name:'SPS Technologies, Inc.',loc:'Jenkintown, PA'},
+  {code:'0FV87',name:'Precision Castparts Corp.',loc:'Portland, OR'},
+  {code:'81343',name:'Boeing Defense',loc:'Saint Louis, MO'},
+  {code:'77272',name:'Lockheed Martin',loc:'Bethesda, MD'},
+  {code:'99193',name:'Parker Hannifin',loc:'Cleveland, OH'},
+  {code:'45158',name:'Raytheon Technologies',loc:'Waltham, MA'},
+  {code:'1XZC4',name:'TransDigm Group',loc:'Cleveland, OH'},
+  {code:'08578',name:'Honeywell International',loc:'Charlotte, NC'},
+  {code:'55939',name:'General Dynamics',loc:'Reston, VA'},
+  {code:'06090',name:'Moog Inc.',loc:'East Aurora, NY'},
+  {code:'71468',name:'Curtiss-Wright Corp.',loc:'Parsippany, NJ'},
+  {code:'31507',name:'Textron Inc.',loc:'Providence, RI'},
+];
+
+// Active lists — start populated with sample data
+let activeFscs = [
+  {code:'5305',name:'Screws',rfqs:124,enabled:true,setasides:['unrestricted','sb']},
+  {code:'5306',name:'Bolts',rfqs:187,enabled:true,setasides:['unrestricted','sb','sdvosb']},
+  {code:'5310',name:'Nuts and Washers',rfqs:96,enabled:true,setasides:['unrestricted']},
+  {code:'5935',name:'Connectors, Electrical',rfqs:203,enabled:true,setasides:['sb','hubzone','wosb']},
+  {code:'5315',name:'Nails, Keys, and Pins',rfqs:31,enabled:false,setasides:[]},
+];
+let activeCages = [
+  {code:'96906',name:'SPS Technologies, Inc.',loc:'Jenkintown, PA',setasides:['unrestricted','sb']},
+  {code:'99193',name:'Parker Hannifin',loc:'Cleveland, OH',setasides:['unrestricted']},
+  {code:'06090',name:'Moog Inc.',loc:'East Aurora, NY',setasides:['sb','sdvosb']},
+];
+
+// ─── MODAL STATE ────────────────────────────────────────────────────────
+let modalMode = 'fsc';
+let editingIndex = -1;
+let pendingItem = null;
+let selectedSAs = [];
+
+function goStep(n){
+  document.getElementById('step1').style.display = n===1 ? 'block' : 'none';
+  document.getElementById('step2').style.display = n===2 ? 'block' : 'none';
+  if(n===1){
+    const isFsc = modalMode==='fsc';
+    document.getElementById('modal-search').placeholder = isFsc ? 'Search FSC number or name…' : 'Search CAGE code or company…';
+    document.getElementById('modal-search').value = '';
+    document.getElementById('modal-suggestions').innerHTML = '';
+    document.getElementById('modal-suggestions').classList.remove('open');
+    setTimeout(()=>document.getElementById('modal-search').focus(), 100);
+  }
+}
+
+// Open search modal — step 1
+function openSearchModal(mode){
+  modalMode = mode;
+  editingIndex = -1;
+  pendingItem = null;
+  const isFsc = mode==='fsc';
+  document.getElementById('m-eyebrow').textContent  = isFsc ? 'ADD FSC' : 'ADD CAGE';
+  document.getElementById('m-eyebrow2').textContent = isFsc ? 'ADD FSC' : 'ADD CAGE';
+  document.getElementById('m-title-step1').textContent = isFsc ? 'Add Federal Supply Class' : 'Add Manufacturer CAGE';
+  document.getElementById('m-sub-step1').textContent = isFsc
+    ? 'Search by FSC code or name, then select it to configure set-asides.'
+    : 'Search by CAGE code or company name, then select it to configure set-asides.';
+  goStep(1);
+  document.getElementById('addOverlay').classList.add('open');
+}
+
+// Step 1 search
+function modalSearch(q){
+  const d = document.getElementById('modal-suggestions');
+  if(!q || q.length < 1){ d.innerHTML=''; return; }
+  const ql = q.toLowerCase();
+  if(modalMode === 'fsc'){
+    const existing = activeFscs.map(f=>f.code);
+    const res = ALL_FSCS.filter(f=>!existing.includes(f.code)&&(f.code.includes(q)||f.name.toLowerCase().includes(ql))).slice(0,8);
+    d.innerHTML = res.length
+      ? res.map(f=>`<div class="suggest-item" onclick="selectFromSearch('${f.code}','${f.name.replace(/'/g,"\\'")}',${f.rfqs},'')">
+          <span class="si-code">${f.code}</span><span class="si-name">${f.name} <span style="color:var(--text-faint);font-size:10.5px">— ${f.rfqs} RFQs</span></span>
+        </div>`).join('')
+      : `<div style="padding:14px;text-align:center;font-size:12px;color:var(--text-faint)">No matching FSCs found</div>`;
+  } else {
+    const existing = activeCages.map(c=>c.code);
+    const res = ALL_CAGES.filter(c=>!existing.includes(c.code)&&(c.code.toLowerCase().includes(ql)||c.name.toLowerCase().includes(ql))).slice(0,8);
+    d.innerHTML = res.length
+      ? res.map(c=>`<div class="suggest-item" onclick="selectFromSearch('${c.code}','${c.name.replace(/'/g,"\\'")}',0,'${c.loc.replace(/'/g,"\\'")}')">
+          <span class="si-code">${c.code}</span><span class="si-name">${c.name} <span style="color:var(--text-faint);font-size:10.5px">— ${c.loc}</span></span>
+        </div>`).join('')
+      : `<div style="padding:14px;text-align:center;font-size:12px;color:var(--text-faint)">No matching CAGEs found</div>`;
+  }
+}
+
+// User picks from search results → go to step 2
+function selectFromSearch(code, name, rfqs, loc){
+  pendingItem = {code, name, rfqs: rfqs||0, loc: loc||''};
+  const isFsc = modalMode==='fsc';
+  document.getElementById('m-code').textContent = code;
+  document.getElementById('m-name').textContent = name;
+  document.getElementById('m-rfqs').textContent = isFsc ? `${rfqs} active RFQs in this FSC` : loc;
+  document.getElementById('m-confirm-btn').textContent = isFsc ? 'Add FSC to My List' : 'Add CAGE to My List';
+  renderSAGrid([]);
+  goStep(2);
+}
+
+// Edit existing item — skip step 1, go straight to step 2
+function editItem(mode, index){
+  modalMode = mode;
+  editingIndex = index;
+  const item = mode==='fsc' ? activeFscs[index] : activeCages[index];
+  pendingItem = {...item};
+  const isFsc = mode==='fsc';
+  document.getElementById('m-eyebrow2').textContent = isFsc ? 'EDIT FSC' : 'EDIT CAGE';
+  document.getElementById('m-code').textContent = item.code;
+  document.getElementById('m-name').textContent = item.name;
+  document.getElementById('m-rfqs').textContent = isFsc ? `${item.rfqs} active RFQs in this FSC` : (item.loc||'');
+  document.getElementById('m-confirm-btn').textContent = 'Save Changes';
+  renderSAGrid(item.setasides||[]);
+  goStep(2);
+  document.getElementById('addOverlay').classList.add('open');
+}
+function saLabel(id){return SET_ASIDES.find(s=>s.id===id)?.label||id}
+
+function renderFscList(){
+  const el = document.getElementById('fsc-list');
+  const en = activeFscs.filter(f=>f.enabled).length;
+  document.getElementById('fsc-count').textContent = activeFscs.length + ' FSC' + (activeFscs.length!==1?'s':'') + ' (' + en + ' active)';
+  if(!activeFscs.length){
+    el.innerHTML=`<div class="empty-state"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><div class="empty-title">No FSCs added yet</div><div class="empty-sub">Search above to add Federal Supply Classes to your RFQ feed.</div></div>`;
+    return;
+  }
+  el.innerHTML = activeFscs.map((f,i)=>{
+    const hasSA = f.setasides && f.setasides.length > 0;
+    const pills = hasSA
+      ? f.setasides.map(s=>`<span class="sa-pill">${saLabel(s)}</span>`).join('')
+      : `<span class="sa-pill warn">⚠ No set-asides — no RFQs will pull</span>`;
+    return `<div class="fsc-item">
+      <div class="fsc-row">
+        <div class="fi-left">
+          <span class="fi-code">${f.code}</span>
+          <div class="fi-info">
+            <div class="fi-name">${f.name}</div>
+            <div class="fi-setasides">${pills}</div>
+          </div>
+        </div>
+        <div class="fi-right">
+          <span class="fi-count">${f.rfqs} RFQs</span>
+          <button class="tog ${f.enabled?'on':''}" onclick="toggleFsc(${i})" title="${f.enabled?'Disable':'Enable'}"></button>
+          <button class="icon-btn" onclick="editItem('fsc',${i})" title="Edit set-asides">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+          <button class="icon-btn del" onclick="removeFsc(${i})" title="Remove">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderCageList(){
+  const el = document.getElementById('cage-list');
+  document.getElementById('cage-count').textContent = activeCages.length + ' CAGE' + (activeCages.length!==1?'s':'') + ' added';
+  if(!activeCages.length){
+    el.innerHTML=`<div class="empty-state"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg><div class="empty-title">No CAGEs added yet</div><div class="empty-sub">Add manufacturer CAGE codes to capture RFQs where they are a required source.</div></div>`;
+    return;
+  }
+  el.innerHTML = activeCages.map((c,i)=>{
+    const hasSA = c.setasides && c.setasides.length > 0;
+    const pills = hasSA
+      ? c.setasides.map(s=>`<span class="sa-pill">${saLabel(s)}</span>`).join('')
+      : `<span class="sa-pill warn">⚠ No set-asides — no RFQs will pull</span>`;
+    return `<div class="fsc-item">
+      <div class="fsc-row">
+        <div class="fi-left">
+          <span class="fi-code">${c.code}</span>
+          <div class="fi-info">
+            <div class="fi-name">${c.name}</div>
+            <div style="font-size:10.5px;color:var(--text-faint);margin-bottom:3px">${c.loc}</div>
+            <div class="fi-setasides">${pills}</div>
+          </div>
+        </div>
+        <div class="fi-right">
+          <button class="icon-btn" onclick="editItem('cage',${i})" title="Edit set-asides">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+          <button class="icon-btn del" onclick="removeCage(${i})" title="Remove">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─── MODAL HELPERS ──────────────────────────────────────────────────────
+function renderSAGrid(preselected){
+  selectedSAs = [...(preselected||[])];
+  document.getElementById('sa-grid').innerHTML = SET_ASIDES.map(sa=>`
+    <div class="sa-tile ${selectedSAs.includes(sa.id)?'sel':''}" id="tile-${sa.id}" onclick="toggleSA('${sa.id}')">
+      <input type="checkbox" ${selectedSAs.includes(sa.id)?'checked':''} onclick="event.stopPropagation();toggleSA('${sa.id}')">
+      <div>
+        <div class="sa-tile-label">${sa.label}</div>
+        <div class="sa-tile-desc">${sa.desc}</div>
+      </div>
+    </div>`).join('');
+  checkWarn();
+}
+
+function toggleSA(id){
+  const idx = selectedSAs.indexOf(id);
+  if(idx>=0) selectedSAs.splice(idx,1);
+  else selectedSAs.push(id);
+  // update tile
+  const tile = document.getElementById('tile-'+id);
+  tile.classList.toggle('sel', selectedSAs.includes(id));
+  tile.querySelector('input').checked = selectedSAs.includes(id);
+  checkWarn();
+}
+
+function checkWarn(){
+  document.getElementById('sa-warn').classList.toggle('show', selectedSAs.length===0);
+}
+
+function openAddModal(mode, code, name, rfqs, loc){
+  modalMode = mode;
+  editingIndex = -1;
+  pendingItem = {code, name, rfqs: rfqs||0, loc: loc||''};
+  // close suggestions
+  document.querySelectorAll('.suggest-drop').forEach(d=>d.classList.remove('open'));
+  document.getElementById(mode==='fsc'?'fsc-search':'cage-search').value='';
+  // fill modal
+  const isFsc = mode==='fsc';
+  document.getElementById('m-eyebrow').textContent = 'ADD ' + (isFsc?'FSC':'CAGE');
+  document.getElementById('m-title').textContent = 'Choose Set-Asides';
+  document.getElementById('m-sub').textContent = `Select which set-aside types to pull RFQs for. At least one is recommended.`;
+  document.getElementById('m-code').textContent = code;
+  document.getElementById('m-name').textContent = name;
+  document.getElementById('m-rfqs').textContent = isFsc ? `${rfqs} active RFQs in this FSC` : loc;
+  document.getElementById('m-confirm-btn').textContent = isFsc ? 'Add FSC to My List' : 'Add CAGE to My List';
+  renderSAGrid([]);
+  document.getElementById('addOverlay').classList.add('open');
+}
+
+function editItem(mode, index){
+  modalMode = mode;
+  editingIndex = index;
+  const item = mode==='fsc' ? activeFscs[index] : activeCages[index];
+  pendingItem = {...item};
+  const isFsc = mode==='fsc';
+  document.getElementById('m-eyebrow').textContent = 'EDIT ' + (isFsc?'FSC':'CAGE');
+  document.getElementById('m-title').textContent = 'Edit Set-Asides';
+  document.getElementById('m-sub').textContent = 'Update which set-aside types pull RFQs for this code.';
+  document.getElementById('m-code').textContent = item.code;
+  document.getElementById('m-name').textContent = item.name;
+  document.getElementById('m-rfqs').textContent = isFsc ? `${item.rfqs} active RFQs in this FSC` : item.loc||'';
+  document.getElementById('m-confirm-btn').textContent = 'Save Changes';
+  renderSAGrid(item.setasides||[]);
+  document.getElementById('addOverlay').classList.add('open');
+}
+
+function confirmAdd(){
+  if(modalMode==='fsc'){
+    if(editingIndex>=0){
+      activeFscs[editingIndex].setasides = [...selectedSAs];
+    } else {
+      activeFscs.push({...pendingItem, enabled:true, setasides:[...selectedSAs]});
+    }
+    renderFscList();
+  } else {
+    if(editingIndex>=0){
+      activeCages[editingIndex].setasides = [...selectedSAs];
+    } else {
+      activeCages.push({...pendingItem, setasides:[...selectedSAs]});
+    }
+    renderCageList();
+  }
+  closeModal();
+}
+
+function closeModal(){
+  document.getElementById('addOverlay').classList.remove('open');
+  editingIndex = -1;
+  pendingItem = null;
+}
+function closeIfBg(e,id){if(e.target===document.getElementById(id))closeModal()}
+
+// ─── TOGGLE / REMOVE ────────────────────────────────────────────────────
+function toggleFsc(i){activeFscs[i].enabled=!activeFscs[i].enabled;renderFscList();}
+function removeFsc(i){activeFscs.splice(i,1);renderFscList();}
+function removeCage(i){activeCages.splice(i,1);renderCageList();}
+
+// ─── SAVE ───────────────────────────────────────────────────────────────
+function saveAll(){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent='Changes saved — your RFQ feed has been updated.';
+  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+function resetAll(){
+  activeFscs=[
+    {code:'5305',name:'Screws',rfqs:124,enabled:true,setasides:['unrestricted','sb']},
+    {code:'5306',name:'Bolts',rfqs:187,enabled:true,setasides:['unrestricted','sb','sdvosb']},
+    {code:'5310',name:'Nuts and Washers',rfqs:96,enabled:true,setasides:['unrestricted']},
+    {code:'5935',name:'Connectors, Electrical',rfqs:203,enabled:true,setasides:['sb','hubzone','wosb']},
+    {code:'5315',name:'Nails, Keys, and Pins',rfqs:31,enabled:false,setasides:[]},
+  ];
+  activeCages=[
+    {code:'96906',name:'SPS Technologies, Inc.',loc:'Jenkintown, PA',setasides:['unrestricted','sb']},
+    {code:'99193',name:'Parker Hannifin',loc:'Cleveland, OH',setasides:['unrestricted']},
+    {code:'06090',name:'Moog Inc.',loc:'East Aurora, NY',setasides:['sb','sdvosb']},
+  ];
+  renderFscList();renderCageList();
+}
+
+// Init
+renderFscList();
+renderCageList();
+</script>
+</body>
+</html>
