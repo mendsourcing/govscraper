@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light">
 <title>Claim Pending — GovScraper</title>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -39,15 +39,16 @@
     --brand-blue: #00AEEF;
     --brand-red: #BE1E2D;
     --brand-navy: #1B2A4A;
-    /* FSC bar palette - energized */
-    --fsc-1: #2563EB;
-    --fsc-2: #0891B2;
-    --fsc-3: #16A34A;
-    --fsc-4: #7C3AED;
-    --fsc-5: #D97706;
-    --fsc-6: #DC2626;
-    --fsc-7: #0E7490;
-    --fsc-8: #059669;
+    --active-supplier: #BE1E2D;
+    /* FSC bar palette - blue monochrome */
+    --fsc-1: #1B6CA8;
+    --fsc-2: #2563EB;
+    --fsc-3: #3B82F6;
+    --fsc-4: #60A5FA;
+    --fsc-5: #1B3A6B;
+    --fsc-6: #0F172A;
+    --fsc-7: #1E40AF;
+    --fsc-8: #93C5FD;
   }
 
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -113,8 +114,8 @@
   .s-item svg { width:16px; height:16px; flex-shrink:0; }
   .sidebar-item svg { width:16px; height:16px; flex-shrink:0; }
   .s-item:hover { background:var(--surface-2); color:var(--text); }
-  .s-item.active { color:var(--green); border-left-color:var(--green); background:var(--green-bg); font-weight:600; }
-  body.supplier-mode .s-item:hover { background:var(--green-bg); color:var(--green); }
+  .s-item.active { color:var(--active-supplier); border-left-color:var(--active-supplier); background:var(--red-bg); font-weight:600; }
+  body.supplier-mode .s-item:hover { background:var(--red-bg); color:var(--active-supplier); }
   .sidebar-item:hover { background:var(--accent-bg); color:var(--accent); text-decoration:none; border-left-color:var(--accent-border); }
   .sidebar-item.active { color:var(--accent); font-weight:700; border-left-color:var(--accent); background:var(--accent-bg); }
   .sidebar-item svg { width:16px; height:16px; flex-shrink:0; opacity:0.8; }
@@ -191,7 +192,7 @@
     font-size:17px; margin-bottom:12px;
   }
   .banner-icon.blue { background:var(--accent-bg); }
-  .banner-icon.green { background:var(--green-bg); }
+  .banner-icon.green { background:var(--red-bg); }
   .banner-icon.gray { background:var(--surface-2); }
   .banner h3 { font-size:13px; font-weight:700; margin-bottom:5px; color:var(--text); }
   .banner p { font-size:12px; color:var(--text-muted); margin-bottom:14px; line-height:1.5; }
@@ -211,7 +212,7 @@
     border-radius:12px 12px 0 0;
   }
   .metric-card.blue::before { background:var(--accent); }
-  .metric-card.green::before { background:var(--green); }
+  .metric-card.green::before { background:var(--active-supplier); }
   .metric-card.red::before { background:var(--red); }
   .metric-card.gold::before { background:var(--amber); }
   .metric-label {
@@ -227,7 +228,7 @@
   .metric-sub { font-size:11px; color:var(--text-muted); font-weight:500; }
   .metric-change { font-size:11px; margin-top:5px; font-weight:600; }
   .metric-change.down { color:var(--red); }
-  .metric-change.up { color:var(--green); }
+  .metric-change.up { color:#BE1E2D; }
   .metric-hdr-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
   .metric-award-row { display:flex; gap:24px; margin-top:4px; }
   .metric-award-row .col .slabel {
@@ -292,7 +293,7 @@
   }
   .member-wins-body .mw-amt {
     font-family:'Source Code Pro',monospace; font-size:22px;
-    font-weight:700; color:var(--green);
+    font-weight:700; color:#BE1E2D;
   }
   .member-wins-body .mw-powered {
     font-size:10.5px; color:var(--text-faint); font-weight:500;
@@ -333,7 +334,7 @@
     font-family:'Source Code Pro',monospace; font-size:40px;
     font-weight:800; line-height:1;
   }
-  .ratio-val.good { color:var(--green); }
+  .ratio-val.good { color:#BE1E2D; }
   .ratio-val.below { color:var(--amber); }
   .ratio-sub { font-size:11px; color:var(--text-muted); margin-top:6px; font-weight:500; }
 
@@ -418,7 +419,7 @@
 .acc-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:none;border:none;font-family:'Manrope',sans-serif;cursor:pointer;gap:12px;transition:background .15s}.acc-trigger:hover{background:var(--surface-2)}
 .acc-trigger-left{display:flex;align-items:center;gap:10px}
 .acc-ico{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.acc-ico.blue{background:var(--accent-bg)}.acc-ico.green{background:var(--green-bg)}.acc-ico.amber{background:var(--amber-bg)}.acc-ico.purple{background:#F5F3FF}.acc-ico.red{background:var(--red-bg)}
+.acc-ico.blue{background:var(--accent-bg)}.acc-ico.green{background:var(--red-bg)}.acc-ico.amber{background:var(--amber-bg)}.acc-ico.purple{background:#F5F3FF}.acc-ico.red{background:var(--red-bg)}
 .acc-label{font-size:13px;font-weight:700;color:var(--text);text-align:left}
 .acc-sub{font-size:11px;color:var(--text-faint);margin-top:1px;text-align:left}
 .acc-chevron{color:var(--text-faint);transition:transform .2s;flex-shrink:0}
@@ -445,7 +446,7 @@ input[type=file]{display:none}
 
 /* SAVE BUTTON */
 .btn-save{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:9px 20px;border-radius:8px;border:none;background:var(--accent);color:#fff;cursor:pointer;transition:background .15s;margin-top:16px;width:100%}.btn-save:hover{background:var(--accent-hover)}
-.btn-save.success{background:var(--green)}
+.btn-save.success{background:#BE1E2D}
 
 /* PASSWORD RESET SECTION */
 .pw-reset-box{background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:16px;margin-bottom:4px}
@@ -454,7 +455,7 @@ input[type=file]{display:none}
 .btn-send-reset{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:9px 18px;border-radius:8px;border:1.5px solid var(--accent-border);background:var(--accent-bg);color:var(--accent);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:7px;width:100%;justify-content:center}.btn-send-reset:hover{background:var(--accent);color:#fff}
 .pw-sent-state{display:none;text-align:center;padding:12px}
 .pw-sent-state.show{display:block}
-.pw-sent-ico{width:40px;height:40px;border-radius:50%;background:var(--green-bg);border:2px solid var(--green-border);display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.pw-sent-ico{width:40px;height:40px;border-radius:50%;background:var(--red-bg);border:2px solid var(--red-border);display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
 .pw-sent-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
 .pw-sent-sub{font-size:11.5px;color:var(--text-muted);line-height:1.6}
 
@@ -532,7 +533,7 @@ input[type=file]{display:none}
 /* Supplier mode: green accent on topbar bottom border only */
 body.supplier-mode .topbar {
   background: #FFFFFF !important;
-  border-bottom: 2px solid #16A34A !important;
+  border-bottom: 2px solid #BE1E2D !important;
   box-shadow: 0 1px 4px rgba(22,163,74,0.12) !important;
 }
 
@@ -581,9 +582,9 @@ body.supplier-mode .topbar {
 }
 /* Active Supplier — solid green */
 .mode-btn.active-supplier {
-  background: #16A34A;
+  background: #BE1E2D;
   color: #ffffff;
-  box-shadow: 0 1px 4px rgba(22,163,74,0.35), 0 0 0 0px #16A34A;
+  box-shadow: 0 1px 4px rgba(190,30,45,0.35), 0 0 0 0px #BE1E2D;
 }
 .mode-dot {
   width: 7px; height: 7px;
@@ -593,7 +594,7 @@ body.supplier-mode .topbar {
 }
 /* Dot colors on inactive buttons */
 .mode-btn.inactive .mode-dot.blue { background: #2563EB; }
-.mode-btn.inactive .mode-dot.green { background: #16A34A; }
+.mode-btn.inactive .mode-dot.green { background: #BE1E2D; }
 /* Dot on active buttons — white */
 .mode-btn.active-member .mode-dot,
 .mode-btn.active-supplier .mode-dot { background: rgba(255,255,255,0.6); }
@@ -630,14 +631,14 @@ body.supplier-mode .sidebar-supplier {
 .reg-page .step {display:flex;align-items:center;gap:8px;flex:1}
 .reg-page .step:last-child {flex:none}
 .reg-page .sdot {width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
-.reg-page .sdot.done {background:var(--green);color:#fff}
+.reg-page .sdot.done {background:#BE1E2D;color:#fff}
 .reg-page .sdot.active {background:var(--accent);color:#fff;box-shadow:0 0 0 4px var(--accent-bg)}
 .reg-page .sdot.pend {background:var(--surface-2);color:var(--text-faint);border:2px solid var(--border)}
 .reg-page .slbl {font-size:11px;font-weight:700;color:var(--text-muted)}
 .reg-page .slbl.active {color:var(--accent)}
-.reg-page .slbl.done {color:var(--green)}
+.reg-page .slbl.done {color:#BE1E2D}
 .reg-page .sline {flex:1;height:2px;background:var(--border);margin:0 8px}
-.reg-page .sline.done {background:var(--green)}
+.reg-page .sline.done {background:#BE1E2D}
 .reg-page .cage-bar {background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 20px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 3px rgba(0,0,0,.04)}
 .reg-page .cb-l {display:flex;align-items:center;gap:14px}
 .reg-page .cb-ico {width:40px;height:40px;background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:10px;display:flex;align-items:center;justify-content:center}
@@ -724,7 +725,7 @@ body.supplier-mode .sidebar-supplier {
 .af-lbl{font-size:10.5px;font-weight:700;color:var(--text-faint)}
 .af-chip{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:5px;background:var(--accent-bg);border:1px solid var(--accent-border);color:var(--accent)}.af-chip button{border:none;background:none;color:var(--accent);cursor:pointer;font-size:13px;line-height:1;padding:0}
 .search-bar{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 16px;margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,.04)}.search-bar:focus-within{border-color:var(--accent-border)}.search-bar svg{width:18px;height:18px;color:var(--text-faint);flex-shrink:0}.search-bar input{flex:1;border:none;background:transparent;font-family:'Manrope',sans-serif;font-size:14px;color:var(--text);outline:none}.search-bar input::placeholder{color:var(--text-faint)}.search-btn{font-family:'Manrope',sans-serif;font-size:11.5px;font-weight:700;padding:6px 16px;border-radius:6px;border:none;background:var(--accent);color:#fff;cursor:pointer}
-.tag{display:inline-flex;align-items:center;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:5px;letter-spacing:.2px}.tag-blue{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-border)}.tag-gray{background:var(--surface-2);color:var(--text-dim);border:1px solid var(--border)}.tag-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}.tag-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}.tag-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}.tag-purple{background:var(--purple-bg);color:var(--purple);border:1px solid var(--purple-border)}
+.tag{display:inline-flex;align-items:center;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:5px;letter-spacing:.2px}.tag-blue{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-border)}.tag-gray{background:var(--surface-2);color:var(--text-dim);border:1px solid var(--border)}.tag-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}.tag-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}.tag-green{background:var(--red-bg);color:#BE1E2D;border:1px solid var(--red-border)}.tag-purple{background:var(--purple-bg);color:var(--purple);border:1px solid var(--purple-border)}
 .hero{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
 .hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:16px}
 .cage-code{font-family:'Source Code Pro',monospace;font-size:26px;font-weight:700;letter-spacing:2px;color:var(--text);margin-bottom:3px}.cage-co{font-size:18px;font-weight:700;margin-bottom:2px}.cage-fmr{font-size:11.5px;color:var(--text-muted);font-style:italic;margin-bottom:10px}.cage-tags{display:flex;gap:6px;flex-wrap:wrap}
@@ -736,7 +737,7 @@ body.supplier-mode .sidebar-supplier {
 .ss-n{font-family:'Source Code Pro',monospace;font-size:24px;font-weight:700;color:var(--accent);line-height:1}.ss-l{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-faint);margin-top:2px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04)}.ch{padding:11px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface-2)}.ch h3{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--text-dim)}.src-t{font-family:'Source Code Pro',monospace;font-size:10px;color:var(--text-faint)}.cb{padding:18px 20px}
 .kvg{display:grid;gap:16px}.c2{grid-template-columns:1fr 1fr}.c3{grid-template-columns:1fr 1fr 1fr}
-.kv label{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--text-faint);display:block;margin-bottom:4px}.kv .v{font-size:13px;font-weight:600;color:var(--text-dim)}.kv .v.mo{font-family:'Source Code Pro',monospace}.kv .v.gr{color:var(--green)}.kv .v.fa{color:var(--text-faint);font-style:italic;font-weight:400}
+.kv label{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--text-faint);display:block;margin-bottom:4px}.kv .v{font-size:13px;font-weight:600;color:var(--text-dim)}.kv .v.mo{font-family:'Source Code Pro',monospace}.kv .v.gr{color:#BE1E2D}.kv .v.fa{color:var(--text-faint);font-style:italic;font-weight:400}
 .dt{width:100%;border-collapse:collapse;font-size:12px}.dt thead th{font-size:9.5px;text-transform:uppercase;letter-spacing:.4px;font-weight:800;color:var(--text-faint);padding:9px 14px;border-bottom:2px solid var(--border);text-align:left;background:var(--surface-2)}.dt tbody td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim)}.dt tbody tr:last-child td{border-bottom:none}.dt tbody tr:hover{background:var(--accent-bg)}.dt .mo{font-family:'Source Code Pro',monospace}.dt a{color:var(--accent);font-weight:600}
 .va{display:block;text-align:center;padding:11px;font-size:12px;font-weight:700;color:var(--accent);border-top:1px solid var(--border)}.va:hover{background:var(--accent-bg);text-decoration:none}
 .cr-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border)}.cr-row:last-child{border-bottom:none}.cr-l{display:flex;align-items:center;gap:10px}.cr-role{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--text-faint);width:68px;flex-shrink:0}.sec-lbl{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--text-faint);margin-bottom:8px;display:block}
@@ -767,9 +768,9 @@ body.supplier-mode .sidebar-supplier-active {
   background:var(--surface); border-right:1px solid var(--border);
   padding:20px 0 16px; overflow-y:auto; z-index:90;
 }
-.s-item { display:flex; align-items:center; gap:10px; padding:8px 20px; font-size:12.5px; font-weight:500; color:var(--green); text-decoration:none; border-left:3px solid transparent; transition:all .15s; background:none; border-top:none; border-right:none; border-bottom:none; width:100%; cursor:pointer; font-family:'Manrope',sans-serif; }
-.s-item:hover { background:var(--green-bg); text-decoration:none; }
-.s-item.s-active { font-weight:700; border-left-color:var(--green); background:var(--green-bg); }
+.s-item { display:flex; align-items:center; gap:10px; padding:8px 20px; font-size:12.5px; font-weight:500; color:#BE1E2D; text-decoration:none; border-left:3px solid transparent; transition:all .15s; background:none; border-top:none; border-right:none; border-bottom:none; width:100%; cursor:pointer; font-family:'Manrope',sans-serif; }
+.s-item:hover { background:var(--red-bg); text-decoration:none; }
+.s-item.s-active { font-weight:700; border-left-color:#BE1E2D; background:var(--red-bg); }
 .s-item svg { width:16px; height:16px; flex-shrink:0; opacity:.8; }
 
 .sidebar-member { display:flex !important; }
@@ -819,7 +820,7 @@ body.supplier-mode #panel-supplier { display:block; }
   .tag-gray{background:var(--surface-2);color:var(--text-dim);border:1px solid var(--border)}
   .tag-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
   .tag-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
-  .tag-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+  .tag-green{background:var(--red-bg);color:#BE1E2D;border:1px solid var(--red-border)}
   .tag-purple{background:var(--purple-bg);color:var(--purple);border:1px solid var(--purple-border)}
   /* Hero */
   .hero{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
@@ -843,18 +844,18 @@ body.supplier-mode #panel-supplier { display:block; }
   .cb{padding:18px 20px}
   .kvg{display:grid;gap:16px}.c2{grid-template-columns:1fr 1fr}.c3{grid-template-columns:1fr 1fr 1fr}.c4{grid-template-columns:1fr 1fr 1fr 1fr}
   .kv label{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--text-faint);display:block;margin-bottom:4px}
-  .kv .v{font-size:13px;font-weight:600;color:var(--text-dim)}.kv .v.mo{font-family:'Source Code Pro',monospace}.kv .v.gr{color:var(--green)}.kv .v.fa{color:var(--text-faint);font-style:italic;font-weight:400}
+  .kv .v{font-size:13px;font-weight:600;color:var(--text-dim)}.kv .v.mo{font-family:'Source Code Pro',monospace}.kv .v.gr{color:#BE1E2D}.kv .v.fa{color:var(--text-faint);font-style:italic;font-weight:400}
   /* Certs grid */
   .cert-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
   .cert-tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 8px;border-radius:8px;border:1.5px solid var(--border);background:var(--surface-2);font-size:11px;font-weight:700;color:var(--text-muted);text-align:center;line-height:1.3}
-  .cert-tile.active{border-color:var(--green-border);background:var(--green-bg);color:var(--green)}
+  .cert-tile.active{border-color:var(--red-border);background:var(--red-bg);color:#BE1E2D}
   .cert-tile .ct-check{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px}
-  .cert-tile.active .ct-check{background:var(--green);color:#fff}
+  .cert-tile.active .ct-check{background:#BE1E2D;color:#fff}
   .cert-tile:not(.active) .ct-check{background:var(--surface-2);border:1.5px solid var(--border);color:var(--text-faint)}
   /* Set-asides row */
   .sa-row{display:flex;flex-wrap:wrap;gap:8px}
   .sa-chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 12px;border-radius:6px;border:1.5px solid var(--border);color:var(--text-muted);background:var(--surface-2)}
-  .sa-chip.active{border-color:var(--green-border);background:var(--green-bg);color:var(--green)}
+  .sa-chip.active{border-color:var(--red-border);background:var(--red-bg);color:#BE1E2D}
   /* Capability tiles */
   .cap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
   .cap-tile{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;border-radius:8px;border:1.5px solid var(--border);background:var(--surface-2)}
@@ -946,7 +947,7 @@ body.supplier-mode #panel-supplier { display:block; }
   .tag{display:inline-flex;align-items:center;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:5px;letter-spacing:.2px}
   .tag-blue{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-border)}
   .tag-gray{background:var(--surface-2);color:var(--text-dim);border:1px solid var(--border)}
-  .tag-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+  .tag-green{background:var(--red-bg);color:#BE1E2D;border:1px solid var(--red-border)}
   .tag-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
   .tag-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
   /* Active filters bar */
@@ -978,7 +979,7 @@ body.supplier-mode #panel-supplier { display:block; }
   .fsc-pill{font-family:'Source Code Pro',monospace;font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:4px;background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-border);white-space:nowrap}
   .nsn-count{font-family:'Source Code Pro',monospace;font-size:12px;font-weight:700;color:var(--text-dim)}
   /* GovScraper Verified inline badge */
-  .gs-verified{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:800;color:var(--green);white-space:nowrap;margin-top:3px}
+  .gs-verified{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:800;color:#BE1E2D;white-space:nowrap;margin-top:3px}
   .gs-verified img{width:13px;height:13px;flex-shrink:0}
   /* Pagination */
   .pagi{display:flex;align-items:center;justify-content:center;gap:4px;margin-top:20px}
@@ -1013,14 +1014,14 @@ body.supplier-mode #panel-supplier { display:block; }
   .step { display:flex; align-items:center; gap:8px; flex:1; }
   .step:last-child { flex:none; }
   .sdot { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; flex-shrink:0; }
-  .sdot.done { background:var(--green); color:#fff; }
+  .sdot.done { background:#BE1E2D; color:#fff; }
   .sdot.active { background:var(--amber); color:#fff; box-shadow:0 0 0 4px var(--amber-bg); }
   .sdot.pend { background:var(--surface-2); color:var(--text-faint); border:2px solid var(--border); }
   .slbl { font-size:11px; font-weight:700; color:var(--text-muted); white-space:nowrap; }
-  .slbl.done { color:var(--green); }
+  .slbl.done { color:#BE1E2D; }
   .slbl.active { color:var(--amber); }
   .sline { flex:1; height:2px; background:var(--border); margin:0 8px; }
-  .sline.done { background:var(--green); }
+  .sline.done { background:#BE1E2D; }
 
   /* Hero card */
   .hero-card {
@@ -1057,19 +1058,19 @@ body.supplier-mode #panel-supplier { display:block; }
   .ts { display:flex; align-items:flex-start; gap:16px; position:relative; }
   .ts:not(:last-child) { padding-bottom:24px; }
   .ts:not(:last-child)::before { content:''; position:absolute; left:13px; top:30px; width:2px; bottom:0; background:var(--border); }
-  .ts.done:not(:last-child)::before { background:var(--green); }
+  .ts.done:not(:last-child)::before { background:#BE1E2D; }
   .ts-dot { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex-shrink:0; z-index:1; }
-  .ts-dot.done { background:var(--green); color:#fff; }
+  .ts-dot.done { background:#BE1E2D; color:#fff; }
   .ts-dot.active { background:var(--amber); color:#fff; animation:glow 2s ease-in-out infinite; }
   .ts-dot.pend { background:var(--surface-2); border:2px solid var(--border); color:var(--text-faint); }
   @keyframes glow { 0%,100%{box-shadow:0 0 0 0 rgba(217,119,6,.4)} 50%{box-shadow:0 0 0 7px rgba(217,119,6,0)} }
   .ts-body { flex:1; padding-top:3px; }
   .ts-label { font-size:13px; font-weight:700; color:var(--text); margin-bottom:3px; }
-  .ts-label.done { color:var(--green); }
+  .ts-label.done { color:#BE1E2D; }
   .ts-label.active { color:var(--amber); }
   .ts-desc { font-size:12px; color:var(--text-muted); line-height:1.65; }
   .ts-tag { display:inline-block; font-size:10.5px; font-weight:700; padding:2px 9px; border-radius:5px; margin-top:6px; border:1px solid; }
-  .ts-tag.done { color:var(--green); background:var(--green-bg); border-color:var(--green-border); }
+  .ts-tag.done { color:#BE1E2D; background:var(--red-bg); border-color:var(--red-border); }
   .ts-tag.active { color:var(--amber); background:var(--amber-bg); border-color:var(--amber-border); }
   .ts-tag.pend { color:var(--text-faint); background:var(--surface-2); border-color:var(--border); }
 
@@ -1082,7 +1083,7 @@ body.supplier-mode #panel-supplier { display:block; }
   .expect-ico { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
   .expect-ico.amber { background:var(--amber-bg); }
   .expect-ico.blue { background:var(--accent-bg); }
-  .expect-ico.green { background:var(--green-bg); }
+  .expect-ico.green { background:var(--red-bg); }
   .expect-body h4 { font-size:13px; font-weight:700; color:var(--text); margin-bottom:3px; }
   .expect-body p { font-size:12px; color:var(--text-muted); line-height:1.6; }
 
@@ -1094,7 +1095,7 @@ body.supplier-mode #panel-supplier { display:block; }
   .sr-l { color:var(--text-muted); font-weight:500; }
   .sr-v { color:var(--text-dim); font-weight:700; }
   .sr-v.mono { font-family:'Source Code Pro',monospace; color:var(--accent); }
-  .sr-v.green { color:var(--green); }
+  .sr-v.green { color:#BE1E2D; }
 
   /* Actions */
   .action-row { display:flex; gap:10px; }
@@ -1115,30 +1116,39 @@ body.supplier-mode #panel-supplier { display:block; }
   .sb-tour-ico svg{width:15px;height:15px}
   .sb-tour-label{font-size:12px;font-weight:800;color:#334155}
   .sb-tour-sub{font-size:10.5px;color:#94A3B8;margin-top:1px}
+
+.sb-tour-wrap{padding:0 12px 16px;margin-top:0;flex-shrink:0}
+.sb-tour-divider{height:1px;background:#E2E8F0;margin:12px 0 14px}
+.sb-tour-btn{width:100%;font-family:'Manrope',sans-serif;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;border:1.5px solid #E2E8F0;background:#F8FAFC;cursor:pointer;transition:all .15s;text-align:left;position:relative}
+.sb-tour-btn:hover{background:#fff;border-color:#CBD5E1;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.sb-tour-ico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-tour-ico svg{width:15px;height:15px}
+.sb-tour-label{font-size:12px;font-weight:800;color:#334155}
+.sb-tour-sub{font-size:10.5px;color:#94A3B8;margin-top:1px}
 </style>
 </head>
 <body class="supplier-mode">
 <header class="topbar">
   <div class="topbar-left">
     <a href="dashboard.html">
-      <img src="https://govscraper.com/assets/BigLogo-7gv5uAxF.png" alt="GovScraper" class="topbar-logo" onerror="this.outerHTML='<span style=&quot;font-family:Manrope,sans-serif;font-size:18px;font-weight:800;color:var(--text);&quot;>GovScraper</span>'">
+      <img src="https://govscraper.com/assets/BigLogo-7gv5uAxF.png" alt="GovScraper" class="topbar-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
     </a>
     <div class="topbar-divider"></div>
 
     <!-- ── MODE SWITCHER ── -->
     <div class="mode-switcher">
-      <button class="mode-btn inactive" id="btn-member" onclick="setMode('member')">
+      <button class="mode-btn active-member" id="btn-member" onclick="setMode('member')">
         <span class="mode-dot blue"></span>
         Member Portal
       </button>
-      <button class="mode-btn active-supplier" id="btn-supplier" onclick="setMode('supplier')">
+      <button class="mode-btn inactive" id="btn-supplier" onclick="setMode('supplier')">
         <span class="mode-dot green"></span>
         Supplier Portal
       </button>
     </div>
 
     <div class="topbar-divider"></div>
-    <div class="breadcrumb" id="topbar-bc"><a href="dashboard.html">Dashboard</a> <span style="color:#CBD5E1;margin:0 4px">›</span> <a href="cage-search.html">CAGE Search</a> <span style="color:#CBD5E1;margin:0 4px">›</span> Claim Pending</div>
+    <div class="breadcrumb" id="topbar-bc">Dashboard &rsaquo; CAGE Search &rsaquo; Claim Pending</div>
   </div>
   <div class="topbar-right">
     <div class="topbar-icon-btn bullseye-icon" title="New Opportunities">
@@ -1159,14 +1169,15 @@ body.supplier-mode #panel-supplier { display:block; }
   </div>
 </header>
 <nav class="sidebar sidebar-member">
+
   <div class="sidebar-label">Main</div>
   <a class="sidebar-item" href="dashboard.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
     Dashboard
   </a>
-  <a class="sidebar-item" href="rfq-listing.html">
+  <a class="sidebar-item" id="sb-rfqs" href="rfq-listing.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
-    My RFQs <span class="sidebar-badge">47</span>
+    My RFQs<span class="sidebar-badge">47</span>
   </a>
   <a class="sidebar-item" href="rfq-listing.html" style="padding-left:32px;font-size:12px;">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
@@ -1176,24 +1187,25 @@ body.supplier-mode #panel-supplier { display:block; }
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
     Public List of RFQs
   </a>
+
   <div class="sidebar-label">Intelligence</div>
-  <a class="sidebar-item" href="nsn-search.html">
+  <a class="sidebar-item" id="sb-nsn" href="nsn-search.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     NSN Search
   </a>
-  <a class="sidebar-item" href="cage-search.html">
+  <a class="sidebar-item active" href="cage-search.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
     CAGE Search
   </a>
-  <a class="sidebar-item" href="#">
+  <a class="sidebar-item" href="fsc-lookup.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
     FSC Lookup
   </a>
-  <a class="sidebar-item sb-locked-click" href="#" onclick="showGoldUpgrade();return false;">
+  <a id="sb-watchlist" class="sidebar-item" href="nsn-watchlist.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
     NSN Watch List
-    <span class="lock-pip gold">GOLD</span>
   </a>
+
   <div class="sidebar-label">Results</div>
   <a class="sidebar-item" href="awarded-contracts.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
@@ -1203,40 +1215,47 @@ body.supplier-mode #panel-supplier { display:block; }
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
     Archived RFQs
   </a>
+
   <div class="sidebar-label">Alerts</div>
-  <a class="sidebar-item sb-locked-click" href="#" onclick="showGoldUpgrade();return false;">
+  <a class="sidebar-item" href="rfq-alerts.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
-    RFQ Alerts
-    <span class="lock-pip gold">GOLD</span>
+    RFQ Alerts<span class="sidebar-badge">3</span>
   </a>
+
   <div class="sidebar-label">Community</div>
-  <a class="sidebar-item" href="#">
+  <a id="sb-community" class="sidebar-item" href="#">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
     Community
   </a>
+
   <div class="sidebar-label">Tools</div>
-  <a class="sidebar-item" href="#">
+  <a id="sb-packing" class="sidebar-item" href="#">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
     GovPacking
   </a>
+
   <div class="sidebar-spacer"></div>
+
   <div style="height:1px;background:var(--border);margin:4px 14px 2px;"></div>
+
   <button class="sidebar-item" onclick="document.getElementById('account-panel').classList.add('open');document.getElementById('ap-overlay').classList.add('open');document.getElementById('avatar-btn').classList.add('panel-open');" style="background:none;border:none;width:100%;cursor:pointer;font-family:'Manrope',sans-serif;">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     Settings &amp; Account
   </button>
-  <div style="padding:0 12px 12px;">
-    <div style="height:1px;background:var(--border);margin-bottom:10px;"></div>
-    <button class="sb-tour-btn" style="border-color:#2563EB40;background:#2563EB08;width:100%;">
-      <div class="sb-tour-ico" style="background:#2563EB15;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2"><polygon points="5,3 19,12 5,21 5,3"/></svg>
+
+  <div class="sb-tour-wrap">
+    <div class="sb-tour-divider"></div>
+    <button class="sb-tour-btn" id="sbTourBtn" onclick="restartTour()" style="border-color:#7C3AED40;background:#7C3AED08">
+      <div class="sb-tour-ico" style="background:#7C3AED15">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2"><polygon points="5,3 19,12 5,21 5,3"/></svg>
       </div>
       <div>
-        <div class="sb-tour-label" style="color:#2563EB;">Replay PRO Tour</div>
+        <div class="sb-tour-label" style="color:#7C3AED">Replay MAXX Tour</div>
         <div class="sb-tour-sub">Replay the walkthrough</div>
       </div>
     </button>
   </div>
+
 </nav>
 <nav class="sidebar-supplier">
   <div class="sidebar-label">SUPPLIER ACCOUNT</div>
@@ -1244,7 +1263,7 @@ body.supplier-mode #panel-supplier { display:block; }
   <!-- Claimed identity card -->
   <div class="supplier-id-card" id="sic-claimed" style="display:none">
     <div class="sic-verified">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="#16A34A"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="#BE1E2D"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
       GovScraper Verified
     </div>
     <div class="sic-name">SPS Technologies, Inc.</div>
@@ -1268,7 +1287,7 @@ body.supplier-mode #panel-supplier { display:block; }
   <a class="s-item" href="#" onclick="switchSupplierTab('rfq-alerts');return false;">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
     RFQ Alerts
-    <span style="margin-left:auto;background:#16A34A;color:#fff;font-size:9px;font-weight:800;padding:1px 6px;border-radius:8px;" id="rfq-alert-badge" style="display:none">2</span>
+    <span style="margin-left:auto;background:#BE1E2D;color:#fff;font-size:9px;font-weight:800;padding:1px 6px;border-radius:8px;" id="rfq-alert-badge" style="display:none">2</span>
   </a>
   <a class="s-item" href="#" onclick="switchSupplierTab('upgrade');return false;">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
@@ -1303,10 +1322,10 @@ body.supplier-mode #panel-supplier { display:block; }
   <div class="sidebar-label" style="margin-top:10px;">MY ACCOUNT</div>
 
   <!-- Claim submitted — done state, not clickable -->
-  <div class="s-item" style="color:var(--green);border-left-color:var(--green);background:var(--green-bg);font-weight:700;cursor:default;">
+  <div class="s-item" style="color:#BE1E2D;border-left-color:#BE1E2D;background:var(--red-bg);font-weight:700;cursor:default;">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg>
     Claim Submitted
-    <span style="margin-left:auto;background:var(--green);color:#fff;font-size:9px;font-weight:800;padding:1px 7px;border-radius:8px;">Done</span>
+    <span style="margin-left:auto;background:#BE1E2D;color:#fff;font-size:9px;font-weight:800;padding:1px 7px;border-radius:8px;">Done</span>
   </div>
 
   <!-- Inventory — PRO, no badge, dimmed until approved -->
@@ -1342,12 +1361,12 @@ body.supplier-mode #panel-supplier { display:block; }
   </a>
   <div style="padding:0 12px 12px;margin-top:4px;">
     <div style="height:1px;background:var(--border);margin-bottom:10px;"></div>
-    <button class="sb-tour-btn" style="border-color:#2563EB40;background:#2563EB08;width:100%;">
-      <div class="sb-tour-ico" style="background:#2563EB15;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2"><polygon points="5,3 19,12 5,21 5,3"/></svg>
+    <button class="sb-tour-btn" style="border-color:#7C3AED40;background:#7C3AED08;width:100%;">
+      <div class="sb-tour-ico" style="background:#7C3AED15;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2"><polygon points="5,3 19,12 5,21 5,3"/></svg>
       </div>
       <div>
-        <div class="sb-tour-label" style="color:#2563EB;">Replay PRO Tour</div>
+        <div class="sb-tour-label" style="color:#7C3AED;">Replay MAXX Tour</div>
         <div class="sb-tour-sub">Replay the walkthrough</div>
       </div>
     </button>
@@ -1380,7 +1399,7 @@ body.supplier-mode #panel-supplier { display:block; }
     <!-- HERO -->
     <div class="hero-card">
       <div class="hero-icon">
-        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#4ADE80" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#BE1E2D" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
       </div>
       <h1>Claim Request Submitted</h1>
       <p>Your claim for CAGE <strong style="color:#fff">96906 — SPS Technologies, Inc.</strong> has been received. A GovScraper representative will reach out to confirm your CAGE identity and grant you access — typically within 5 business days.</p>
@@ -1506,9 +1525,9 @@ body.supplier-mode #panel-supplier { display:block; }
           </div>
           <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--text-dim);margin-bottom:10px;">Certifications</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
-            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:7px;border:1.5px solid var(--green-border);background:var(--green-bg);cursor:pointer;"><input type="checkbox" checked style="accent-color:var(--green);"><span style="font-size:12px;font-weight:600;color:var(--green);">ISO 9001:2015</span></label>
-            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:7px;border:1.5px solid var(--green-border);background:var(--green-bg);cursor:pointer;"><input type="checkbox" checked style="accent-color:var(--green);"><span style="font-size:12px;font-weight:600;color:var(--green);">ITAR Registered</span></label>
-            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:7px;border:1.5px solid var(--green-border);background:var(--green-bg);cursor:pointer;"><input type="checkbox" checked style="accent-color:var(--green);"><span style="font-size:12px;font-weight:600;color:var(--green);">MIL-SPEC Packaging</span></label>
+            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:7px;border:1.5px solid var(--red-border);background:var(--red-bg);cursor:pointer;"><input type="checkbox" checked style="accent-color:#BE1E2D;"><span style="font-size:12px;font-weight:600;color:#BE1E2D;">ISO 9001:2015</span></label>
+            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:7px;border:1.5px solid var(--red-border);background:var(--red-bg);cursor:pointer;"><input type="checkbox" checked style="accent-color:#BE1E2D;"><span style="font-size:12px;font-weight:600;color:#BE1E2D;">ITAR Registered</span></label>
+            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:7px;border:1.5px solid var(--red-border);background:var(--red-bg);cursor:pointer;"><input type="checkbox" checked style="accent-color:#BE1E2D;"><span style="font-size:12px;font-weight:600;color:#BE1E2D;">MIL-SPEC Packaging</span></label>
             <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:7px;border:1.5px solid var(--border);background:var(--surface-2);cursor:pointer;"><input type="checkbox"><span style="font-size:12px;font-weight:600;color:var(--text-muted);">AS9100 Rev D</span></label>
             <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:7px;border:1.5px solid var(--border);background:var(--surface-2);cursor:pointer;"><input type="checkbox"><span style="font-size:12px;font-weight:600;color:var(--text-muted);">NADCAP</span></label>
             <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:7px;border:1.5px solid var(--border);background:var(--surface-2);cursor:pointer;"><input type="checkbox"><span style="font-size:12px;font-weight:600;color:var(--text-muted);">CMMC Level 2+</span></label>
@@ -1520,7 +1539,7 @@ body.supplier-mode #panel-supplier { display:block; }
         <div style="background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04);">
           <div style="padding:11px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface-2);">
             <h3 style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--text-dim);">Contact Information</h3>
-            <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:5px;background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);">✓ Claimed</span><button onclick="toggleEdit()" style="font-family:'Manrope',sans-serif;font-size:10.5px;font-weight:700;padding:5px 12px;border-radius:6px;border:1px solid var(--accent-border);background:var(--accent-bg);color:var(--accent);cursor:pointer;">Edit</button></div>
+            <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:5px;background:var(--red-bg);color:#BE1E2D;border:1px solid var(--red-border);">✓ Claimed</span><button onclick="toggleEdit()" style="font-family:'Manrope',sans-serif;font-size:10.5px;font-weight:700;padding:5px 12px;border-radius:6px;border:1px solid var(--accent-border);background:var(--accent-bg);color:var(--accent);cursor:pointer;">Edit</button></div>
           </div>
           <div style="padding:18px 20px;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
             <div><div style="font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--text-faint);margin-bottom:4px;">Website</div><div style="font-size:13px;font-weight:600;color:var(--text-dim);">www.spstechnologies.com</div></div>
@@ -1534,12 +1553,12 @@ body.supplier-mode #panel-supplier { display:block; }
         <div style="background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04);">
           <div style="padding:11px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface-2);">
             <h3 style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--text-dim);">Certifications</h3>
-            <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:5px;background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);">✓ Claimed</span><button onclick="toggleEdit()" style="font-family:'Manrope',sans-serif;font-size:10.5px;font-weight:700;padding:5px 12px;border-radius:6px;border:1px solid var(--accent-border);background:var(--accent-bg);color:var(--accent);cursor:pointer;">Edit</button></div>
+            <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:5px;background:var(--red-bg);color:#BE1E2D;border:1px solid var(--red-border);">✓ Claimed</span><button onclick="toggleEdit()" style="font-family:'Manrope',sans-serif;font-size:10.5px;font-weight:700;padding:5px 12px;border-radius:6px;border:1px solid var(--accent-border);background:var(--accent-bg);color:var(--accent);cursor:pointer;">Edit</button></div>
           </div>
           <div style="padding:18px 20px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-            <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:7px;background:var(--green-bg);border:1px solid var(--green-border);font-size:12px;font-weight:600;color:var(--green);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg> ISO 9001:2015</div>
-            <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:7px;background:var(--green-bg);border:1px solid var(--green-border);font-size:12px;font-weight:600;color:var(--green);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg> ITAR Registered</div>
-            <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:7px;background:var(--green-bg);border:1px solid var(--green-border);font-size:12px;font-weight:600;color:var(--green);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg> MIL-SPEC Packaging</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:7px;background:var(--red-bg);border:1px solid var(--red-border);font-size:12px;font-weight:600;color:#BE1E2D;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg> ISO 9001:2015</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:7px;background:var(--red-bg);border:1px solid var(--red-border);font-size:12px;font-weight:600;color:#BE1E2D;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg> ITAR Registered</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:7px;background:var(--red-bg);border:1px solid var(--red-border);font-size:12px;font-weight:600;color:#BE1E2D;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg> MIL-SPEC Packaging</div>
             <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:7px;background:var(--surface-2);border:1px solid var(--border);font-size:12px;font-weight:600;color:var(--text-faint);">— AS9100 Rev D</div>
             <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:7px;background:var(--surface-2);border:1px solid var(--border);font-size:12px;font-weight:600;color:var(--text-faint);">— NADCAP</div>
             <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:7px;background:var(--surface-2);border:1px solid var(--border);font-size:12px;font-weight:600;color:var(--text-faint);">— CMMC Level 2+</div>
@@ -1550,15 +1569,15 @@ body.supplier-mode #panel-supplier { display:block; }
         <div style="background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04);">
           <div style="padding:11px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface-2);">
             <h3 style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--text-dim);">Supplier Inventory</h3>
-            <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:5px;background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);">✓ Active — 4 Items</span><button onclick="showSupTab('inventory')" style="font-family:'Manrope',sans-serif;font-size:10.5px;font-weight:700;padding:5px 12px;border-radius:6px;border:1px solid var(--accent-border);background:var(--accent-bg);color:var(--accent);cursor:pointer;">Manage</button></div>
+            <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:5px;background:var(--red-bg);color:#BE1E2D;border:1px solid var(--red-border);">✓ Active — 4 Items</span><button onclick="showSupTab('inventory')" style="font-family:'Manrope',sans-serif;font-size:10.5px;font-weight:700;padding:5px 12px;border-radius:6px;border:1px solid var(--accent-border);background:var(--accent-bg);color:var(--accent);cursor:pointer;">Manage</button></div>
           </div>
           <div style="padding:0;">
             <table style="width:100%;border-collapse:collapse;font-size:12px;">
               <thead><tr style="background:var(--surface-2);"><th style="font-size:9.5px;text-transform:uppercase;font-weight:800;color:var(--text-faint);padding:9px 14px;border-bottom:2px solid var(--border);text-align:left;">NSN</th><th style="font-size:9.5px;text-transform:uppercase;font-weight:800;color:var(--text-faint);padding:9px 14px;border-bottom:2px solid var(--border);text-align:left;">Part Number</th><th style="font-size:9.5px;text-transform:uppercase;font-weight:800;color:var(--text-faint);padding:9px 14px;border-bottom:2px solid var(--border);text-align:left;">Condition</th><th style="font-size:9.5px;text-transform:uppercase;font-weight:800;color:var(--text-faint);padding:9px 14px;border-bottom:2px solid var(--border);text-align:left;">Lead Time</th><th style="font-size:9.5px;text-transform:uppercase;font-weight:800;color:var(--text-faint);padding:9px 14px;border-bottom:2px solid var(--border);text-align:left;">MIL-SPEC Pkg</th></tr></thead>
               <tbody>
-                <tr><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;color:var(--accent);font-weight:600;"><a href="nsn-search.html">5306-00-203-3858</a></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;color:var(--text-dim);">NAS6203-14</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">New</span></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);">In Stock</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">Yes</span></td></tr>
-                <tr><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;color:var(--accent);font-weight:600;"><a href="#">5305-00-269-5518</a></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;color:var(--text-dim);">SPS-2505-14</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">New</span></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);">7 Days</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">Yes</span></td></tr>
-                <tr><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;color:var(--accent);font-weight:600;"><a href="#">5306-00-418-7224</a></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;color:var(--text-dim);">NAS6203-20</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">New</span></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);">14 Days</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">Yes</span></td></tr>
+                <tr><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;color:var(--accent);font-weight:600;"><a href="nsn-search.html">5306-00-203-3858</a></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;color:var(--text-dim);">NAS6203-14</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--red-bg);color:#BE1E2D;border:1px solid var(--red-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">New</span></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);">In Stock</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--red-bg);color:#BE1E2D;border:1px solid var(--red-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">Yes</span></td></tr>
+                <tr><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;color:var(--accent);font-weight:600;"><a href="#">5305-00-269-5518</a></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;color:var(--text-dim);">SPS-2505-14</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--red-bg);color:#BE1E2D;border:1px solid var(--red-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">New</span></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);">7 Days</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--red-bg);color:#BE1E2D;border:1px solid var(--red-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">Yes</span></td></tr>
+                <tr><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;color:var(--accent);font-weight:600;"><a href="#">5306-00-418-7224</a></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;color:var(--text-dim);">NAS6203-20</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--red-bg);color:#BE1E2D;border:1px solid var(--red-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">New</span></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);">14 Days</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--red-bg);color:#BE1E2D;border:1px solid var(--red-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">Yes</span></td></tr>
                 <tr><td style="padding:9px 14px;font-family:'Source Code Pro',monospace;color:var(--accent);font-weight:600;"><a href="#">5310-00-225-8698</a></td><td style="padding:9px 14px;font-family:'Source Code Pro',monospace;color:var(--text-dim);">SPS-W516-5AE</td><td style="padding:9px 14px;"><span style="background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">Surplus</span></td><td style="padding:9px 14px;color:var(--text-dim);">In Stock</td><td style="padding:9px 14px;"><span style="background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">No</span></td></tr>
               </tbody>
             </table>
@@ -1613,9 +1632,9 @@ body.supplier-mode #panel-supplier { display:block; }
         <table style="width:100%;border-collapse:collapse;font-size:12px;background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden;">
           <thead><tr style="background:var(--surface-2);"><th style="font-size:9.5px;text-transform:uppercase;font-weight:800;color:var(--text-faint);padding:9px 14px;border-bottom:2px solid var(--border);text-align:left;">NSN</th><th style="font-size:9.5px;text-transform:uppercase;font-weight:800;color:var(--text-faint);padding:9px 14px;border-bottom:2px solid var(--border);text-align:left;">Part Number</th><th style="font-size:9.5px;text-transform:uppercase;font-weight:800;color:var(--text-faint);padding:9px 14px;border-bottom:2px solid var(--border);text-align:left;">Condition</th><th style="font-size:9.5px;text-transform:uppercase;font-weight:800;color:var(--text-faint);padding:9px 14px;border-bottom:2px solid var(--border);text-align:left;">Cert</th><th style="font-size:9.5px;text-transform:uppercase;font-weight:800;color:var(--text-faint);padding:9px 14px;border-bottom:2px solid var(--border);text-align:left;">Lead Time</th><th style="font-size:9.5px;text-transform:uppercase;font-weight:800;color:var(--text-faint);padding:9px 14px;border-bottom:2px solid var(--border);text-align:left;">MIL-SPEC Pkg</th><th style="font-size:9.5px;text-transform:uppercase;font-weight:800;color:var(--text-faint);padding:9px 14px;border-bottom:2px solid var(--border);text-align:left;">Updated</th><th style="padding:9px 14px;border-bottom:2px solid var(--border);"></th></tr></thead>
           <tbody>
-            <tr><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;color:var(--accent);font-weight:600;"><a href="nsn-search.html">5306-00-203-3858</a></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;">NAS6203-14</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">New</span></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);">OEM Cert</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);">In Stock</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">Yes</span></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-muted);">10-Feb-2026</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><button style="font-size:10px;padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;">✕</button></td></tr>
-            <tr><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;color:var(--accent);font-weight:600;"><a href="#">5305-00-269-5518</a></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;">SPS-2505-14</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">New</span></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);">OEM Cert</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);">7 Days</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">Yes</span></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-muted);">08-Feb-2026</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><button style="font-size:10px;padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;">✕</button></td></tr>
-            <tr><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;color:var(--accent);font-weight:600;"><a href="#">5306-00-418-7224</a></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;">NAS6203-20</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">New</span></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);">OEM Cert</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);">14 Days</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">Yes</span></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-muted);">05-Feb-2026</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><button style="font-size:10px;padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;">✕</button></td></tr>
+            <tr><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;color:var(--accent);font-weight:600;"><a href="nsn-search.html">5306-00-203-3858</a></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;">NAS6203-14</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--red-bg);color:#BE1E2D;border:1px solid var(--red-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">New</span></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);">OEM Cert</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);">In Stock</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--red-bg);color:#BE1E2D;border:1px solid var(--red-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">Yes</span></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-muted);">10-Feb-2026</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><button style="font-size:10px;padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;">✕</button></td></tr>
+            <tr><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;color:var(--accent);font-weight:600;"><a href="#">5305-00-269-5518</a></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;">SPS-2505-14</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--red-bg);color:#BE1E2D;border:1px solid var(--red-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">New</span></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);">OEM Cert</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);">7 Days</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--red-bg);color:#BE1E2D;border:1px solid var(--red-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">Yes</span></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-muted);">08-Feb-2026</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><button style="font-size:10px;padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;">✕</button></td></tr>
+            <tr><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;color:var(--accent);font-weight:600;"><a href="#">5306-00-418-7224</a></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;">NAS6203-20</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--red-bg);color:#BE1E2D;border:1px solid var(--red-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">New</span></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);">OEM Cert</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);">14 Days</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--red-bg);color:#BE1E2D;border:1px solid var(--red-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">Yes</span></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-muted);">05-Feb-2026</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><button style="font-size:10px;padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;">✕</button></td></tr>
             <tr><td style="padding:9px 14px;font-family:'Source Code Pro',monospace;color:var(--accent);font-weight:600;"><a href="#">5310-00-225-8698</a></td><td style="padding:9px 14px;font-family:'Source Code Pro',monospace;">SPS-W516-5AE</td><td style="padding:9px 14px;"><span style="background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">Surplus</span></td><td style="padding:9px 14px;color:var(--text-dim);">No Cert</td><td style="padding:9px 14px;color:var(--text-dim);">In Stock</td><td style="padding:9px 14px;"><span style="background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">No</span></td><td style="padding:9px 14px;color:var(--text-muted);">01-Feb-2026</td><td style="padding:9px 14px;"><button style="font-size:10px;padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;">✕</button></td></tr>
           </tbody>
         </table>
@@ -1635,8 +1654,8 @@ body.supplier-mode #panel-supplier { display:block; }
         <table style="width:100%;border-collapse:collapse;font-size:12px;background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden;">
           <thead><tr style="background:var(--surface-2);"><th style="font-size:9.5px;text-transform:uppercase;font-weight:800;color:var(--text-faint);padding:9px 14px;border-bottom:2px solid var(--border);text-align:left;">Solicitation</th><th style="font-size:9.5px;text-transform:uppercase;font-weight:800;color:var(--text-faint);padding:9px 14px;border-bottom:2px solid var(--border);text-align:left;">NSN</th><th style="font-size:9.5px;text-transform:uppercase;font-weight:800;color:var(--text-faint);padding:9px 14px;border-bottom:2px solid var(--border);text-align:left;">Item</th><th style="font-size:9.5px;text-transform:uppercase;font-weight:800;color:var(--text-faint);padding:9px 14px;border-bottom:2px solid var(--border);text-align:left;">Qty</th><th style="font-size:9.5px;text-transform:uppercase;font-weight:800;color:var(--text-faint);padding:9px 14px;border-bottom:2px solid var(--border);text-align:left;">Expires</th><th style="font-size:9.5px;text-transform:uppercase;font-weight:800;color:var(--text-faint);padding:9px 14px;border-bottom:2px solid var(--border);text-align:left;">Your Inventory</th></tr></thead>
           <tbody>
-            <tr style="background:var(--accent-bg);"><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;font-weight:600;color:var(--accent);">SPE7M8-26-Q-0142</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;"><a href="nsn-search.html">5306-00-203-3858</a></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);">BOLT, MACHINE</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);">18,000 EA</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--red);font-weight:600;">15-Mar-2026</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">✓ In Stock</span></td></tr>
-            <tr><td style="padding:9px 14px;font-family:'Source Code Pro',monospace;font-weight:600;color:var(--accent);">SPE7M8-26-Q-0098</td><td style="padding:9px 14px;font-family:'Source Code Pro',monospace;"><a href="#">5305-00-269-5518</a></td><td style="padding:9px 14px;color:var(--text-dim);">SCREW, CAP SOCKET</td><td style="padding:9px 14px;color:var(--text-dim);">5,000 EA</td><td style="padding:9px 14px;color:var(--red);font-weight:600;">10-Mar-2026</td><td style="padding:9px 14px;"><span style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">7 Days</span></td></tr>
+            <tr style="background:var(--accent-bg);"><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;font-weight:600;color:var(--accent);">SPE7M8-26-Q-0142</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Source Code Pro',monospace;"><a href="nsn-search.html">5306-00-203-3858</a></td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);">BOLT, MACHINE</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim);">18,000 EA</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);color:var(--red);font-weight:600;">15-Mar-2026</td><td style="padding:9px 14px;border-bottom:1px solid var(--border);"><span style="background:var(--red-bg);color:#BE1E2D;border:1px solid var(--red-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">✓ In Stock</span></td></tr>
+            <tr><td style="padding:9px 14px;font-family:'Source Code Pro',monospace;font-weight:600;color:var(--accent);">SPE7M8-26-Q-0098</td><td style="padding:9px 14px;font-family:'Source Code Pro',monospace;"><a href="#">5305-00-269-5518</a></td><td style="padding:9px 14px;color:var(--text-dim);">SCREW, CAP SOCKET</td><td style="padding:9px 14px;color:var(--text-dim);">5,000 EA</td><td style="padding:9px 14px;color:var(--red);font-weight:600;">10-Mar-2026</td><td style="padding:9px 14px;"><span style="background:var(--red-bg);color:#BE1E2D;border:1px solid var(--red-border);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;">7 Days</span></td></tr>
           </tbody>
         </table>
       </div>
@@ -1792,7 +1811,7 @@ body.supplier-mode #panel-supplier { display:block; }
         </div>
         <div class="sub-stats">
           <div class="sub-stat"><div class="sub-stat-n" style="color:var(--accent)">8</div><div class="sub-stat-l">FSCs Active</div></div>
-          <div class="sub-stat"><div class="sub-stat-n" style="color:var(--green)">47</div><div class="sub-stat-l">Active RFQs</div></div>
+          <div class="sub-stat"><div class="sub-stat-n" style="color:#BE1E2D">47</div><div class="sub-stat-l">Active RFQs</div></div>
         </div>
         <button class="btn-manage-sub" onclick="closePanel();window.location.href='account.html'">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
@@ -1853,7 +1872,7 @@ body.supplier-mode #panel-supplier { display:block; }
     <div class="acc-item">
       <button class="acc-trigger" onclick="toggleAcc(this)">
         <div class="acc-trigger-left">
-          <div class="acc-ico blue" style="background:#F0FDF4;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div class="acc-ico blue" style="background:var(--red-bg);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#BE1E2D" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
           <div>
             <div class="acc-label">Email Integration</div>
             <div class="acc-sub" id="email-acc-sub">No mailbox connected</div>
@@ -2009,7 +2028,7 @@ window.panelNav = function(url){
 // ─── TOAST ───────────────────────────────────────────────────────────────
 function showToast(msg){
   const t = document.getElementById('toast');
-  t.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ADE80" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg><span>${msg}</span>`;
+  t.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#BE1E2D" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg><span>${msg}</span>`;
   t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'), 3000);
 }
@@ -2026,6 +2045,7 @@ window.showToast = showToast;
 const CAGE_STATE = 'unclaimed'; // 'unclaimed' | 'claimed'
 
 function setMode(mode) {
+  sessionStorage.setItem('gs_mode', mode === 'supplier' ? 'supplier' : 'member');
   const body = document.body;
   const btnMember = document.getElementById('btn-member');
   const btnSupplier = document.getElementById('btn-supplier');
@@ -2062,6 +2082,11 @@ function setMode(mode) {
     bc.textContent = 'Dashboard';
   }
 }
+
+// Auto-activate supplier mode — this is a supplier-only page
+(function() {
+  setMode('supplier');
+})();
 
 function switchSupplierTab(tab) {
   // Update active state in supplier sidebar

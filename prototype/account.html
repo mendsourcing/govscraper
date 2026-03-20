@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light">
 <title>Account — GovScraper</title>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -11,6 +11,7 @@
   --text:#0F172A;--text-dim:#334155;--text-muted:#64748B;--text-faint:#94A3B8;
   --accent:#2563EB;--accent-hover:#1D4ED8;--accent-bg:#EFF6FF;--accent-border:#BFDBFE;
   --green:#16A34A;--green-bg:#F0FDF4;--green-border:#BBF7D0;
+  --active-supplier:#BE1E2D;
   --amber:#D97706;--amber-bg:#FFFBEB;--amber-border:#FDE68A;
   --red:#DC2626;--red-bg:#FEF2F2;--red-border:#FECACA;
   --purple:#7C3AED;--purple-bg:#F5F3FF;--purple-border:#DDD6FE;
@@ -30,10 +31,10 @@ a:hover{text-decoration:underline}
 .mode-btn.inactive{background:transparent;color:var(--text-muted)}
 .mode-btn.inactive:hover{background:var(--surface-3);color:var(--text-dim)}
 .mode-btn.active-member{background:#1B2A4A;color:#fff;box-shadow:0 1px 4px rgba(27,42,74,.3)}
-.mode-btn.active-supplier{background:#16A34A;color:#fff;box-shadow:0 1px 4px rgba(22,163,74,.35)}
+.mode-btn.active-supplier{background:#BE1E2D;color:#fff;box-shadow:0 1px 4px rgba(190,30,45,.35)}
 .mode-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;display:inline-block}
 .mode-btn.inactive .mode-dot.blue{background:#2563EB}
-.mode-btn.inactive .mode-dot.green{background:#16A34A}
+.mode-btn.inactive .mode-dot.green{background:#BE1E2D}
 .mode-btn.active-member .mode-dot,.mode-btn.active-supplier .mode-dot{background:rgba(255,255,255,.6)}
 .breadcrumb{font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:4px}
 .breadcrumb a{color:var(--text-muted);font-weight:500;text-decoration:none}.breadcrumb a:hover{color:var(--accent)}
@@ -43,8 +44,8 @@ a:hover{text-decoration:underline}
 .avatar-btn{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent-hover));color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;cursor:pointer;border:none;font-family:'Manrope',sans-serif}
 
 /* ── SIDEBAR ── */
-.sidebar{width:224px;position:fixed;top:56px;left:0;bottom:0;background:var(--surface);border-right:1px solid var(--border);padding:14px 0;overflow-y:auto;z-index:90;display:flex;flex-direction:column}
-.sidebar-label{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--text-faint);padding:12px 20px 4px}
+.sidebar{width:224px;position:fixed;top:56px;left:0;bottom:0;background:var(--surface);border-right:1px solid var(--border);padding:20px 0 16px;overflow-y:auto;z-index:90;display:flex;flex-direction:column}
+.sidebar-label{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--text-faint);padding:14px 20px 5px}
 .sidebar-item{display:flex;align-items:center;gap:10px;padding:8px 20px;font-size:12.5px;font-weight:500;color:var(--text-dim);text-decoration:none;border-left:3px solid transparent;transition:all .15s;cursor:pointer;background:none;border-top:none;border-right:none;border-bottom:none;width:100%;text-align:left;font-family:'Manrope',sans-serif}
 .sidebar-item:hover{background:var(--accent-bg);color:var(--accent);text-decoration:none}
 .sidebar-item.active{color:var(--accent);font-weight:700;border-left-color:var(--accent);background:var(--accent-bg)}
@@ -63,7 +64,7 @@ a:hover{text-decoration:underline}
 .acc-card:hover{border-color:var(--accent-border);box-shadow:0 2px 12px rgba(37,99,235,.08);text-decoration:none}
 .acc-card-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;flex-shrink:0}
 .acc-card-icon.blue{background:var(--accent-bg);border:1px solid var(--accent-border)}
-.acc-card-icon.green{background:var(--green-bg);border:1px solid var(--green-border)}
+.acc-card-icon.green{background:var(--accent-bg);border:1px solid var(--accent-border)}
 .acc-card-icon.amber{background:var(--amber-bg);border:1px solid var(--amber-border)}
 .acc-card-icon.purple{background:var(--purple-bg);border:1px solid var(--purple-border)}
 .acc-card h3{font-size:14px;font-weight:800;color:var(--text);margin-bottom:4px}
@@ -83,6 +84,152 @@ a:hover{text-decoration:underline}
 .btn-logout:hover{background:var(--red);color:#fff}
 
 @media(max-width:900px){.sidebar{display:none}.main{margin-left:0;padding:16px}}
+
+/* ── BULLSEYE ICON ── */
+.bullseye-icon { color:var(--accent); }
+
+/* ── AVATAR BTN OVERRIDE ── */
+.avatar-btn {
+  width:34px; height:34px; border-radius:8px;
+  border:2px solid var(--border);
+  background:linear-gradient(135deg, #1B2A4A 0%, var(--accent) 100%);
+  color:#fff; display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:700; cursor:pointer; letter-spacing:0.5px;
+  transition:all .15s; position:relative; padding:0;
+  font-family:'Manrope',sans-serif;
+}
+.avatar-btn:hover { border-color:var(--accent); box-shadow:0 0 0 3px rgba(37,99,235,.15); }
+.avatar-btn.panel-open { border-color:var(--accent); box-shadow:0 0 0 3px rgba(37,99,235,.15); }
+
+/* ── TOPBAR OVERRIDE ── */
+.topbar {
+  background: #FFFFFF !important;
+  border-bottom: 2px solid var(--border) !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+}
+.topbar-divider { background: var(--border) !important; }
+.breadcrumb, .breadcrumb a { color: var(--text-muted) !important; }
+.breadcrumb a:hover { color: var(--accent) !important; }
+.topbar-icon-btn {
+  border-color: var(--border) !important;
+  background: var(--surface) !important;
+  color: var(--text-muted) !important;
+  width:34px; height:34px; border-radius:8px;
+  border:1px solid var(--border); display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:all .15s;
+}
+.topbar-icon-btn:hover {
+  background: var(--surface-2) !important;
+  color: var(--accent) !important;
+  border-color: var(--accent-border) !important;
+}
+.topbar-icon-btn svg { width:16px; height:16px; }
+
+/* ── SIDEBAR ITEM POSITION ── */
+.sidebar-item { position:relative; }
+.sidebar-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:10px}
+
+/* ── SB TOUR ── */
+.sb-tour-wrap{padding:0 12px 16px;margin-top:0;flex-shrink:0}
+.sb-tour-divider{height:1px;background:#E2E8F0;margin:12px 0 14px}
+.sb-tour-btn{width:100%;font-family:'Manrope',sans-serif;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;border:1.5px solid #E2E8F0;background:#F8FAFC;cursor:pointer;transition:all .15s;text-align:left;position:relative}
+.sb-tour-btn:hover{background:#fff;border-color:#CBD5E1;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.sb-tour-ico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-tour-ico svg{width:15px;height:15px}
+.sb-tour-label{font-size:12px;font-weight:800;color:#334155}
+.sb-tour-sub{font-size:10.5px;color:#94A3B8;margin-top:1px}
+
+/* ─── ACCOUNT PANEL OVERLAY ─── */
+.ap-overlay{position:fixed;inset:0;background:rgba(15,23,42,.35);z-index:1000;opacity:0;pointer-events:none;transition:opacity .25s}
+.ap-overlay.open{opacity:1;pointer-events:all}
+
+/* ─── ACCOUNT PANEL ─── */
+.ap{position:fixed;top:0;right:0;bottom:0;width:380px;background:var(--surface);border-left:1px solid var(--border);z-index:1100;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);box-shadow:-8px 0 40px rgba(0,0,0,.12)}
+.ap.open{transform:translateX(0)}
+
+/* PANEL HEADER */
+.ap-hdr{padding:18px 20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.ap-hdr-left{display:flex;align-items:center;gap:12px}
+.ap-avatar-wrap{position:relative;cursor:pointer}
+.ap-avatar{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#1D4ED8);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;overflow:hidden;border:2px solid var(--border)}
+.ap-avatar img{width:100%;height:100%;object-fit:cover;display:none}.ap-avatar img.loaded{display:block}
+.ap-avatar-edit{position:absolute;bottom:-4px;right:-4px;width:20px;height:20px;border-radius:50%;background:var(--accent);border:2px solid var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.ap-avatar-edit svg{color:#fff}
+.ap-name{font-size:14px;font-weight:800;color:var(--text)}
+.ap-email{font-size:11.5px;color:var(--text-muted);margin-top:1px}
+.ap-close{width:30px;height:30px;border:none;background:var(--surface-2);border-radius:7px;cursor:pointer;color:var(--text-muted);display:flex;align-items:center;justify-content:center;flex-shrink:0}.ap-close:hover{background:var(--border);color:var(--text)}
+
+/* PANEL BODY */
+.ap-body{flex:1;overflow-y:auto;padding:8px 0}
+
+/* ACCORDION */
+.acc-item{border-bottom:1px solid var(--border)}
+.acc-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:none;border:none;font-family:'Manrope',sans-serif;cursor:pointer;gap:12px;transition:background .15s}.acc-trigger:hover{background:var(--surface-2)}
+.acc-trigger-left{display:flex;align-items:center;gap:10px}
+.acc-ico{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.acc-ico.blue{background:var(--accent-bg)}.acc-ico.green{background:var(--green-bg)}.acc-ico.amber{background:var(--amber-bg)}.acc-ico.purple{background:#F5F3FF}.acc-ico.red{background:var(--red-bg)}
+.acc-label{font-size:13px;font-weight:700;color:var(--text);text-align:left}
+.acc-sub{font-size:11px;color:var(--text-faint);margin-top:1px;text-align:left}
+.acc-chevron{color:var(--text-faint);transition:transform .2s;flex-shrink:0}
+.acc-trigger.open .acc-chevron{transform:rotate(180deg)}
+.acc-body{display:none;padding:0 20px 18px}.acc-body.open{display:block}
+
+/* FORM FIELDS */
+.field{margin-bottom:14px}.field:last-of-type{margin-bottom:0}
+.field-label{font-size:11px;font-weight:700;color:var(--text-dim);display:block;margin-bottom:5px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fi{width:100%;font-family:'Manrope',sans-serif;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;transition:all .15s}.fi:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.08)}.fi::placeholder{color:var(--text-faint)}
+.fi-wrap{position:relative}.fi-wrap .fi{padding-right:38px}
+.fi-eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-faint);display:flex;align-items:center}.fi-eye:hover{color:var(--text-dim)}
+
+/* PHOTO UPLOAD */
+.photo-upload{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.photo-preview{width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#1D4ED8);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;overflow:hidden;border:2px solid var(--border);flex-shrink:0}
+.photo-preview img{width:100%;height:100%;object-fit:cover;display:none}.photo-preview img.loaded{display:block}
+.photo-actions{display:flex;flex-direction:column;gap:6px}
+.btn-upload{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:7px 14px;border-radius:7px;border:1.5px solid var(--accent-border);background:var(--accent-bg);color:var(--accent);cursor:pointer;transition:all .15s}.btn-upload:hover{background:var(--accent);color:#fff}
+.btn-remove-photo{font-family:'Manrope',sans-serif;font-size:11.5px;font-weight:600;padding:5px 14px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer}.btn-remove-photo:hover{background:var(--red-bg);color:var(--red);border-color:var(--red-border)}
+.photo-hint{font-size:10.5px;color:var(--text-faint);line-height:1.5;margin-top:2px}
+input[type=file]{display:none}
+
+/* SAVE BUTTON */
+.btn-save{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:9px 20px;border-radius:8px;border:none;background:var(--accent);color:#fff;cursor:pointer;transition:background .15s;margin-top:16px;width:100%}.btn-save:hover{background:var(--accent-hover)}
+.btn-save.success{background:var(--green)}
+
+/* PASSWORD RESET SECTION */
+.pw-reset-box{background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:16px;margin-bottom:4px}
+.pw-reset-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+.pw-reset-sub{font-size:12px;color:var(--text-muted);line-height:1.6;margin-bottom:14px}
+.btn-send-reset{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:9px 18px;border-radius:8px;border:1.5px solid var(--accent-border);background:var(--accent-bg);color:var(--accent);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:7px;width:100%;justify-content:center}.btn-send-reset:hover{background:var(--accent);color:#fff}
+.pw-sent-state{display:none;text-align:center;padding:12px}
+.pw-sent-state.show{display:block}
+.pw-sent-ico{width:40px;height:40px;border-radius:50%;background:var(--green-bg);border:2px solid var(--green-border);display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.pw-sent-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+.pw-sent-sub{font-size:11.5px;color:var(--text-muted);line-height:1.6}
+
+/* SUBSCRIPTION SUMMARY */
+.sub-summary{background:linear-gradient(135deg,#1E3A5F,#2563EB);border-radius:9px;padding:14px 16px;margin-bottom:14px}
+.sub-plan{font-size:15px;font-weight:800;color:#fff;margin-bottom:2px}
+.sub-price{font-size:12px;color:rgba(255,255,255,.7);margin-bottom:10px}
+.sub-renews{font-size:11px;color:rgba(255,255,255,.55)}
+.sub-renews strong{color:rgba(255,255,255,.85)}
+.sub-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.sub-stat{background:var(--surface-2);border:1px solid var(--border);border-radius:7px;padding:10px 12px}
+.sub-stat-n{font-family:'Source Code Pro',monospace;font-size:17px;font-weight:700;color:var(--text)}
+.sub-stat-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--text-faint);margin-top:1px}
+.btn-manage-sub{font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;padding:9px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;width:100%;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px}.btn-manage-sub:hover{background:var(--surface-2);border-color:var(--border-strong)}
+
+/* FSC SHORTCUT */
+.fsc-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;margin-bottom:4px}
+.fsc-chip{font-family:'Source Code Pro',monospace;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:var(--accent-bg);border:1px solid var(--accent-border);color:var(--accent)}
+
+/* LOGOUT (panel) */
+.ap .btn-logout{font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:12px 20px;border:none;background:transparent;color:var(--red);cursor:pointer;width:100%;text-align:left;display:flex;align-items:center;gap:10px;transition:all .15s}.ap .btn-logout:hover{background:var(--red-bg)}
+
+/* PANEL FOOTER */
+.ap-footer{padding:14px 20px;border-top:1px solid var(--border);flex-shrink:0}
+.ap-footer-txt{font-size:10.5px;color:var(--text-faint);text-align:center;line-height:1.5}
+
 </style>
 </head>
 <body>
@@ -91,46 +238,66 @@ a:hover{text-decoration:underline}
 <header class="topbar">
   <div class="topbar-left">
     <a href="dashboard.html">
-      <img src="https://govscraper.com/assets/BigLogo-7gv5uAxF.png" alt="GovScraper" class="topbar-logo" onerror="this.outerHTML='<span style=&quot;font-family:Manrope,sans-serif;font-size:18px;font-weight:800;color:var(--text);&quot;>GovScraper</span>'">
+      <img src="https://govscraper.com/assets/BigLogo-7gv5uAxF.png" alt="GovScraper" class="topbar-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
     </a>
     <div class="topbar-divider"></div>
+
+    <!-- ── MODE SWITCHER ── -->
     <div class="mode-switcher">
       <button class="mode-btn active-member" id="btn-member" onclick="setMode('member')">
-        <span class="mode-dot blue"></span>Member Portal
+        <span class="mode-dot blue"></span>
+        Member Portal
       </button>
       <button class="mode-btn inactive" id="btn-supplier" onclick="setMode('supplier')">
-        <span class="mode-dot green"></span>Supplier Portal
+        <span class="mode-dot green"></span>
+        Supplier Portal
       </button>
     </div>
+
     <div class="topbar-divider"></div>
-    <div class="breadcrumb">
-      <a href="dashboard.html">Dashboard</a>
-      <span style="color:#CBD5E1;margin:0 4px">›</span>
-      <span style="color:var(--text-dim);font-weight:600">Account</span>
-    </div>
+    <div class="breadcrumb" id="topbar-bc">Account</div>
   </div>
   <div class="topbar-right">
-    <button class="topbar-icon-btn" title="Notifications">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+    <div class="topbar-icon-btn bullseye-icon" title="New Opportunities">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+      </svg>
+    </div>
+    <div class="topbar-icon-btn" title="Settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+      </svg>
+    </div>
+    <button class="avatar-btn" id="avatar-btn" title="My Account" onclick="togglePanel()">
+      <span id="avatar-initials">JD</span>
     </button>
-    <button class="avatar-btn" title="My Account">JD</button>
   </div>
 </header>
 
 <!-- SIDEBAR -->
-<nav class="sidebar">
+<nav class="sidebar sidebar-member">
+
   <div class="sidebar-label">Main</div>
   <a class="sidebar-item" href="dashboard.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
     Dashboard
   </a>
-  <a class="sidebar-item" href="rfq-listing.html">
+  <a class="sidebar-item" id="sb-rfqs" href="rfq-listing.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
-    My RFQs <span class="sidebar-badge">47</span>
+    My RFQs<span class="sidebar-badge">47</span>
+  </a>
+  <a class="sidebar-item" href="rfq-listing.html" style="padding-left:32px;font-size:12px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+    Private List of RFQs
+  </a>
+  <a class="sidebar-item" href="rfq-listing.html" style="padding-left:32px;font-size:12px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+    Public List of RFQs
   </a>
 
   <div class="sidebar-label">Intelligence</div>
-  <a class="sidebar-item" href="nsn-search.html">
+  <a class="sidebar-item" id="sb-nsn" href="nsn-search.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     NSN Search
   </a>
@@ -142,32 +309,61 @@ a:hover{text-decoration:underline}
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
     FSC Lookup
   </a>
+  <a id="sb-watchlist" class="sidebar-item" href="nsn-watchlist.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    NSN Watch List
+  </a>
 
   <div class="sidebar-label">Results</div>
   <a class="sidebar-item" href="awarded-contracts.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
     Awarded Contracts
   </a>
-  <a class="sidebar-item" href="nsn-watchlist.html">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-    NSN Watch List
-  </a>
   <a class="sidebar-item" href="archived.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
-    Archived
-  </a>
-  <a class="sidebar-item" href="rfq-alerts.html">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-    RFQ Alerts
+    Archived RFQs
   </a>
 
-  <div class="sidebar-label">Account</div>
-  <a class="sidebar-item active" href="account.html">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    Account
+  <div class="sidebar-label">Alerts</div>
+  <a class="sidebar-item" href="rfq-alerts.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+    RFQ Alerts<span class="sidebar-badge">3</span>
+  </a>
+
+  <div class="sidebar-label">Community</div>
+  <a id="sb-community" class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+    Community
+  </a>
+
+  <div class="sidebar-label">Tools</div>
+  <a id="sb-packing" class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+    GovPacking
   </a>
 
   <div class="sidebar-spacer"></div>
+
+  <div style="height:1px;background:var(--border);margin:4px 14px 2px;"></div>
+
+  <button class="sidebar-item active" onclick="togglePanel()" style="background:none;border:none;width:100%;cursor:pointer;font-family:'Manrope',sans-serif;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    Settings &amp; Account
+  </button>
+
+  <div class="sb-tour-wrap">
+    <div class="sb-tour-divider"></div>
+    <button class="sb-tour-btn" id="sbTourBtn" onclick="restartTour()" style="border-color:#7C3AED40;background:#7C3AED08">
+      <div class="sb-tour-ico" style="background:#7C3AED15">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2"><polygon points="5,3 19,12 5,21 5,3"/></svg>
+      </div>
+      <div>
+        <div class="sb-tour-label" style="color:#7C3AED">Replay MAXX Tour</div>
+        <div class="sb-tour-sub">Replay the walkthrough</div>
+      </div>
+    </button>
+  </div>
+
 </nav>
 
 <!-- MAIN -->
@@ -220,7 +416,7 @@ a:hover{text-decoration:underline}
     <!-- FSC / CAGE Listing -->
     <a class="acc-card" href="fsc-cage-listing.html">
       <div class="acc-card-icon green">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
       </div>
       <h3>FSC / CAGE Listing</h3>
       <p>Control which FSCs and manufacturer CAGEs feed into your RFQ pipeline, and configure set-asides per code.</p>
@@ -258,10 +454,378 @@ a:hover{text-decoration:underline}
 
 <script>
 function setMode(mode) {
+  sessionStorage.setItem('gs_mode', mode === 'supplier' ? 'supplier' : 'member');
   const isSupplier = mode === 'supplier';
   document.getElementById('btn-member').className = isSupplier ? 'mode-btn inactive' : 'mode-btn active-member';
   document.getElementById('btn-supplier').className = isSupplier ? 'mode-btn active-supplier' : 'mode-btn inactive';
 }
+
+// Auto-restore supplier mode from session
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('mode') === 'supplier') {
+    setMode('supplier');
+  }
+})();
+</script>
+
+<!-- ─── ACCOUNT PANEL OVERLAY ─── -->
+<div class="ap-overlay" id="ap-overlay" onclick="closePanel()"></div>
+
+<!-- ─── ACCOUNT PANEL ─── -->
+<div class="ap" id="account-panel">
+
+  <!-- HEADER -->
+  <div class="ap-hdr">
+    <div class="ap-hdr-left">
+      <div class="ap-avatar-wrap" onclick="triggerPhotoUpload()" title="Change photo">
+        <div class="ap-avatar" id="ap-avatar">
+          <img id="ap-avatar-img" alt="">
+          <span id="ap-avatar-initials">JD</span>
+        </div>
+        <div class="ap-avatar-edit">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </div>
+      </div>
+      <div>
+        <div class="ap-name" id="ap-name">John Demo</div>
+        <div class="ap-email" id="ap-email-display">john.demo@contractingco.com</div>
+      </div>
+    </div>
+    <button class="ap-close" onclick="closePanel()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+
+  <!-- BODY -->
+  <div class="ap-body">
+
+    <!-- ACCORDION 1: PROFILE -->
+    <div class="acc-item">
+      <button class="acc-trigger open" onclick="toggleAcc(this)">
+        <div class="acc-trigger-left">
+          <div class="acc-ico blue"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div>
+            <div class="acc-label">Profile</div>
+            <div class="acc-sub">Name, email, company, photo</div>
+          </div>
+        </div>
+        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+      </button>
+      <div class="acc-body open">
+
+        <!-- PHOTO -->
+        <div class="photo-upload">
+          <div class="photo-preview" id="photo-preview">
+            <img id="photo-preview-img" alt="">
+            <span id="photo-preview-initials">JD</span>
+          </div>
+          <div>
+            <div class="photo-actions">
+              <button class="btn-upload" onclick="triggerPhotoUpload()">Upload Photo</button>
+              <button class="btn-remove-photo" onclick="removePhoto()">Remove</button>
+            </div>
+            <div class="photo-hint">JPG or PNG, max 5MB. Square crop recommended.</div>
+          </div>
+        </div>
+        <input type="file" id="photo-input" accept="image/*" onchange="handlePhoto(this)">
+
+        <!-- NAME ROW -->
+        <div class="field">
+          <div class="field-row">
+            <div>
+              <label class="field-label">First Name</label>
+              <input class="fi" id="p-first" value="John" placeholder="First name">
+            </div>
+            <div>
+              <label class="field-label">Last Name</label>
+              <input class="fi" id="p-last" value="Demo" placeholder="Last name">
+            </div>
+          </div>
+        </div>
+
+        <!-- EMAIL -->
+        <div class="field">
+          <label class="field-label">Email Address</label>
+          <input class="fi" id="p-email" type="email" value="john.demo@contractingco.com" placeholder="your@email.com">
+          <div style="font-size:11px;color:var(--text-faint);margin-top:5px;line-height:1.5">Changing your email will require verification. A confirmation link will be sent to your new address.</div>
+        </div>
+
+        <!-- COMPANY -->
+        <div class="field">
+          <label class="field-label">Company Name</label>
+          <input class="fi" id="p-company" value="Demo Contracting Co." placeholder="Your company">
+        </div>
+
+        <!-- PHONE -->
+        <div class="field">
+          <label class="field-label">Phone Number</label>
+          <input class="fi" id="p-phone" type="tel" value="(555) 012-3456" placeholder="(555) 000-0000">
+        </div>
+
+        <button class="btn-save" id="save-profile-btn" onclick="saveProfile()">Save Profile</button>
+      </div>
+    </div>
+
+    <!-- ACCORDION 2: CHANGE PASSWORD -->
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">
+        <div class="acc-trigger-left">
+          <div class="acc-ico green"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+          <div>
+            <div class="acc-label">Change Password</div>
+            <div class="acc-sub">Send a secure reset link</div>
+          </div>
+        </div>
+        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+      </button>
+      <div class="acc-body">
+        <div class="pw-reset-box" id="pw-reset-form">
+          <div class="pw-reset-title">Reset your password</div>
+          <div class="pw-reset-sub">We'll send a secure password reset link to <strong id="pw-email-display">john.demo@contractingco.com</strong>. The link expires in 30 minutes.</div>
+          <button class="btn-send-reset" onclick="sendPasswordReset()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Send Reset Link
+          </button>
+        </div>
+        <div class="pw-sent-state" id="pw-sent-state">
+          <div class="pw-sent-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></div>
+          <div class="pw-sent-title">Reset link sent!</div>
+          <div class="pw-sent-sub">Check <strong id="pw-sent-email">john.demo@contractingco.com</strong> for the reset link. It expires in 30 minutes.</div>
+          <button style="font-family:'Manrope',sans-serif;font-size:11.5px;font-weight:600;padding:7px 14px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;margin-top:12px" onclick="resetPasswordState()">Send again</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACCORDION 3: SUBSCRIPTION -->
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">
+        <div class="acc-trigger-left">
+          <div class="acc-ico amber"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+          <div>
+            <div class="acc-label">Subscription</div>
+            <div class="acc-sub">Pro plan &middot; renews Mar 14</div>
+          </div>
+        </div>
+        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+      </button>
+      <div class="acc-body">
+        <div class="sub-summary">
+          <div class="sub-plan">GovScraper Pro</div>
+          <div class="sub-price">$149 / month</div>
+          <div class="sub-renews">Next renewal: <strong>March 14, 2026</strong></div>
+        </div>
+        <div class="sub-stats">
+          <div class="sub-stat"><div class="sub-stat-n" style="color:var(--accent)">8</div><div class="sub-stat-l">FSCs Active</div></div>
+          <div class="sub-stat"><div class="sub-stat-n" style="color:var(--accent)">47</div><div class="sub-stat-l">Active RFQs</div></div>
+        </div>
+        <button class="btn-manage-sub" onclick="closePanel();window.location.href='subscription.html'">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Manage Subscription &amp; Billing &rarr;
+        </button>
+      </div>
+    </div>
+
+    <!-- ACCORDION 4: FSC / CAGE LIST -->
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">
+        <div class="acc-trigger-left">
+          <div class="acc-ico purple"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h7"/></svg></div>
+          <div>
+            <div class="acc-label">FSC / CAGE List</div>
+            <div class="acc-sub">8 FSCs &middot; 3 CAGEs tracked</div>
+          </div>
+        </div>
+        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+      </button>
+      <div class="acc-body">
+        <!-- FSCs -->
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--text-faint);margin-bottom:7px">Active FSCs</div>
+        <div class="fsc-chips" style="margin-bottom:14px">
+          <span class="fsc-chip">5305</span>
+          <span class="fsc-chip">5306</span>
+          <span class="fsc-chip">5310</span>
+          <span class="fsc-chip">5320</span>
+          <span class="fsc-chip">5935</span>
+          <span class="fsc-chip">5961</span>
+          <span class="fsc-chip">5315</span>
+          <span class="fsc-chip">5325</span>
+        </div>
+        <!-- CAGEs with names -->
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--text-faint);margin-bottom:7px">Manufacturer CAGEs</div>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px">
+          <div style="display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:7px;padding:8px 11px">
+            <span style="font-family:'Source Code Pro',monospace;font-size:11px;font-weight:700;color:#7C3AED;width:44px;flex-shrink:0">96906</span>
+            <span style="font-size:12px;font-weight:600;color:var(--text-dim)">SPS Technologies, Inc.</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:7px;padding:8px 11px">
+            <span style="font-family:'Source Code Pro',monospace;font-size:11px;font-weight:700;color:#7C3AED;width:44px;flex-shrink:0">99193</span>
+            <span style="font-size:12px;font-weight:600;color:var(--text-dim)">Parker Hannifin</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:7px;padding:8px 11px">
+            <span style="font-family:'Source Code Pro',monospace;font-size:11px;font-weight:700;color:#7C3AED;width:44px;flex-shrink:0">06090</span>
+            <span style="font-size:12px;font-weight:600;color:var(--text-dim)">Moog Inc.</span>
+          </div>
+        </div>
+        <button class="btn-manage-sub" onclick="closePanel();window.location.href='fsc-cage-listing.html'">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Edit FSC / CAGE List &rarr;
+        </button>
+      </div>
+    </div>
+
+    <!-- ACCORDION 5: EMAIL INTEGRATION -->
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">
+        <div class="acc-trigger-left">
+          <div class="acc-ico blue" style="background:#F0FDF4;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div>
+            <div class="acc-label">Email Integration</div>
+            <div class="acc-sub" id="email-acc-sub">No mailbox connected</div>
+          </div>
+        </div>
+        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+      </button>
+      <div class="acc-body">
+        <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:14px 16px;margin-bottom:12px">
+          <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">Connect your mailbox</div>
+          <div style="font-size:12px;color:var(--text-muted);line-height:1.6">Send emails to vendors directly from GovScraper using your own Gmail or Outlook account.</div>
+        </div>
+        <button class="btn-manage-sub" onclick="closePanel();window.location.href='email-integration.html'">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Manage Email Integration &rarr;
+        </button>
+      </div>
+    </div>
+
+    <!-- LOGOUT -->
+    <div class="acc-item">
+      <button class="btn-logout" onclick="handleLogout()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Log Out
+      </button>
+    </div>
+
+  </div><!-- end ap-body -->
+
+  <div class="ap-footer">
+    <div class="ap-footer-txt">GovScraper &middot; Member since Feb 14, 2025 &middot; <a href="#" style="color:var(--text-faint)">Privacy Policy</a></div>
+  </div>
+
+</div><!-- end account panel -->
+
+<script>
+// ─── ACCOUNT PANEL ──────────────────────────────────────────────────────────
+(function(){
+  let panelOpen = false;
+
+  window.togglePanel = function(){ panelOpen ? closePanel() : openPanel(); };
+  window.openPanel = window.openPanel || function(){};
+  function openPanelFn(){
+    panelOpen = true;
+    document.getElementById('account-panel').classList.add('open');
+    document.getElementById('ap-overlay').classList.add('open');
+    document.getElementById('avatar-btn').classList.add('panel-open');
+  }
+  window.closePanel = window.closePanel || function(){};
+  function closePanelFn(){
+    panelOpen = false;
+    document.getElementById('account-panel').classList.remove('open');
+    document.getElementById('ap-overlay').classList.remove('open');
+    document.getElementById('avatar-btn').classList.remove('panel-open');
+  }
+  window.openPanel = openPanelFn;
+  window.closePanel = closePanelFn;
+  window.togglePanel = function(){ panelOpen ? closePanelFn() : openPanelFn(); };
+
+  var avatarBtn = document.getElementById('avatar-btn');
+  if(avatarBtn) {
+    avatarBtn.onclick = function(e){ e.preventDefault(); window.togglePanel(); };
+  }
+  document.getElementById('ap-overlay').addEventListener('click', closePanelFn);
+  document.querySelectorAll('.ap-close').forEach(function(b){ b.addEventListener('click', closePanelFn); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closePanelFn(); });
+
+  // Accordion
+  window.toggleAcc = function(trigger){
+    var body = trigger.nextElementSibling;
+    var isOpen = trigger.classList.contains('open');
+    trigger.classList.toggle('open', !isOpen);
+    body.classList.toggle('open', !isOpen);
+  };
+
+  // Photo upload
+  window.triggerPhotoUpload = function(){
+    document.getElementById('photo-input').click();
+  };
+  window.handlePhoto = function(input){
+    if(!input.files || !input.files[0]) return;
+    var file = input.files[0];
+    if(file.size > 5*1024*1024){ alert('Photo must be under 5MB.'); return; }
+    var reader = new FileReader();
+    reader.onload = function(e){ setPhoto(e.target.result); };
+    reader.readAsDataURL(file);
+  };
+  function setPhoto(src){
+    var btn = document.getElementById('avatar-btn');
+    btn.style.backgroundImage = 'url('+src+')';
+    btn.style.backgroundSize = 'cover';
+    var ai = document.getElementById('avatar-initials');
+    if(ai) ai.style.display = 'none';
+    var apIco = document.getElementById('ap-avatar');
+    apIco.style.backgroundImage = 'url('+src+')';
+    apIco.style.backgroundSize = 'cover';
+    document.getElementById('ap-avatar-initials').style.display = 'none';
+    var pp = document.getElementById('photo-preview');
+    pp.style.backgroundImage = 'url('+src+')';
+    pp.style.backgroundSize = 'cover';
+    document.getElementById('photo-preview-initials').style.display = 'none';
+  }
+  window.removePhoto = function(){
+    [document.getElementById('avatar-btn'), document.getElementById('ap-avatar'), document.getElementById('photo-preview')]
+      .forEach(function(el){ el.style.backgroundImage=''; el.style.backgroundSize=''; });
+    ['avatar-initials','ap-avatar-initials','photo-preview-initials']
+      .forEach(function(id){ var el = document.getElementById(id); if(el) el.style.display = ''; });
+  };
+
+  // Save profile
+  window.saveProfile = function(){
+    var first = document.getElementById('p-first').value.trim();
+    var last  = document.getElementById('p-last').value.trim();
+    var email = document.getElementById('p-email').value.trim();
+    if(!first || !last){ alert('Please enter your first and last name.'); return; }
+    if(!email || email.indexOf('@') < 0){ alert('Please enter a valid email.'); return; }
+    var initials = (first[0]||'').toUpperCase() + (last[0]||'').toUpperCase();
+    ['avatar-initials','ap-avatar-initials','photo-preview-initials'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) el.textContent = initials;
+    });
+    document.getElementById('ap-name').textContent = first + ' ' + last;
+    document.getElementById('ap-email-display').textContent = email;
+    var pwe = document.getElementById('pw-email-display');
+    if(pwe) pwe.textContent = email;
+    var pse = document.getElementById('pw-sent-email');
+    if(pse) pse.textContent = email;
+    var btn = document.getElementById('save-profile-btn');
+    btn.textContent = 'Saved ✓'; btn.className = 'btn-save success';
+    setTimeout(function(){ btn.textContent='Save Profile'; btn.className='btn-save'; }, 2500);
+  };
+
+  // Password reset
+  window.sendPasswordReset = function(){
+    document.getElementById('pw-reset-form').style.display = 'none';
+    document.getElementById('pw-sent-state').classList.add('show');
+  };
+  window.resetPasswordState = function(){
+    document.getElementById('pw-reset-form').style.display = 'block';
+    document.getElementById('pw-sent-state').classList.remove('show');
+  };
+
+  // Logout
+  window.handleLogout = function(){
+    if(confirm('Log out of GovScraper?')){ sessionStorage.clear(); window.location.href='sign-in.html'; }
+  };
+})();
 </script>
 </body>
 </html>

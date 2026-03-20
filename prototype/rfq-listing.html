@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light">
 <title>My RFQs — GovScraper</title>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -34,6 +34,7 @@
     --purple-bg: #F5F3FF;
     --cyan: #0891B2;
     --cyan-bg: #ECFEFF;
+    --active-supplier: #BE1E2D;
   }
 
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -136,7 +137,7 @@
   .stat-num.blue { color:var(--accent); }
   .stat-num.default { color:var(--text); }
   .stat-num.amber { color:var(--amber); }
-  .stat-num.green { color:var(--green); }
+  .stat-num.green { color:var(--accent); }
   .stat-num.purple { color:var(--purple); }
   .stat-num.gray { color:var(--text-muted); }
   .stat-num.red { color:var(--red); }
@@ -244,7 +245,7 @@
   }
   .sol-num { font-family:'Source Code Pro',monospace; font-size:11px; color:var(--text-dim); }
   .aaa-val { font-family:'Source Code Pro',monospace; font-weight:600; font-size:12px; }
-  .aaa-val.green { color:var(--green); }
+  .aaa-val.green { color:var(--accent); }
   .aaa-val.unknown { color:var(--text-faint); font-weight:400; font-size:11px; font-style:italic; }
   .due-red { color:var(--red); font-weight:700; }
   .due-normal { color:var(--text-dim); }
@@ -464,7 +465,7 @@
     font-size:12.5px; font-weight:600; color:var(--text-dim);
     font-family:'Source Code Pro',monospace;
   }
-  .meta-row .mval.green { color:var(--green); }
+  .meta-row .mval.green { color:var(--accent); }
   .meta-row .mval.red { color:var(--red); }
   .meta-row .mval.amber { color:var(--amber); }
   .meta-row .mval.faint { color:var(--text-faint); font-style:italic; font-family:'Manrope',sans-serif; font-weight:400; font-size:12px; }
@@ -511,7 +512,7 @@
     white-space:nowrap;
   }
   .info-table .val-mono { font-family:'Source Code Pro',monospace; }
-  .info-table .val-green { color:var(--green); font-weight:600; }
+  .info-table .val-green { color:var(--accent); font-weight:600; }
   .info-table .val-faint { color:var(--text-faint); font-style:italic; }
 
   /* Inline action button in table */
@@ -634,7 +635,7 @@
   .ps-group input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(37,99,235,0.08); }
   .ps-group input.computed { background:var(--surface-2); color:var(--text-muted); cursor:default; }
   .ps-group input.val-blue { background:var(--accent-bg); border-color:var(--accent-border); color:var(--accent); font-weight:700; }
-  .ps-group input.val-green { background:var(--green-bg); border-color:var(--green-border); color:var(--green); font-weight:700; }
+  .ps-group input.val-green { background:var(--accent-bg); border-color:var(--accent-border); color:var(--accent); font-weight:700; }
   .ps-inner hr { border:none; border-top:1px solid var(--border); margin:14px 0; }
   .ps-footer { display:flex; gap:8px; margin-top:16px; padding-top:14px; border-top:1px solid var(--border); }
   .ps-footer .ps-cancel {
@@ -838,10 +839,10 @@ input[type=file]{display:none}
 .mode-btn.inactive { background: transparent; color: var(--text-muted); }
 .mode-btn.inactive:hover { background: var(--surface-3); color: var(--text-dim); }
 .mode-btn.active-member { background: #1B2A4A; color: #fff; box-shadow: 0 1px 4px rgba(27,42,74,0.3); }
-.mode-btn.active-supplier { background: #16A34A; color: #fff; box-shadow: 0 1px 4px rgba(22,163,74,0.35); }
+.mode-btn.active-supplier { background: #BE1E2D; color: #fff; box-shadow: 0 1px 4px rgba(190,30,45,0.35); }
 .mode-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; display: inline-block; }
 .mode-btn.inactive .mode-dot.blue { background: #2563EB; }
-.mode-btn.inactive .mode-dot.green { background: #16A34A; }
+.mode-btn.inactive .mode-dot.green { background: #BE1E2D; }
 .mode-btn.active-member .mode-dot,
 .mode-btn.active-supplier .mode-dot { background: rgba(255,255,255,0.6); }
 
@@ -869,7 +870,7 @@ input[type=file]{display:none}
   .upgrade-features { padding:18px 24px; }
   .upgrade-features ul { list-style:none;display:flex;flex-direction:column;gap:9px; }
   .upgrade-features li { display:flex;align-items:center;gap:10px;font-size:12.5px;font-weight:500;color:var(--text-dim); }
-  .upgrade-features li svg { color:var(--green);flex-shrink:0; }
+  .upgrade-features li svg { color:var(--accent);flex-shrink:0; }
   .upgrade-box-footer { padding:14px 24px 20px;display:flex;gap:10px; }
   .upgrade-cta { flex:1;font-family:'Manrope',sans-serif;font-size:13px;font-weight:800;padding:11px 20px;border-radius:9px;border:none;cursor:pointer;color:#fff;transition:opacity .15s; }
   .upgrade-cta:hover { opacity:.9; }
@@ -879,6 +880,31 @@ input[type=file]{display:none}
   .upgrade-cancel:hover { background:var(--surface-2); }
 
   
+  /* ── SAVED SEARCHES MODAL ── */
+  .ss-backdrop { display:none;position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:9000;align-items:center;justify-content:center; }
+  .ss-backdrop.open { display:flex; }
+  .ss-box { background:var(--surface);border-radius:16px;width:480px;max-width:calc(100vw - 32px);box-shadow:0 24px 64px rgba(0,0,0,.18);border:1px solid var(--border);overflow:hidden; }
+  .ss-hdr { padding:22px 24px 18px;text-align:center;border-bottom:1px solid var(--border); }
+  .ss-hdr h3 { font-size:17px;font-weight:900;color:var(--text);margin:0; }
+  .ss-list { padding:16px 20px;display:flex;flex-direction:column;gap:0;max-height:360px;overflow-y:auto; }
+  .ss-row { display:flex;align-items:center;padding:13px 14px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;background:var(--surface);transition:all .15s; }
+  .ss-row:hover { background:var(--surface-2); }
+  .ss-row-name { flex:1;font-size:13.5px;font-weight:600;color:var(--text); }
+  .ss-row-name input { font-family:'Manrope',sans-serif;font-size:13.5px;font-weight:600;color:var(--text);border:1px solid var(--accent);border-radius:6px;padding:4px 8px;width:100%;box-sizing:border-box;outline:none;background:var(--accent-bg); }
+  .ss-row-actions { display:flex;align-items:center;gap:10px;margin-left:12px; }
+  .ss-row-btn { background:none;border:none;cursor:pointer;padding:4px;border-radius:5px;transition:all .12s;display:flex;align-items:center;justify-content:center; }
+  .ss-row-btn:hover { background:var(--surface-2); }
+  .ss-row-btn.edit svg { width:17px;height:17px;color:var(--accent); }
+  .ss-row-btn.delete svg { width:16px;height:16px;color:var(--red); }
+  .ss-row-btn.delete:hover { background:var(--red-bg); }
+  .ss-row-btn.save svg { width:17px;height:17px;color:#16A34A; }
+  .ss-row-btn.save:hover { background:#F0FDF4; }
+  .ss-footer { padding:14px 20px 20px;display:flex;align-items:center;justify-content:space-between; }
+  .ss-add-btn { font-family:'Manrope',sans-serif;font-size:12.5px;font-weight:800;padding:9px 16px;border-radius:8px;border:1.5px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;transition:all .15s; }
+  .ss-add-btn:hover { background:var(--surface-2);border-color:var(--text-faint); }
+  .ss-ok-btn { font-family:'Manrope',sans-serif;font-size:13px;font-weight:800;padding:10px 28px;border-radius:9px;border:none;background:var(--accent);color:#fff;cursor:pointer;transition:opacity .15s; }
+  .ss-ok-btn:hover { opacity:.9; }
+
   /* ── FSC AUTOCOMPLETE ── */
   .fsc-ac-wrap { position:relative; }
   .fsc-ac-input { width:100%;box-sizing:border-box; }
@@ -931,6 +957,9 @@ input[type=file]{display:none}
   .sb-tour-ico svg { width:15px; height:15px; }
   .sb-tour-label { font-size:12px; font-weight:800; color:#334155; }
   .sb-tour-sub { font-size:10.5px; color:#94A3B8; margin-top:1px; }
+  .sb-tour-wrap{padding:0 12px 16px;margin-top:0;flex-shrink:0}
+  .sb-tour-divider{height:1px;background:#E2E8F0;margin:12px 0 14px}
+  .bullseye-icon { color:var(--accent); }
 </style>
 </head>
 <body>
@@ -941,49 +970,67 @@ input[type=file]{display:none}
 <header class="topbar">
   <div class="topbar-left">
     <a href="dashboard.html">
-      <img src="https://govscraper.com/assets/BigLogo-7gv5uAxF.png" alt="GovScraper" class="topbar-logo" onerror="this.style.display='none'">
+      <img src="https://govscraper.com/assets/BigLogo-7gv5uAxF.png" alt="GovScraper" class="topbar-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
     </a>
     <div class="topbar-divider"></div>
+
+    <!-- ── MODE SWITCHER ── -->
     <div class="mode-switcher">
-      <button class="mode-btn active-member" onclick="setMode('member')">
+      <button class="mode-btn active-member" id="btn-member" onclick="setMode('member')">
         <span class="mode-dot blue"></span>
         Member Portal
       </button>
-      <button class="mode-btn inactive" onclick="setMode('supplier')">
+      <button class="mode-btn inactive" id="btn-supplier" onclick="setMode('supplier')">
         <span class="mode-dot green"></span>
         Supplier Portal
       </button>
     </div>
+
     <div class="topbar-divider"></div>
-    <div class="breadcrumb">
-      <a href="dashboard.html">Dashboard</a>
-      <span class="sep">›</span>
-      My RFQs
-    </div>
+    <div class="breadcrumb" id="topbar-bc">RFQ Listing</div>
   </div>
   <div class="topbar-right">
-    <div class="topbar-icon-btn" title="Notifications">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+    <div class="topbar-icon-btn bullseye-icon" title="New Opportunities">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+      </svg>
     </div>
-    <div class="avatar" title="Account">JD</div>
+    <div class="topbar-icon-btn" title="Settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+      </svg>
+    </div>
+    <button class="avatar-btn" id="avatar-btn" title="My Account"
+      onclick="document.getElementById('account-panel').classList.add('open');document.getElementById('ap-overlay').classList.add('open');this.classList.add('panel-open');">
+      <span id="avatar-initials">JD</span>
+    </button>
   </div>
 </header>
 
 <!-- SIDEBAR -->
-<nav class="sidebar">
+<nav class="sidebar sidebar-member">
 
   <div class="sidebar-label">Main</div>
   <a class="sidebar-item" href="dashboard.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
     Dashboard
   </a>
-  <a class="sidebar-item active" href="rfq-listing.html">
+  <a class="sidebar-item active" id="sb-rfqs" href="rfq-listing.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
-    My RFQs <span class="sidebar-badge">47</span>
+    My RFQs<span class="sidebar-badge">47</span>
+  </a>
+  <a class="sidebar-item" href="rfq-listing.html" style="padding-left:32px;font-size:12px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+    Private List of RFQs
+  </a>
+  <a class="sidebar-item" href="rfq-listing.html" style="padding-left:32px;font-size:12px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+    Public List of RFQs
   </a>
 
   <div class="sidebar-label">Intelligence</div>
-  <a class="sidebar-item" href="nsn-search.html">
+  <a class="sidebar-item" id="sb-nsn" href="nsn-search.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     NSN Search
   </a>
@@ -995,32 +1042,61 @@ input[type=file]{display:none}
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
     FSC Lookup
   </a>
+  <a id="sb-watchlist" class="sidebar-item" href="nsn-watchlist.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    NSN Watch List
+  </a>
 
   <div class="sidebar-label">Results</div>
   <a class="sidebar-item" href="awarded-contracts.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
     Awarded Contracts
   </a>
-  <a class="sidebar-item" href="nsn-watchlist.html">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-    NSN Watch List
-  </a>
   <a class="sidebar-item" href="archived.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
-    Archived
-  </a>
-  <a class="sidebar-item" href="rfq-alerts.html">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
-    RFQ Alerts
+    Archived RFQs
   </a>
 
-  <div class="sidebar-label">Account</div>
-  <a class="sidebar-item" href="account.html">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    Account
+  <div class="sidebar-label">Alerts</div>
+  <a class="sidebar-item" href="rfq-alerts.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+    RFQ Alerts<span class="sidebar-badge">3</span>
+  </a>
+
+  <div class="sidebar-label">Community</div>
+  <a id="sb-community" class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+    Community
+  </a>
+
+  <div class="sidebar-label">Tools</div>
+  <a id="sb-packing" class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+    GovPacking
   </a>
 
   <div class="sidebar-spacer"></div>
+
+  <div style="height:1px;background:var(--border);margin:4px 14px 2px;"></div>
+
+  <button class="sidebar-item" onclick="document.getElementById('account-panel').classList.add('open');document.getElementById('ap-overlay').classList.add('open');document.getElementById('avatar-btn').classList.add('panel-open');" style="background:none;border:none;width:100%;cursor:pointer;font-family:'Manrope',sans-serif;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    Settings &amp; Account
+  </button>
+
+  <div class="sb-tour-wrap">
+    <div class="sb-tour-divider"></div>
+    <button class="sb-tour-btn" id="sbTourBtn" onclick="restartTour()" style="border-color:#7C3AED40;background:#7C3AED08">
+      <div class="sb-tour-ico" style="background:#7C3AED15">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2"><polygon points="5,3 19,12 5,21 5,3"/></svg>
+      </div>
+      <div>
+        <div class="sb-tour-label" style="color:#7C3AED">Replay MAXX Tour</div>
+        <div class="sb-tour-sub">Replay the walkthrough</div>
+      </div>
+    </button>
+  </div>
+
 </nav>
 
 
@@ -1125,7 +1201,7 @@ input[type=file]{display:none}
     <!-- Action buttons row -->
     <div style="display:flex;justify-content:flex-end;gap:6px;margin-top:10px;">
       <button class="btn btn-ghost btn-sm">Clear</button>
-      <button class="btn btn-accent btn-sm">Save Search</button>
+      <button class="btn btn-accent btn-sm" onclick="openSavedSearches()">Save Search</button>
       <button class="btn btn-primary btn-sm">Apply</button>
     </div>
 
@@ -1527,21 +1603,21 @@ input[type=file]{display:none}
                   <td><span class="cage-link">1H5P6</span> <span class="ph-cage-icon">ℹ</span></td>
                   <td style="font-family:'Source Code Pro',monospace;font-size:12px">SPE5E115V2266</td>
                   <td>18</td>
-                  <td style="color:var(--green);font-weight:600">$25.10</td>
+                  <td style="color:var(--accent);font-weight:600">$25.10</td>
                   <td>20150319</td>
                 </tr>
                 <tr>
                   <td><span class="cage-link">55683</span> <span class="ph-cage-icon">ℹ</span></td>
                   <td style="font-family:'Source Code Pro',monospace;font-size:12px">SPE5EK15V1206</td>
                   <td>16</td>
-                  <td style="color:var(--green);font-weight:600">$26.28</td>
+                  <td style="color:var(--accent);font-weight:600">$26.28</td>
                   <td>20141206</td>
                 </tr>
                 <tr>
                   <td><span class="cage-link">6LY89</span> <span class="ph-cage-icon">ℹ</span></td>
                   <td style="font-family:'Source Code Pro',monospace;font-size:12px">SPE5EK14V3307</td>
                   <td>25</td>
-                  <td style="color:var(--green);font-weight:600">$26.82</td>
+                  <td style="color:var(--accent);font-weight:600">$26.82</td>
                   <td>20140515</td>
                 </tr>
                 <tr>
@@ -1706,6 +1782,58 @@ input[type=file]{display:none}
     </div><!-- /panel-content -->
   </div><!-- /panel -->
 </div><!-- /panel-overlay -->
+
+<!-- ══════════════════════════════════════════════
+     SAVED SEARCHES MODAL
+══════════════════════════════════════════════ -->
+<div class="ss-backdrop" id="ssModal" onclick="if(event.target===this)closeSavedSearches()">
+  <div class="ss-box">
+    <div class="ss-hdr">
+      <h3>Saved Searches</h3>
+    </div>
+    <div class="ss-list" id="ssList">
+      <div class="ss-row" data-id="1">
+        <div class="ss-row-name">5305 @ 25k</div>
+        <div class="ss-row-actions">
+          <button class="ss-row-btn edit" title="Edit" onclick="editSavedSearch(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></button>
+          <button class="ss-row-btn delete" title="Delete" onclick="deleteSavedSearch(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+      </div>
+      <div class="ss-row" data-id="2">
+        <div class="ss-row-name">5305 &amp; 5306 @ 100k or More</div>
+        <div class="ss-row-actions">
+          <button class="ss-row-btn edit" title="Edit" onclick="editSavedSearch(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></button>
+          <button class="ss-row-btn delete" title="Delete" onclick="deleteSavedSearch(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+      </div>
+      <div class="ss-row" data-id="3">
+        <div class="ss-row-name">5305 - screw</div>
+        <div class="ss-row-actions">
+          <button class="ss-row-btn edit" title="Edit" onclick="editSavedSearch(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></button>
+          <button class="ss-row-btn delete" title="Delete" onclick="deleteSavedSearch(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+      </div>
+      <div class="ss-row" data-id="4">
+        <div class="ss-row-name">5306 above 100k</div>
+        <div class="ss-row-actions">
+          <button class="ss-row-btn edit" title="Edit" onclick="editSavedSearch(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></button>
+          <button class="ss-row-btn delete" title="Delete" onclick="deleteSavedSearch(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+      </div>
+      <div class="ss-row" data-id="5">
+        <div class="ss-row-name">New Opp - No Tech Docs</div>
+        <div class="ss-row-actions">
+          <button class="ss-row-btn edit" title="Edit" onclick="editSavedSearch(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></button>
+          <button class="ss-row-btn delete" title="Delete" onclick="deleteSavedSearch(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <div class="ss-footer">
+      <button class="ss-add-btn" onclick="addSavedSearch()">+ Add Item</button>
+      <button class="ss-ok-btn" onclick="closeSavedSearches()">Ok</button>
+    </div>
+  </div>
+</div>
 
 <!-- ══════════════════════════════════════════════
      PRICE BID SHEET MODAL
@@ -1942,7 +2070,7 @@ input[type=file]{display:none}
         </div>
         <div class="sub-stats">
           <div class="sub-stat"><div class="sub-stat-n" style="color:var(--accent)">8</div><div class="sub-stat-l">FSCs Active</div></div>
-          <div class="sub-stat"><div class="sub-stat-n" style="color:var(--green)">47</div><div class="sub-stat-l">Active RFQs</div></div>
+          <div class="sub-stat"><div class="sub-stat-n" style="color:var(--accent)">47</div><div class="sub-stat-l">Active RFQs</div></div>
         </div>
         <button class="btn-manage-sub" onclick="closePanel();window.location.href='account.html'">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
@@ -2435,11 +2563,20 @@ window.showToast = showToast;
 
 
 function setMode(mode) {
+  sessionStorage.setItem('gs_mode', mode === 'supplier' ? 'supplier' : 'member');
   if (mode === 'supplier') {
     window.location.href = 'dashboard.html?mode=supplier';
   }
   // member = already here
 }
+
+// Auto-restore supplier mode from session
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('mode') === 'supplier') {
+    setMode('supplier');
+  }
+})();
 
 </script>
 
@@ -2498,6 +2635,99 @@ function closeUpgrade() { document.getElementById('upgrade-backdrop').classList.
 document.addEventListener('keydown', e => { if(e.key==='Escape' && document.getElementById('upgrade-backdrop').classList.contains('open')) closeUpgrade(); });
 </script>
 
+<script>
+/* ── SAVED SEARCHES ─────────────────────────────────────── */
+let ssCounter = 6;
+
+function openSavedSearches() {
+  document.getElementById('ssModal').classList.add('open');
+}
+
+function closeSavedSearches() {
+  // Cancel any active edits first
+  document.querySelectorAll('.ss-row-name input').forEach(input => {
+    const row = input.closest('.ss-row');
+    const nameDiv = row.querySelector('.ss-row-name');
+    nameDiv.textContent = input.dataset.original;
+    // Restore edit/delete buttons
+    const actions = row.querySelector('.ss-row-actions');
+    actions.innerHTML = `
+      <button class="ss-row-btn edit" title="Edit" onclick="editSavedSearch(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></button>
+      <button class="ss-row-btn delete" title="Delete" onclick="deleteSavedSearch(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    `;
+  });
+  document.getElementById('ssModal').classList.remove('open');
+}
+
+function editSavedSearch(btn) {
+  const row = btn.closest('.ss-row');
+  const nameDiv = row.querySelector('.ss-row-name');
+  const currentName = nameDiv.textContent.trim();
+  nameDiv.innerHTML = `<input type="text" value="${currentName}" data-original="${currentName}" onkeydown="if(event.key==='Enter')saveSavedSearch(this)" autofocus>`;
+  nameDiv.querySelector('input').focus();
+  nameDiv.querySelector('input').select();
+  // Swap buttons to save/cancel
+  const actions = row.querySelector('.ss-row-actions');
+  actions.innerHTML = `
+    <button class="ss-row-btn save" title="Save" onclick="saveSavedSearch(this.closest('.ss-row').querySelector('input'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></button>
+    <button class="ss-row-btn delete" title="Cancel" onclick="cancelEditSearch(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  `;
+}
+
+function saveSavedSearch(input) {
+  const row = input.closest('.ss-row');
+  const newName = input.value.trim() || input.dataset.original;
+  const nameDiv = row.querySelector('.ss-row-name');
+  nameDiv.textContent = newName;
+  // Restore edit/delete buttons
+  const actions = row.querySelector('.ss-row-actions');
+  actions.innerHTML = `
+    <button class="ss-row-btn edit" title="Edit" onclick="editSavedSearch(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></button>
+    <button class="ss-row-btn delete" title="Delete" onclick="deleteSavedSearch(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  `;
+}
+
+function cancelEditSearch(btn) {
+  const row = btn.closest('.ss-row');
+  const input = row.querySelector('input');
+  const nameDiv = row.querySelector('.ss-row-name');
+  nameDiv.textContent = input.dataset.original;
+  const actions = row.querySelector('.ss-row-actions');
+  actions.innerHTML = `
+    <button class="ss-row-btn edit" title="Edit" onclick="editSavedSearch(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></button>
+    <button class="ss-row-btn delete" title="Delete" onclick="deleteSavedSearch(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  `;
+}
+
+function deleteSavedSearch(btn) {
+  const row = btn.closest('.ss-row');
+  row.style.transition = 'all .25s';
+  row.style.opacity = '0';
+  row.style.transform = 'translateX(10px)';
+  setTimeout(() => row.remove(), 250);
+}
+
+function addSavedSearch() {
+  const list = document.getElementById('ssList');
+  const row = document.createElement('div');
+  row.className = 'ss-row';
+  row.dataset.id = ssCounter++;
+  row.innerHTML = `
+    <div class="ss-row-name"><input type="text" value="" data-original="New Search" placeholder="Enter search name..." onkeydown="if(event.key==='Enter')saveSavedSearch(this)" autofocus></div>
+    <div class="ss-row-actions">
+      <button class="ss-row-btn save" title="Save" onclick="saveSavedSearch(this.closest('.ss-row').querySelector('input'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></button>
+      <button class="ss-row-btn delete" title="Delete" onclick="deleteSavedSearch(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+  `;
+  list.appendChild(row);
+  row.querySelector('input').focus();
+}
+
+// Close on Escape
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape' && document.getElementById('ssModal').classList.contains('open')) closeSavedSearches();
+});
+</script>
 
 <script>
 /* ── FSC AUTOCOMPLETE ─────────────────────────────────────── */

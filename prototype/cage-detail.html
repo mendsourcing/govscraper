@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light">
 <title>CAGE Detail — GovScraper</title>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -40,14 +40,15 @@
     --brand-red: #BE1E2D;
     --brand-navy: #1B2A4A;
     /* FSC bar palette - energized */
-    --fsc-1: #2563EB;
-    --fsc-2: #0891B2;
-    --fsc-3: #16A34A;
-    --fsc-4: #7C3AED;
-    --fsc-5: #D97706;
-    --fsc-6: #DC2626;
-    --fsc-7: #0E7490;
-    --fsc-8: #059669;
+    --fsc-1: #1B6CA8;
+    --fsc-2: #2563EB;
+    --fsc-3: #3B82F6;
+    --fsc-4: #60A5FA;
+    --fsc-5: #1B3A6B;
+    --fsc-6: #0F172A;
+    --fsc-7: #1E40AF;
+    --fsc-8: #93C5FD;
+    --active-supplier: #BE1E2D;
   }
 
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -113,8 +114,8 @@
   .s-item svg { width:16px; height:16px; flex-shrink:0; }
   .sidebar-item svg { width:16px; height:16px; flex-shrink:0; }
   .s-item:hover { background:var(--surface-2); color:var(--text); }
-  .s-item.active { color:var(--green); border-left-color:var(--green); background:var(--green-bg); font-weight:600; }
-  body.supplier-mode .s-item:hover { background:var(--green-bg); color:var(--green); }
+  .s-item.active { color:#BE1E2D; border-left-color:#BE1E2D; background:#FEF2F2; font-weight:600; }
+  body.supplier-mode .s-item:hover { background:#FEF2F2; color:#BE1E2D; }
   .sidebar-item:hover { background:var(--accent-bg); color:var(--accent); text-decoration:none; border-left-color:var(--accent-border); }
   .sidebar-item.active { color:var(--accent); font-weight:700; border-left-color:var(--accent); background:var(--accent-bg); }
   .sidebar-item svg { width:16px; height:16px; flex-shrink:0; opacity:0.8; }
@@ -211,7 +212,7 @@
     border-radius:12px 12px 0 0;
   }
   .metric-card.blue::before { background:var(--accent); }
-  .metric-card.green::before { background:var(--green); }
+  .metric-card.green::before { background:var(--accent); }
   .metric-card.red::before { background:var(--red); }
   .metric-card.gold::before { background:var(--amber); }
   .metric-label {
@@ -227,7 +228,7 @@
   .metric-sub { font-size:11px; color:var(--text-muted); font-weight:500; }
   .metric-change { font-size:11px; margin-top:5px; font-weight:600; }
   .metric-change.down { color:var(--red); }
-  .metric-change.up { color:var(--green); }
+  .metric-change.up { color:#1B6CA8; }
   .metric-hdr-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
   .metric-award-row { display:flex; gap:24px; margin-top:4px; }
   .metric-award-row .col .slabel {
@@ -292,7 +293,7 @@
   }
   .member-wins-body .mw-amt {
     font-family:'Source Code Pro',monospace; font-size:22px;
-    font-weight:700; color:var(--green);
+    font-weight:700; color:var(--accent);
   }
   .member-wins-body .mw-powered {
     font-size:10.5px; color:var(--text-faint); font-weight:500;
@@ -333,7 +334,7 @@
     font-family:'Source Code Pro',monospace; font-size:40px;
     font-weight:800; line-height:1;
   }
-  .ratio-val.good { color:var(--green); }
+  .ratio-val.good { color:#1B6CA8; }
   .ratio-val.below { color:var(--amber); }
   .ratio-sub { font-size:11px; color:var(--text-muted); margin-top:6px; font-weight:500; }
 
@@ -532,8 +533,8 @@ input[type=file]{display:none}
 /* Supplier mode: green accent on topbar bottom border only */
 body.supplier-mode .topbar {
   background: #FFFFFF !important;
-  border-bottom: 2px solid #16A34A !important;
-  box-shadow: 0 1px 4px rgba(22,163,74,0.12) !important;
+  border-bottom: 2px solid #BE1E2D !important;
+  box-shadow: 0 1px 4px rgba(190,30,45,0.12) !important;
 }
 
 /* ═══════════════════════════════════════
@@ -579,11 +580,11 @@ body.supplier-mode .topbar {
   color: #ffffff;
   box-shadow: 0 1px 4px rgba(27,42,74,0.3), 0 0 0 0px #1B2A4A;
 }
-/* Active Supplier — solid green */
+/* Active Supplier — solid red */
 .mode-btn.active-supplier {
-  background: #16A34A;
+  background: #BE1E2D;
   color: #ffffff;
-  box-shadow: 0 1px 4px rgba(22,163,74,0.35), 0 0 0 0px #16A34A;
+  box-shadow: 0 1px 4px rgba(190,30,45,0.35), 0 0 0 0px #BE1E2D;
 }
 .mode-dot {
   width: 7px; height: 7px;
@@ -593,7 +594,7 @@ body.supplier-mode .topbar {
 }
 /* Dot colors on inactive buttons */
 .mode-btn.inactive .mode-dot.blue { background: #2563EB; }
-.mode-btn.inactive .mode-dot.green { background: #16A34A; }
+.mode-btn.inactive .mode-dot.green { background: #BE1E2D; }
 /* Dot on active buttons — white */
 .mode-btn.active-member .mode-dot,
 .mode-btn.active-supplier .mode-dot { background: rgba(255,255,255,0.6); }
@@ -630,14 +631,14 @@ body.supplier-mode .sidebar-supplier {
 .reg-page .step {display:flex;align-items:center;gap:8px;flex:1}
 .reg-page .step:last-child {flex:none}
 .reg-page .sdot {width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
-.reg-page .sdot.done {background:var(--green);color:#fff}
+.reg-page .sdot.done {background:var(--accent);color:#fff}
 .reg-page .sdot.active {background:var(--accent);color:#fff;box-shadow:0 0 0 4px var(--accent-bg)}
 .reg-page .sdot.pend {background:var(--surface-2);color:var(--text-faint);border:2px solid var(--border)}
 .reg-page .slbl {font-size:11px;font-weight:700;color:var(--text-muted)}
 .reg-page .slbl.active {color:var(--accent)}
-.reg-page .slbl.done {color:var(--green)}
+.reg-page .slbl.done {color:var(--accent)}
 .reg-page .sline {flex:1;height:2px;background:var(--border);margin:0 8px}
-.reg-page .sline.done {background:var(--green)}
+.reg-page .sline.done {background:var(--accent)}
 .reg-page .cage-bar {background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 20px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 3px rgba(0,0,0,.04)}
 .reg-page .cb-l {display:flex;align-items:center;gap:14px}
 .reg-page .cb-ico {width:40px;height:40px;background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:10px;display:flex;align-items:center;justify-content:center}
@@ -736,7 +737,7 @@ body.supplier-mode .sidebar-supplier {
 .ss-n{font-family:'Source Code Pro',monospace;font-size:24px;font-weight:700;color:var(--accent);line-height:1}.ss-l{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-faint);margin-top:2px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04)}.ch{padding:11px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface-2)}.ch h3{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--text-dim)}.src-t{font-family:'Source Code Pro',monospace;font-size:10px;color:var(--text-faint)}.cb{padding:18px 20px}
 .kvg{display:grid;gap:16px}.c2{grid-template-columns:1fr 1fr}.c3{grid-template-columns:1fr 1fr 1fr}
-.kv label{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--text-faint);display:block;margin-bottom:4px}.kv .v{font-size:13px;font-weight:600;color:var(--text-dim)}.kv .v.mo{font-family:'Source Code Pro',monospace}.kv .v.gr{color:var(--green)}.kv .v.fa{color:var(--text-faint);font-style:italic;font-weight:400}
+.kv label{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--text-faint);display:block;margin-bottom:4px}.kv .v{font-size:13px;font-weight:600;color:var(--text-dim)}.kv .v.mo{font-family:'Source Code Pro',monospace}.kv .v.gr{color:#1B6CA8}.kv .v.fa{color:var(--text-faint);font-style:italic;font-weight:400}
 .dt{width:100%;border-collapse:collapse;font-size:12px}.dt thead th{font-size:9.5px;text-transform:uppercase;letter-spacing:.4px;font-weight:800;color:var(--text-faint);padding:9px 14px;border-bottom:2px solid var(--border);text-align:left;background:var(--surface-2)}.dt tbody td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-dim)}.dt tbody tr:last-child td{border-bottom:none}.dt tbody tr:hover{background:var(--accent-bg)}.dt .mo{font-family:'Source Code Pro',monospace}.dt a{color:var(--accent);font-weight:600}
 .va{display:block;text-align:center;padding:11px;font-size:12px;font-weight:700;color:var(--accent);border-top:1px solid var(--border)}.va:hover{background:var(--accent-bg);text-decoration:none}
 .cr-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border)}.cr-row:last-child{border-bottom:none}.cr-l{display:flex;align-items:center;gap:10px}.cr-role{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--text-faint);width:68px;flex-shrink:0}.sec-lbl{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--text-faint);margin-bottom:8px;display:block}
@@ -767,9 +768,9 @@ body.supplier-mode .sidebar-supplier-active {
   background:var(--surface); border-right:1px solid var(--border);
   padding:20px 0 16px; overflow-y:auto; z-index:90;
 }
-.s-item { display:flex; align-items:center; gap:10px; padding:8px 20px; font-size:12.5px; font-weight:500; color:var(--green); text-decoration:none; border-left:3px solid transparent; transition:all .15s; background:none; border-top:none; border-right:none; border-bottom:none; width:100%; cursor:pointer; font-family:'Manrope',sans-serif; }
-.s-item:hover { background:var(--green-bg); text-decoration:none; }
-.s-item.s-active { font-weight:700; border-left-color:var(--green); background:var(--green-bg); }
+.s-item { display:flex; align-items:center; gap:10px; padding:8px 20px; font-size:12.5px; font-weight:500; color:#BE1E2D; text-decoration:none; border-left:3px solid transparent; transition:all .15s; background:none; border-top:none; border-right:none; border-bottom:none; width:100%; cursor:pointer; font-family:'Manrope',sans-serif; }
+.s-item:hover { background:#FEF2F2; text-decoration:none; }
+.s-item.s-active { font-weight:700; border-left-color:#BE1E2D; background:#FEF2F2; }
 .s-item svg { width:16px; height:16px; flex-shrink:0; opacity:.8; }
 
 .sidebar-member { display:flex !important; }
@@ -843,7 +844,7 @@ body.supplier-mode #panel-supplier { display:block; }
   .cb{padding:18px 20px}
   .kvg{display:grid;gap:16px}.c2{grid-template-columns:1fr 1fr}.c3{grid-template-columns:1fr 1fr 1fr}.c4{grid-template-columns:1fr 1fr 1fr 1fr}
   .kv label{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--text-faint);display:block;margin-bottom:4px}
-  .kv .v{font-size:13px;font-weight:600;color:var(--text-dim)}.kv .v.mo{font-family:'Source Code Pro',monospace}.kv .v.gr{color:var(--green)}.kv .v.fa{color:var(--text-faint);font-style:italic;font-weight:400}
+  .kv .v{font-size:13px;font-weight:600;color:var(--text-dim)}.kv .v.mo{font-family:'Source Code Pro',monospace}.kv .v.gr{color:#1B6CA8}.kv .v.fa{color:var(--text-faint);font-style:italic;font-weight:400}
   /* Certs grid */
   .cert-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
   .cert-tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 8px;border-radius:8px;border:1.5px solid var(--border);background:var(--surface-2);font-size:11px;font-weight:700;color:var(--text-muted);text-align:center;line-height:1.3}
@@ -981,7 +982,7 @@ body.supplier-mode #panel-supplier { display:block; }
   .cb{padding:18px 20px}
   .kvg{display:grid;gap:14px}.c2{grid-template-columns:1fr 1fr}.c3{grid-template-columns:1fr 1fr 1fr}.c4{grid-template-columns:1fr 1fr 1fr 1fr}
   .kv label{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--text-faint);display:block;margin-bottom:4px}
-  .kv .v{font-size:13px;font-weight:600;color:var(--text-dim)}.kv .v.mo{font-family:'Source Code Pro',monospace}.kv .v.gr{color:var(--green)}.kv .v.lnk{color:var(--accent);cursor:pointer}
+  .kv .v{font-size:13px;font-weight:600;color:var(--text-dim)}.kv .v.mo{font-family:'Source Code Pro',monospace}.kv .v.gr{color:#1B6CA8}.kv .v.lnk{color:var(--accent);cursor:pointer}
   .kv .v.lnk:hover{text-decoration:underline}
 
   /* Verified contact block */
@@ -1067,13 +1068,22 @@ body.supplier-mode #panel-supplier { display:block; }
   .sb-tour-ico svg{width:15px;height:15px}
   .sb-tour-label{font-size:12px;font-weight:800;color:#334155}
   .sb-tour-sub{font-size:10.5px;color:#94A3B8;margin-top:1px}
+
+.sb-tour-wrap{padding:0 12px 16px;margin-top:0;flex-shrink:0}
+.sb-tour-divider{height:1px;background:#E2E8F0;margin:12px 0 14px}
+.sb-tour-btn{width:100%;font-family:'Manrope',sans-serif;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;border:1.5px solid #E2E8F0;background:#F8FAFC;cursor:pointer;transition:all .15s;text-align:left;position:relative}
+.sb-tour-btn:hover{background:#fff;border-color:#CBD5E1;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.sb-tour-ico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-tour-ico svg{width:15px;height:15px}
+.sb-tour-label{font-size:12px;font-weight:800;color:#334155}
+.sb-tour-sub{font-size:10.5px;color:#94A3B8;margin-top:1px}
 </style>
 </head>
 <body>
 <header class="topbar">
   <div class="topbar-left">
     <a href="dashboard.html">
-      <img src="https://govscraper.com/assets/BigLogo-7gv5uAxF.png" alt="GovScraper" class="topbar-logo" onerror="this.outerHTML='<span style=&quot;font-family:Manrope,sans-serif;font-size:18px;font-weight:800;color:var(--text);&quot;>GovScraper</span>'">
+      <img src="https://govscraper.com/assets/BigLogo-7gv5uAxF.png" alt="GovScraper" class="topbar-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
     </a>
     <div class="topbar-divider"></div>
 
@@ -1090,7 +1100,7 @@ body.supplier-mode #panel-supplier { display:block; }
     </div>
 
     <div class="topbar-divider"></div>
-    <div class="breadcrumb" id="topbar-bc"><a href="dashboard.html">Dashboard</a> <span style="color:#CBD5E1;margin:0 4px">›</span> <a href="cage-search.html">CAGE Search</a> <span style="color:#CBD5E1;margin:0 4px">›</span> CAGE Detail</div>
+    <div class="breadcrumb" id="topbar-bc">Dashboard &rsaquo; CAGE Search &rsaquo; CAGE Detail</div>
   </div>
   <div class="topbar-right">
     <div class="topbar-icon-btn bullseye-icon" title="New Opportunities">
@@ -1117,9 +1127,9 @@ body.supplier-mode #panel-supplier { display:block; }
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
     Dashboard
   </a>
-  <a class="sidebar-item" href="rfq-listing.html">
+  <a class="sidebar-item" id="sb-rfqs" href="rfq-listing.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
-    My RFQs <span class="sidebar-badge">47</span>
+    My RFQs<span class="sidebar-badge">47</span>
   </a>
   <a class="sidebar-item" href="rfq-listing.html" style="padding-left:32px;font-size:12px;">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
@@ -1131,7 +1141,7 @@ body.supplier-mode #panel-supplier { display:block; }
   </a>
 
   <div class="sidebar-label">Intelligence</div>
-  <a class="sidebar-item" href="nsn-search.html">
+  <a class="sidebar-item" id="sb-nsn" href="nsn-search.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     NSN Search
   </a>
@@ -1143,10 +1153,9 @@ body.supplier-mode #panel-supplier { display:block; }
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
     FSC Lookup
   </a>
-  <a class="sidebar-item sb-locked-click" href="#" onclick="showGoldUpgrade();return false;">
+  <a id="sb-watchlist" class="sidebar-item" href="nsn-watchlist.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
     NSN Watch List
-    <span class="lock-pip gold">GOLD</span>
   </a>
 
   <div class="sidebar-label">Results</div>
@@ -1160,39 +1169,40 @@ body.supplier-mode #panel-supplier { display:block; }
   </a>
 
   <div class="sidebar-label">Alerts</div>
-  <a class="sidebar-item sb-locked-click" href="#" onclick="showGoldUpgrade();return false;">
+  <a class="sidebar-item" href="rfq-alerts.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
-    RFQ Alerts
-    <span class="lock-pip gold">GOLD</span>
+    RFQ Alerts<span class="sidebar-badge">3</span>
   </a>
 
   <div class="sidebar-label">Community</div>
-  <a class="sidebar-item" href="#">
+  <a id="sb-community" class="sidebar-item" href="#">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
     Community
   </a>
 
   <div class="sidebar-label">Tools</div>
-  <a class="sidebar-item" href="#">
+  <a id="sb-packing" class="sidebar-item" href="#">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
     GovPacking
   </a>
 
   <div class="sidebar-spacer"></div>
+
   <div style="height:1px;background:var(--border);margin:4px 14px 2px;"></div>
+
   <button class="sidebar-item" onclick="document.getElementById('account-panel').classList.add('open');document.getElementById('ap-overlay').classList.add('open');document.getElementById('avatar-btn').classList.add('panel-open');" style="background:none;border:none;width:100%;cursor:pointer;font-family:'Manrope',sans-serif;">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     Settings &amp; Account
   </button>
 
-  <div style="padding:0 12px 12px;">
-    <div style="height:1px;background:var(--border);margin-bottom:10px;"></div>
-    <button class="sb-tour-btn" style="border-color:#2563EB40;background:#2563EB08;width:100%;">
-      <div class="sb-tour-ico" style="background:#2563EB15;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2"><polygon points="5,3 19,12 5,21 5,3"/></svg>
+  <div class="sb-tour-wrap">
+    <div class="sb-tour-divider"></div>
+    <button class="sb-tour-btn" id="sbTourBtn" onclick="restartTour()" style="border-color:#7C3AED40;background:#7C3AED08">
+      <div class="sb-tour-ico" style="background:#7C3AED15">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2"><polygon points="5,3 19,12 5,21 5,3"/></svg>
       </div>
       <div>
-        <div class="sb-tour-label" style="color:#2563EB;">Replay PRO Tour</div>
+        <div class="sb-tour-label" style="color:#7C3AED">Replay MAXX Tour</div>
         <div class="sb-tour-sub">Replay the walkthrough</div>
       </div>
     </button>
@@ -1747,9 +1757,9 @@ body.supplier-mode #panel-supplier { display:block; }
           <table class="dt">
             <thead><tr><th>Date</th><th>NSN</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr></thead>
             <tbody>
-              <tr><td>28-Oct-2025</td><td class="mo"><a href="nsn-search.html">5306-00-203-3858</a></td><td>8,000</td><td class="mo" style="color:var(--green);font-weight:600">$3.98</td><td class="mo">$31,840</td></tr>
-              <tr><td>10-Jan-2025</td><td class="mo"><a href="nsn-search.html">5306-00-203-3858</a></td><td>7,600</td><td class="mo" style="color:var(--green);font-weight:600">$3.65</td><td class="mo">$27,740</td></tr>
-              <tr><td>22-Aug-2024</td><td class="mo"><a href="#">5305-00-269-5518</a></td><td>12,000</td><td class="mo" style="color:var(--green);font-weight:600">$2.14</td><td class="mo">$25,680</td></tr>
+              <tr><td>28-Oct-2025</td><td class="mo"><a href="nsn-search.html">5306-00-203-3858</a></td><td>8,000</td><td class="mo" style="color:#1B6CA8;font-weight:600">$3.98</td><td class="mo">$31,840</td></tr>
+              <tr><td>10-Jan-2025</td><td class="mo"><a href="nsn-search.html">5306-00-203-3858</a></td><td>7,600</td><td class="mo" style="color:#1B6CA8;font-weight:600">$3.65</td><td class="mo">$27,740</td></tr>
+              <tr><td>22-Aug-2024</td><td class="mo"><a href="#">5305-00-269-5518</a></td><td>12,000</td><td class="mo" style="color:#1B6CA8;font-weight:600">$2.14</td><td class="mo">$25,680</td></tr>
             </tbody>
           </table>
         </div>
@@ -2103,7 +2113,7 @@ body.supplier-mode #panel-supplier { display:block; }
         </div>
         <div class="sub-stats">
           <div class="sub-stat"><div class="sub-stat-n" style="color:var(--accent)">8</div><div class="sub-stat-l">FSCs Active</div></div>
-          <div class="sub-stat"><div class="sub-stat-n" style="color:var(--green)">47</div><div class="sub-stat-l">Active RFQs</div></div>
+          <div class="sub-stat"><div class="sub-stat-n" style="color:var(--accent)">47</div><div class="sub-stat-l">Active RFQs</div></div>
         </div>
         <button class="btn-manage-sub" onclick="closePanel();window.location.href='account.html'">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
@@ -2337,6 +2347,7 @@ window.showToast = showToast;
 const CAGE_STATE = 'unclaimed'; // 'unclaimed' | 'claimed'
 
 function setMode(mode) {
+  sessionStorage.setItem('gs_mode', mode === 'supplier' ? 'supplier' : 'member');
   const body = document.body;
   const btnMember = document.getElementById('btn-member');
   const btnSupplier = document.getElementById('btn-supplier');
@@ -2373,6 +2384,14 @@ function setMode(mode) {
     bc.textContent = 'Dashboard';
   }
 }
+
+// Auto-restore supplier mode from session
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('mode') === 'supplier') {
+    setMode('supplier');
+  }
+})();
 
 function switchSupplierTab(tab) {
   // Update active state in supplier sidebar

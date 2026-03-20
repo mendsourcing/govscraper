@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light">
 <title>Sign In — GovScraper</title>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Source+Code+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -213,8 +213,16 @@ function togglePw() {
     : '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>';
 }
 
+// Tier-based accounts
+const ACCOUNTS = {
+  'lite@govscraper.com':  { tier: 'lite',  password: 'mendsourcing101' },
+  'pro@govscraper.com':   { tier: 'pro',   password: 'mendsourcing101' },
+  'gold@govscraper.com':  { tier: 'gold',  password: 'mendsourcing101' },
+  'maxx@govscraper.com':  { tier: 'maxx',  password: 'mendsourcing101' }
+};
+
 function signIn() {
-  const email = document.getElementById('email').value.trim();
+  const email = document.getElementById('email').value.trim().toLowerCase();
   const pw = document.getElementById('password').value;
   let valid = true;
 
@@ -235,6 +243,18 @@ function signIn() {
     valid = false;
   }
   if (!valid) return;
+
+  // Check credentials
+  const account = ACCOUNTS[email];
+  if (!account || account.password !== pw) {
+    document.getElementById('globalErrMsg').textContent = 'Invalid email or password. Please try again.';
+    document.getElementById('globalErr').classList.add('show');
+    return;
+  }
+
+  // Store tier in sessionStorage so dashboard can read it
+  sessionStorage.setItem('gs_tier', account.tier);
+  sessionStorage.setItem('gs_email', email);
 
   // Simulate loading
   const btn = document.getElementById('submitBtn');

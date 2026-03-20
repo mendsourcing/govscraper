@@ -37,11 +37,28 @@ This project is worked on from multiple computers via iCloud sync. At the start 
 
 ## Project Context
 
-This is GovScraper - a web application for government contract bidding. The frontend is built with static HTML files using CSS custom properties for theming (light/dark mode), Plus Jakarta Sans + JetBrains Mono fonts.
+This is GovScraper - a web application for government contract bidding. The frontend is built with static HTML files using CSS custom properties for theming (light/dark mode), Manrope + Source Code Pro fonts.
 
-### Key Pages
-- `govscraper-dashboard.html` - Main dashboard with KPIs, charts, saved searches
-- `govscraper-rfq-list.html` - RFQ listing page
-- `govscraper-nsn-page.html` - NSN (National Stock Number) search
-- `govscraper-cage-page.html` - CAGE code search
-- `Final Redesign/Newest of New/` - Latest redesigned pages (multiple tiers, onboarding, modals, public pages)
+### Color System (Monochrome Redesign)
+- **Member Portal:** Blue monochrome (brand blue `#1B6CA8`). All metrics, charts, positive indicators use blue family.
+- **Supplier Portal:** Red accent (`#BE1E2D`). Sidebar, badges, verified cards use brand red.
+- **Tier Badges:** LITE (gray), PRO (blue), GOLD (amber), MAXX (purple) — unchanged.
+- **Errors/warnings:** Red `#DC2626` preserved. Success feedback: green `#16A34A` preserved.
+
+### Authentication
+- Tier-based login: `lite@`, `pro@`, `gold@`, `maxx@govscraper.com` — password: `mendsourcing101`
+- Tier/email stored in `sessionStorage` (`gs_tier`, `gs_email`)
+
+### Key Pages (in `prototype/`)
+- `sign-in.html` - Tier-based sign-in
+- `dashboard.html` - Member Dashboard (Maxx tier, all features unlocked)
+- `rfq-listing.html` - RFQ listing
+- `nsn-search.html` - NSN (National Stock Number) search
+- `cage-search.html` - CAGE code search
+- `cage-detail.html` - CAGE detail page (claimed state)
+- `cage-claim-register.html` / `cage-claim-pending.html` / `cage-claim-approved.html` - CAGE claim flow
+- `cage-supplier-inventory.html` / `cage-rfq-alerts.html` - Supplier CAGE pages
+- `fsc-lookup.html` - FSC lookup
+- `awarded-contracts.html` / `nsn-watchlist.html` / `archived.html` / `rfq-alerts.html` - Results pages
+- `account.html` / `password-change.html` / `subscription.html` / `fsc-cage-listing.html` / `email-integration.html` - Account pages
+- `Final Redesign/Newest of New/` - Source redesigned pages (reference)

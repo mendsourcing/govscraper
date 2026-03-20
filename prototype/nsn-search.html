@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light">
 <title>NSN Search — GovScraper</title>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -40,14 +40,15 @@
     --brand-red: #BE1E2D;
     --brand-navy: #1B2A4A;
     /* FSC bar palette - energized */
-    --fsc-1: #2563EB;
-    --fsc-2: #0891B2;
-    --fsc-3: #16A34A;
-    --fsc-4: #7C3AED;
-    --fsc-5: #D97706;
-    --fsc-6: #DC2626;
-    --fsc-7: #0E7490;
-    --fsc-8: #059669;
+    --fsc-1: #1B6CA8;
+    --fsc-2: #2563EB;
+    --fsc-3: #3B82F6;
+    --fsc-4: #60A5FA;
+    --fsc-5: #1B3A6B;
+    --fsc-6: #0F172A;
+    --fsc-7: #1E40AF;
+    --fsc-8: #93C5FD;
+    --active-supplier: #BE1E2D;
   }
 
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -113,8 +114,8 @@
   .s-item svg { width:16px; height:16px; flex-shrink:0; }
   .sidebar-item svg { width:16px; height:16px; flex-shrink:0; }
   .s-item:hover { background:var(--surface-2); color:var(--text); }
-  .s-item.active { color:var(--green); border-left-color:var(--green); background:var(--green-bg); font-weight:600; }
-  body.supplier-mode .s-item:hover { background:var(--green-bg); color:var(--green); }
+  .s-item.active { color:#BE1E2D; border-left-color:#BE1E2D; background:#FEF2F2; font-weight:600; }
+  body.supplier-mode .s-item:hover { background:#FEF2F2; color:#BE1E2D; }
   .sidebar-item:hover { background:var(--accent-bg); color:var(--accent); text-decoration:none; border-left-color:var(--accent-border); }
   .sidebar-item.active { color:var(--accent); font-weight:700; border-left-color:var(--accent); background:var(--accent-bg); }
   .sidebar-item svg { width:16px; height:16px; flex-shrink:0; opacity:0.8; }
@@ -211,7 +212,7 @@
     border-radius:12px 12px 0 0;
   }
   .metric-card.blue::before { background:var(--accent); }
-  .metric-card.green::before { background:var(--green); }
+  .metric-card.green::before { background:var(--accent); }
   .metric-card.red::before { background:var(--red); }
   .metric-card.gold::before { background:var(--amber); }
   .metric-label {
@@ -227,7 +228,7 @@
   .metric-sub { font-size:11px; color:var(--text-muted); font-weight:500; }
   .metric-change { font-size:11px; margin-top:5px; font-weight:600; }
   .metric-change.down { color:var(--red); }
-  .metric-change.up { color:var(--green); }
+  .metric-change.up { color:#1B6CA8; }
   .metric-hdr-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
   .metric-award-row { display:flex; gap:24px; margin-top:4px; }
   .metric-award-row .col .slabel {
@@ -292,7 +293,7 @@
   }
   .member-wins-body .mw-amt {
     font-family:'Source Code Pro',monospace; font-size:22px;
-    font-weight:700; color:var(--green);
+    font-weight:700; color:var(--accent);
   }
   .member-wins-body .mw-powered {
     font-size:10.5px; color:var(--text-faint); font-weight:500;
@@ -333,7 +334,7 @@
     font-family:'Source Code Pro',monospace; font-size:40px;
     font-weight:800; line-height:1;
   }
-  .ratio-val.good { color:var(--green); }
+  .ratio-val.good { color:#1B6CA8; }
   .ratio-val.below { color:var(--amber); }
   .ratio-sub { font-size:11px; color:var(--text-muted); margin-top:6px; font-weight:500; }
 
@@ -532,8 +533,8 @@ input[type=file]{display:none}
 /* Supplier mode: green accent on topbar bottom border only */
 body.supplier-mode .topbar {
   background: #FFFFFF !important;
-  border-bottom: 2px solid #16A34A !important;
-  box-shadow: 0 1px 4px rgba(22,163,74,0.12) !important;
+  border-bottom: 2px solid #BE1E2D !important;
+  box-shadow: 0 1px 4px rgba(190,30,45,0.12) !important;
 }
 
 /* ═══════════════════════════════════════
@@ -579,11 +580,11 @@ body.supplier-mode .topbar {
   color: #ffffff;
   box-shadow: 0 1px 4px rgba(27,42,74,0.3), 0 0 0 0px #1B2A4A;
 }
-/* Active Supplier — solid green */
+/* Active Supplier — solid red */
 .mode-btn.active-supplier {
-  background: #16A34A;
+  background: #BE1E2D;
   color: #ffffff;
-  box-shadow: 0 1px 4px rgba(22,163,74,0.35), 0 0 0 0px #16A34A;
+  box-shadow: 0 1px 4px rgba(190,30,45,0.35), 0 0 0 0px #BE1E2D;
 }
 .mode-dot {
   width: 7px; height: 7px;
@@ -593,17 +594,18 @@ body.supplier-mode .topbar {
 }
 /* Dot colors on inactive buttons */
 .mode-btn.inactive .mode-dot.blue { background: #2563EB; }
-.mode-btn.inactive .mode-dot.green { background: #16A34A; }
+.mode-btn.inactive .mode-dot.green { background: #BE1E2D; }
 /* Dot on active buttons — white */
 .mode-btn.active-member .mode-dot,
 .mode-btn.active-supplier .mode-dot { background: rgba(255,255,255,0.6); }
 
 
 /* ═══ PANEL VISIBILITY ═══ */
+/* Search pages show the same content in both modes */
 #panel-member  { display: block; }
-#panel-supplier { display: none; }
-body.supplier-mode #panel-member  { display: none; }
-body.supplier-mode #panel-supplier { display: block; }
+#panel-supplier { display: none !important; }
+body.supplier-mode #panel-member  { display: block; }
+body.supplier-mode #panel-supplier { display: none !important; }
 
 /* Sidebar visibility */
 .sidebar-member  { display: flex !important; flex-direction: column; }
@@ -630,14 +632,14 @@ body.supplier-mode .sidebar-supplier {
 .reg-page .step {display:flex;align-items:center;gap:8px;flex:1}
 .reg-page .step:last-child {flex:none}
 .reg-page .sdot {width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
-.reg-page .sdot.done {background:var(--green);color:#fff}
+.reg-page .sdot.done {background:var(--accent);color:#fff}
 .reg-page .sdot.active {background:var(--accent);color:#fff;box-shadow:0 0 0 4px var(--accent-bg)}
 .reg-page .sdot.pend {background:var(--surface-2);color:var(--text-faint);border:2px solid var(--border)}
 .reg-page .slbl {font-size:11px;font-weight:700;color:var(--text-muted)}
 .reg-page .slbl.active {color:var(--accent)}
-.reg-page .slbl.done {color:var(--green)}
+.reg-page .slbl.done {color:var(--accent)}
 .reg-page .sline {flex:1;height:2px;background:var(--border);margin:0 8px}
-.reg-page .sline.done {background:var(--green)}
+.reg-page .sline.done {background:var(--accent)}
 .reg-page .cage-bar {background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 20px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 3px rgba(0,0,0,.04)}
 .reg-page .cb-l {display:flex;align-items:center;gap:14px}
 .reg-page .cb-ico {width:40px;height:40px;background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:10px;display:flex;align-items:center;justify-content:center}
@@ -718,8 +720,8 @@ a:hover{text-decoration:underline;}
 .avatar{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#1D4ED8);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;letter-spacing:0.5px;}
 
 /* ── SIDEBAR ── */
-.sidebar{width:224px;position:fixed;top:56px;left:0;bottom:0;background:var(--surface);border-right:1px solid var(--border);padding:14px 0;overflow-y:auto;z-index:90;}
-.sidebar-label{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-faint);padding:12px 20px 4px;}
+.sidebar{width:224px;position:fixed;top:56px;left:0;bottom:0;background:var(--surface);border-right:1px solid var(--border);padding:20px 0 16px;overflow-y:auto;z-index:90;}
+.sidebar-label{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-faint);padding:14px 20px 5px;}
 .sidebar-item{display:flex;align-items:center;gap:10px;padding:8px 20px;font-size:12.5px;font-weight:500;color:var(--text-dim);text-decoration:none;border-left:3px solid transparent;transition:all .15s;}
 .sidebar-item:hover{background:var(--accent-bg);color:var(--accent);text-decoration:none;}
 .sidebar-item.active{color:var(--accent);font-weight:700;border-left-color:var(--accent);background:var(--accent-bg);}
@@ -761,7 +763,7 @@ a:hover{text-decoration:underline;}
 .hero-stat:last-child{border-right:none;}
 .hero-stat .hs-label{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.6px;color:var(--text-faint);}
 .hero-stat .hs-val{font-size:14px;font-weight:700;font-family:'Source Code Pro',monospace;color:var(--text);}
-.hero-stat .hs-val.green{color:var(--green);}
+.hero-stat .hs-val.green{color:#1B6CA8;}
 .hero-stat .hs-val.amber{color:var(--amber);}
 .hero-stat .hs-val.blue{color:var(--accent);}
 
@@ -796,11 +798,11 @@ a:hover{text-decoration:underline;}
 .kv label{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-faint);display:block;margin-bottom:4px;}
 .kv .val{font-size:13px;font-weight:600;color:var(--text-dim);}
 .kv .val.mono{font-family:'Source Code Pro',monospace;}
-.kv .val.price{color:var(--green);font-family:'Source Code Pro',monospace;}
+.kv .val.price{color:#1B6CA8;font-family:'Source Code Pro',monospace;}
 .kv .val.big{font-size:20px;font-weight:700;font-family:'Source Code Pro',monospace;}
 .kv .val.red{color:var(--red);}
 .kv .val.amber{color:var(--amber);}
-.kv .val.green{color:var(--green);}
+.kv .val.green{color:#1B6CA8;}
 .kv .val.blue{color:var(--accent);}
 
 /* ── QUOTE BLOCK ── */
@@ -856,7 +858,7 @@ a:hover{text-decoration:underline;}
 .link-btn:hover{background:var(--accent);color:#fff;text-decoration:none;}
 
 /* ── TREND ARROW ── */
-.trend-up{color:var(--green);font-weight:700;}
+.trend-up{color:#1B6CA8;font-weight:700;}
 .trend-dn{color:var(--red);font-weight:700;}
 
 /* ── DIVIDER ── */
@@ -878,15 +880,35 @@ a:hover{text-decoration:underline;}
 body.supplier-mode .sidebar-member { display:none !important; }
 body.supplier-mode .sidebar-supplier { display:flex !important; }
 #panel-member { display:block; }
-#panel-supplier { display:none; }
-body.supplier-mode #panel-member { display:none; }
-body.supplier-mode #panel-supplier { display:block; }
+#panel-supplier { display:none !important; }
+body.supplier-mode #panel-member { display:block; }
+body.supplier-mode #panel-supplier { display:none !important; }
+
+.sidebar-supplier-active { display:none !important; }
+body.supplier-mode .sidebar-supplier-active {
+  display:flex !important; flex-direction:column;
+  width:224px; position:fixed; top:56px; left:0; bottom:0;
+  background:var(--surface); border-right:1px solid var(--border);
+  padding:20px 0 16px; overflow-y:auto; z-index:90;
+}
+.s-item { display:flex; align-items:center; gap:10px; padding:8px 20px; font-size:12.5px; font-weight:500; color:#BE1E2D; text-decoration:none; border-left:3px solid transparent; transition:all .15s; background:none; border-top:none; border-right:none; border-bottom:none; width:100%; cursor:pointer; font-family:'Manrope',sans-serif; }
+.s-item:hover { background:#FEF2F2; text-decoration:none; }
+.s-item.s-active { font-weight:700; border-left-color:#BE1E2D; background:#FEF2F2; }
+.s-item svg { width:16px; height:16px; flex-shrink:0; opacity:.8; }
 
   /* ── SIDEBAR LOCKED ITEMS (PRO sidebar) ── */
   .sidebar-item.sb-locked-click { opacity:.65;cursor:pointer; }
   .sidebar-item.sb-locked-click:hover { background:var(--surface-2);color:var(--text-dim); }
   .lock-pip { margin-left:auto;font-size:9px;font-weight:800;padding:2px 6px;border-radius:8px;white-space:nowrap; }
   .lock-pip.gold { background:#FFF7ED;color:#D97706;border:1px solid #FDE68A; }
+  .sb-tour-wrap{padding:0 12px 16px;margin-top:0;flex-shrink:0}
+  .sb-tour-divider{height:1px;background:#E2E8F0;margin:12px 0 14px}
+  .sb-tour-btn{width:100%;font-family:'Manrope',sans-serif;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;border:1.5px solid #E2E8F0;background:#F8FAFC;cursor:pointer;transition:all .15s;text-align:left;position:relative}
+  .sb-tour-btn:hover{background:#fff;border-color:#CBD5E1;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+  .sb-tour-ico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .sb-tour-ico svg{width:15px;height:15px}
+  .sb-tour-label{font-size:12px;font-weight:800;color:#334155}
+  .sb-tour-sub{font-size:10.5px;color:#94A3B8;margin-top:1px}
 </style>
 </head>
 <body>
@@ -894,47 +916,67 @@ body.supplier-mode #panel-supplier { display:block; }
 <header class="topbar">
   <div class="topbar-left">
     <a href="dashboard.html">
-      <img src="https://govscraper.com/assets/BigLogo-7gv5uAxF.png" alt="GovScraper" class="topbar-logo" onerror="this.style.display='none'">
+      <img src="https://govscraper.com/assets/BigLogo-7gv5uAxF.png" alt="GovScraper" class="topbar-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
     </a>
     <div class="topbar-divider"></div>
+
+    <!-- ── MODE SWITCHER ── -->
     <div class="mode-switcher">
-      <button class="mode-btn active-member" onclick="setMode('member')">
+      <button class="mode-btn active-member" id="btn-member" onclick="setMode('member')">
         <span class="mode-dot blue"></span>
         Member Portal
       </button>
-      <button class="mode-btn inactive" onclick="setMode('supplier')">
+      <button class="mode-btn inactive" id="btn-supplier" onclick="setMode('supplier')">
         <span class="mode-dot green"></span>
         Supplier Portal
       </button>
     </div>
+
     <div class="topbar-divider"></div>
-    <div class="breadcrumb">
-      <a href="dashboard.html">Dashboard</a>
-      <span class="sep">›</span>
-      NSN Search
-    </div>
+    <div class="breadcrumb" id="topbar-bc">NSN Search</div>
   </div>
   <div class="topbar-right">
-    <div class="topbar-icon-btn" title="Notifications">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+    <div class="topbar-icon-btn bullseye-icon" title="New Opportunities">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+      </svg>
     </div>
-    <div class="avatar" title="Account">JD</div>
+    <div class="topbar-icon-btn" title="Settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+      </svg>
+    </div>
+    <button class="avatar-btn" id="avatar-btn" title="My Account"
+      onclick="document.getElementById('account-panel').classList.add('open');document.getElementById('ap-overlay').classList.add('open');this.classList.add('panel-open');">
+      <span id="avatar-initials">JD</span>
+    </button>
   </div>
 </header>
-<nav class="sidebar">
+
+<!-- SIDEBAR -->
+<nav class="sidebar sidebar-member">
 
   <div class="sidebar-label">Main</div>
   <a class="sidebar-item" href="dashboard.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
     Dashboard
   </a>
-  <a class="sidebar-item" href="rfq-listing.html">
+  <a class="sidebar-item" id="sb-rfqs" href="rfq-listing.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
-    My RFQs <span class="sidebar-badge">47</span>
+    My RFQs<span class="sidebar-badge">47</span>
+  </a>
+  <a class="sidebar-item" href="rfq-listing.html" style="padding-left:32px;font-size:12px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+    Private List of RFQs
+  </a>
+  <a class="sidebar-item" href="rfq-listing.html" style="padding-left:32px;font-size:12px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+    Public List of RFQs
   </a>
 
   <div class="sidebar-label">Intelligence</div>
-  <a class="sidebar-item active" href="nsn-search.html">
+  <a class="sidebar-item active" id="sb-nsn" href="nsn-search.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     NSN Search
   </a>
@@ -946,33 +988,118 @@ body.supplier-mode #panel-supplier { display:block; }
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
     FSC Lookup
   </a>
+  <a id="sb-watchlist" class="sidebar-item" href="nsn-watchlist.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    NSN Watch List
+  </a>
 
   <div class="sidebar-label">Results</div>
   <a class="sidebar-item" href="awarded-contracts.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
     Awarded Contracts
   </a>
-  <a class="sidebar-item" href="nsn-watchlist.html">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-    NSN Watch List
-  </a>
   <a class="sidebar-item" href="archived.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
-    Archived
-  </a>
-  <a class="sidebar-item" href="rfq-alerts.html">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
-    RFQ Alerts
+    Archived RFQs
   </a>
 
-  <div class="sidebar-label">Account</div>
-  <a class="sidebar-item" href="account.html">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    Account
+  <div class="sidebar-label">Alerts</div>
+  <a class="sidebar-item" href="rfq-alerts.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+    RFQ Alerts<span class="sidebar-badge">3</span>
+  </a>
+
+  <div class="sidebar-label">Community</div>
+  <a id="sb-community" class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+    Community
+  </a>
+
+  <div class="sidebar-label">Tools</div>
+  <a id="sb-packing" class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+    GovPacking
   </a>
 
   <div class="sidebar-spacer"></div>
+
+  <div style="height:1px;background:var(--border);margin:4px 14px 2px;"></div>
+
+  <button class="sidebar-item" onclick="document.getElementById('account-panel').classList.add('open');document.getElementById('ap-overlay').classList.add('open');document.getElementById('avatar-btn').classList.add('panel-open');" style="background:none;border:none;width:100%;cursor:pointer;font-family:'Manrope',sans-serif;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    Settings &amp; Account
+  </button>
+
+  <div class="sb-tour-wrap">
+    <div class="sb-tour-divider"></div>
+    <button class="sb-tour-btn" id="sbTourBtn" onclick="restartTour()" style="border-color:#7C3AED40;background:#7C3AED08">
+      <div class="sb-tour-ico" style="background:#7C3AED15">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2"><polygon points="5,3 19,12 5,21 5,3"/></svg>
+      </div>
+      <div>
+        <div class="sb-tour-label" style="color:#7C3AED">Replay MAXX Tour</div>
+        <div class="sb-tour-sub">Replay the walkthrough</div>
+      </div>
+    </button>
+  </div>
+
 </nav>
+
+<!-- SUPPLIER SIDEBAR — ACTIVE/CLAIMED (MAXX) -->
+<nav class="sidebar-supplier-active" id="supplier-sidebar-active">
+
+  <!-- Verified identity card -->
+  <div style="margin:14px 12px 8px;background:#FEF2F2;border:1.5px solid #FECACA;border-radius:8px;padding:10px 12px;">
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="#BE1E2D"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+      <span style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#BE1E2D">GovScraper Verified</span>
+    </div>
+    <div style="font-size:12.5px;font-weight:800;color:var(--text);margin-bottom:1px;">SPS Technologies, Inc.</div>
+    <div style="font-family:'Source Code Pro',monospace;font-size:11px;font-weight:700;color:var(--text-muted);">CAGE 96906</div>
+  </div>
+
+  <div class="sidebar-label" style="margin-top:4px;">MY ACCOUNT</div>
+
+  <a class="s-item" href="cage-claim-approved.html?mode=supplier">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+    My CAGE Page
+  </a>
+
+  <a class="s-item" href="cage-supplier-inventory.html?mode=supplier">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+    Inventory
+    <span style="margin-left:auto;background:#BE1E2D;color:#fff;font-size:9px;font-weight:800;padding:1px 6px;border-radius:8px;">4</span>
+  </a>
+
+  <a class="s-item" href="cage-rfq-alerts.html?mode=supplier">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+    RFQ Alerts
+    <span style="margin-left:auto;background:#BE1E2D;color:#fff;font-size:9px;font-weight:800;padding:1px 6px;border-radius:8px;">2</span>
+  </a>
+
+  <div class="sidebar-label" style="margin-top:8px;">BROWSE</div>
+  <a class="s-item" href="cage-search.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    CAGE Search
+  </a>
+  <a class="s-item s-active" href="nsn-search.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    NSN Search
+  </a>
+
+  <div class="sidebar-spacer"></div>
+  <div style="height:1px;background:var(--border);margin:4px 14px 2px;"></div>
+  <button class="s-item" onclick="document.getElementById('account-panel').classList.add('open');document.getElementById('ap-overlay').classList.add('open');document.getElementById('avatar-btn').classList.add('panel-open');" style="background:none;border-top:none;border-right:none;border-bottom:none;font-family:'Manrope',sans-serif;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    Settings &amp; Account
+  </button>
+  <a class="s-item" href="#" onclick="setMode('member');return false;" style="color:var(--text-muted);">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15,18 9,12 15,6"/></svg>
+    Back to Member Portal
+  </a>
+
+</nav>
+
 <div class="main" id="panel-member">
 
   <!-- SEARCH BAR -->
@@ -1255,7 +1382,7 @@ body.supplier-mode #panel-supplier { display:block; }
             <td class="mono">SPE7M8-26-Q-0142</td>
             <td class="mono"><a href="#">66324</a></td>
             <td>FASTENAL</td><td>18,000</td>
-            <td class="mono" style="color:var(--green);font-weight:600">$4.12</td>
+            <td class="mono" style="color:#1B6CA8;font-weight:600">$4.12</td>
             <td class="mono">$74,160</td>
           </tr>
           <tr>
@@ -1263,7 +1390,7 @@ body.supplier-mode #panel-supplier { display:block; }
             <td class="mono">SPE7M8-25-Q-0891</td>
             <td class="mono"><a href="#">96906</a></td>
             <td>SPS TECHNOLOGIES</td><td>8,000</td>
-            <td class="mono" style="color:var(--green);font-weight:600">$3.98</td>
+            <td class="mono" style="color:#1B6CA8;font-weight:600">$3.98</td>
             <td class="mono">$31,840</td>
           </tr>
           <tr>
@@ -1271,7 +1398,7 @@ body.supplier-mode #panel-supplier { display:block; }
             <td class="mono">SPE7M8-25-Q-0503</td>
             <td class="mono"><a href="#">66324</a></td>
             <td>FASTENAL</td><td>12,000</td>
-            <td class="mono" style="color:var(--green);font-weight:600">$3.74</td>
+            <td class="mono" style="color:#1B6CA8;font-weight:600">$3.74</td>
             <td class="mono">$44,880</td>
           </tr>
           <tr>
@@ -1279,7 +1406,7 @@ body.supplier-mode #panel-supplier { display:block; }
             <td class="mono">SPE7M8-25-Q-0217</td>
             <td class="mono"><a href="#">0BTK8</a></td>
             <td>MCMASTER-CARR</td><td>8,000</td>
-            <td class="mono" style="color:var(--green);font-weight:600">$3.61</td>
+            <td class="mono" style="color:#1B6CA8;font-weight:600">$3.61</td>
             <td class="mono">$28,880</td>
           </tr>
           <tr>
@@ -1287,7 +1414,7 @@ body.supplier-mode #panel-supplier { display:block; }
             <td class="mono">SPE7M8-25-Q-0038</td>
             <td class="mono"><a href="#">96906</a></td>
             <td>SPS TECHNOLOGIES</td><td>7,600</td>
-            <td class="mono" style="color:var(--green);font-weight:600">$3.65</td>
+            <td class="mono" style="color:#1B6CA8;font-weight:600">$3.65</td>
             <td class="mono">$27,740</td>
           </tr>
         </tbody>
@@ -1427,7 +1554,7 @@ body.supplier-mode #panel-supplier { display:block; }
 
           <div style="display:flex;gap:14px;align-items:flex-start;">
             <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;">
-              <div style="width:28px;height:28px;border-radius:50%;background:#16A34A;display:flex;align-items:center;justify-content:center;">
+              <div style="width:28px;height:28px;border-radius:50%;background:#2563EB;display:flex;align-items:center;justify-content:center;">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
               </div>
               <div style="width:2px;height:32px;background:#E2E8F0;margin:3px 0;"></div>
@@ -1650,7 +1777,7 @@ body.supplier-mode #panel-supplier { display:block; }
         </div>
         <div class="sub-stats">
           <div class="sub-stat"><div class="sub-stat-n" style="color:var(--accent)">8</div><div class="sub-stat-l">FSCs Active</div></div>
-          <div class="sub-stat"><div class="sub-stat-n" style="color:var(--green)">47</div><div class="sub-stat-l">Active RFQs</div></div>
+          <div class="sub-stat"><div class="sub-stat-n" style="color:var(--accent)">47</div><div class="sub-stat-l">Active RFQs</div></div>
         </div>
         <button class="btn-manage-sub" onclick="closePanel();window.location.href='account.html'">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
@@ -1884,6 +2011,7 @@ window.showToast = showToast;
 const CAGE_STATE = 'unclaimed'; // 'unclaimed' | 'claimed'
 
 function setMode(mode) {
+  sessionStorage.setItem('gs_mode', mode === 'supplier' ? 'supplier' : 'member');
   const body = document.body;
   const btnMember = document.getElementById('btn-member');
   const btnSupplier = document.getElementById('btn-supplier');
@@ -1920,6 +2048,14 @@ function setMode(mode) {
     bc.textContent = 'Dashboard';
   }
 }
+
+// Auto-restore supplier mode from session or URL
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('mode') === 'supplier' || sessionStorage.getItem('gs_mode') === 'supplier') {
+    setMode('supplier');
+  }
+})();
 
 function switchSupplierTab(tab) {
   // Update active state in supplier sidebar
@@ -2161,9 +2297,9 @@ document.head.appendChild(style);
     <div style="padding:18px 24px;">
       <p style="font-size:13px;color:var(--text-dim);line-height:1.6;margin:0 0 16px">Watch List lets you bookmark NSNs and get alerted the moment a new RFQ drops — so you're always first in line to bid.</p>
       <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;">
-        <li style="display:flex;align-items:center;gap:10px;font-size:12.5px;font-weight:500;color:var(--text-dim)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>Track up to 500 NSNs in your personal Watch List</li>
-        <li style="display:flex;align-items:center;gap:10px;font-size:12.5px;font-weight:500;color:var(--text-dim)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>RFQ Alerts — instant notification when a watched NSN goes live</li>
-        <li style="display:flex;align-items:center;gap:10px;font-size:12.5px;font-weight:500;color:var(--text-dim)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>Everything already included in your PRO plan</li>
+        <li style="display:flex;align-items:center;gap:10px;font-size:12.5px;font-weight:500;color:var(--text-dim)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1B6CA8" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>Track up to 500 NSNs in your personal Watch List</li>
+        <li style="display:flex;align-items:center;gap:10px;font-size:12.5px;font-weight:500;color:var(--text-dim)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1B6CA8" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>RFQ Alerts — instant notification when a watched NSN goes live</li>
+        <li style="display:flex;align-items:center;gap:10px;font-size:12.5px;font-weight:500;color:var(--text-dim)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1B6CA8" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>Everything already included in your PRO plan</li>
       </ul>
     </div>
     <div style="padding:14px 24px 20px;display:flex;gap:10px;">
